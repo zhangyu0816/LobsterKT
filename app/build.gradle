@@ -22,8 +22,8 @@ android {
             enabled true
         }
         manifestPlaceholders = [
-                qqappid    : "tencent101924394",
-                GETUI_APPID: "IWQwvNTwca5yS84CjPx7Z2"
+                qqappid    : "tencent101928546",
+                GETUI_APPID: "55cac14467e58e8bd7000359"
         ]
     }
 

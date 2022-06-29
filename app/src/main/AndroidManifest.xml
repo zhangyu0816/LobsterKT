@@ -3,6 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.yimi.rentme">
 
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 允许应用程序联网和发送统计数据的权限，以便提供统计分析服务。-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <!--录制音频权限-->
+    <!-- 检测联网方式，在网络异常状态下避免数据发送，节省流量和电量。-->
+    <!-- 获取用户设备的IMEI，通过IMEI对用户进行唯一标识，以便提供统计分析服务。-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--允许程序访问CellID或WiFi热点来获取粗略的位置-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
     <application
         android:name=".MineApp"
         android:allowBackup="false"
@@ -13,17 +34,77 @@
         android:networkSecurityConfig="@xml/network_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.LobsterKT"
-        tools:replace="android:allowBackup">
+        android:theme="@style/AppTheme"
+        tools:replace="android:theme,android:allowBackup">
+
+        <!-- 文件路径 start-->
+        <provider
+            android:name="com.zb.baselibs.utils.MyFileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+        <!-- 个推 start-->
+        <meta-data
+            android:name="GETUI_APPID"
+            android:value="${GETUI_APPID}"
+            tools:replace="android:value" />
+
         <activity
-            android:name=".activity.MainActivity"
-            android:exported="true">
+            android:name="com.tencent.tauth.AuthActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="${qqappid}" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="wxb83427622a6740f6" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="wxb83427622a6740f6" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.LoadingActivity"
+            android:configChanges="orientation|keyboard|layoutDirection|screenSize"
+            android:exported="true"
+            android:theme="@style/StartingWindowTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.MainActivity" />
     </application>
 
 </manifest>
