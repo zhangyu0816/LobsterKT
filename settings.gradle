@@ -1,0 +1,31 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        jcenter()
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven {
+            url "https://mvn.getui.com/nexus/content/repositories/releases/"
+        }
+        maven { url 'https://repo1.maven.org/maven2/' }
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        jcenter()
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven {
+            url "https://mvn.getui.com/nexus/content/repositories/releases/"
+        }
+        maven { url 'https://repo1.maven.org/maven2/' }
+    }
+}
+rootProject.name = "LobsterKT"
+include ':app'
+include ':KotlinCommon'
+project(':KotlinCommon').projectDir = file("../KotlinCommon")
+include ':KotlinCommon:baseLibs'

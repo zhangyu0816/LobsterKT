@@ -1,0 +1,81 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.yimi.rentme"
+        minSdk 21
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        dataBinding {
+            enabled true
+        }
+        viewBinding {
+            enabled true
+        }
+        manifestPlaceholders = [
+                qqappid    : "tencent101924394",
+                GETUI_APPID: "IWQwvNTwca5yS84CjPx7Z2"
+        ]
+    }
+
+    externalNativeBuild {
+        cmake {
+        }
+    }
+
+    signingConfigs {
+        release {
+            keyAlias 'rm'
+            keyPassword 'yimi2015yuwei'
+            storeFile file('C:\\Users\\yu\\Documents\\rentme.keystore')
+            storePassword 'yimi2015yuwei'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //apk命名
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            signingConfig signingConfigs.release
+            debuggable true
+        }
+
+        android.applicationVariants.all { variant ->
+            variant.outputs.all {
+                if (variant.buildType.name == 'release') {
+                    outputFileName = "lobster_${versionName}.apk"
+                }
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    ndkVersion '21.2.6472646'
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(path: ':KotlinCommon:baseLibs')
+}
