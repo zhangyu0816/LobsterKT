@@ -1,6 +1,8 @@
 package com.yimi.rentme.vm
 
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.os.Build
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -81,5 +83,13 @@ abstract class BaseViewModel : BaseLibsViewModel() {
                 )
             }
         }
+    }
+
+    open fun fitComprehensiveScreen() {
+        activity.window.addFlags(View.SYSTEM_UI_FLAG_FULLSCREEN) // 导致华为手机模糊
+        activity.window.addFlags(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) // 导致华为手机黑屏
+        activity.window.addFlags(View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+        activity.window.navigationBarColor = Color.TRANSPARENT
+        activity.window.statusBarColor = Color.TRANSPARENT
     }
 }

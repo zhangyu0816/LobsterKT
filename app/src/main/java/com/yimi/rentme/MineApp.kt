@@ -1,14 +1,19 @@
 package com.yimi.rentme
 
+import androidx.appcompat.app.AppCompatActivity
 import com.zb.baselibs.app.BaseApp
+import com.zb.baselibs.utils.getIntegerByAllName
 
 class MineApp : BaseApp() {
     override fun getBaseUrl(): String {
-        TODO("Not yet implemented")
+        return when {
+            getIntegerByAllName("lobster_selectBase") == 0 -> "https://xgapi.zuwo.la/" // 正式
+            else -> "http://192.168.1.88:8090/" // 敏耀
+        }
     }
 
     override fun getImageUrl(): String {
-        TODO("Not yet implemented")
+        return "http://img.zuwo.la/"
     }
 
     override fun isHorizontal(): Boolean {
@@ -43,5 +48,10 @@ class MineApp : BaseApp() {
 
     override fun getNoticeLogo(): Int {
         return R.mipmap.ic_launcher
+    }
+
+    companion object {
+        const val CHAT_URL = "http://cimg.zuwo.la/"
+      lateinit  var videoPlayActivity:AppCompatActivity
     }
 }

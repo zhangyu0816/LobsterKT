@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">虾菇</string>
+    <string name="company_name">温州专帮信息科技有限公司</string>
+    <string name="rule_1">《虾菇用户注册协议》</string>
+    <string name="rule_2">《虾菇隐私政策》</string>
+    <string name="rule_3">《虾菇用户协议及隐私政策》</string>
 </resources>
