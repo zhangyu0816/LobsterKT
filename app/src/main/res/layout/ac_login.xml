@@ -5,12 +5,12 @@
 
         <variable
             name="viewModel"
-            type="com.yimi.rentme.vm.LoadingViewModel" />
+            type="com.yimi.rentme.vm.LoginViewModel" />
     </data>
 
     <FrameLayout
+        android:id="@+id/login_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-    </FrameLayout>
 </layout>

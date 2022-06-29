@@ -13,6 +13,7 @@ import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.RomUtils
 import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.utils.StatusBarUtil
+import com.zb.baselibs.utils.saveInteger
 import kotlin.system.exitProcess
 
 class VideoPlayActivity : BaseActivity() {
@@ -40,6 +41,7 @@ class VideoPlayActivity : BaseActivity() {
 
     override fun initView() {
         MineApp.videoPlayActivity = this
+        saveInteger("isVideoPlay", 1)
         viewModel.initViewModel()
     }
 
