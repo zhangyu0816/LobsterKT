@@ -12,8 +12,9 @@ import android.view.View
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.activity.BindingPhoneActivity
 import com.yimi.rentme.activity.MainActivity
+import com.yimi.rentme.bean.CheckUser
 import com.yimi.rentme.bean.RegisterInfo
-import com.yimi.rentme.databinding.FragLogin1Binding
+import com.yimi.rentme.databinding.FragLoginNameBinding
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.activity.WebActivity
 import com.zb.baselibs.app.BaseApp
@@ -24,13 +25,14 @@ import kotlinx.coroutines.Job
 import org.jetbrains.anko.startActivity
 import org.simple.eventbus.EventBus
 
-class LoginFrag1ViewModel : BaseViewModel() {
+class LoginNameViewModel : BaseViewModel() {
 
-    lateinit var binding: FragLogin1Binding
+    lateinit var binding: FragLoginNameBinding
     private var baseUrlList = ArrayList<String>()
     private lateinit var threeLogin: ThreeLogin
     private val needMoreInfo = false
     private var passErrorCount = 0
+    private lateinit var mCheckUser: CheckUser
 
     override fun initViewModel() {
         baseUrlList.add("正式服")
@@ -63,6 +65,7 @@ class LoginFrag1ViewModel : BaseViewModel() {
                 dismissLoading()
             }
         })
+        initUtil(activity)
     }
 
     /**
@@ -135,6 +138,10 @@ class LoginFrag1ViewModel : BaseViewModel() {
      * 微信登录
      */
     fun toWX(view: View) {
+        if (!binding.clickSelect) {
+            SCToastUtil.showToast(activity, "请仔细阅读底部协议，并勾选", 2)
+            return
+        }
         showLoading(Job(), "正在发起微信登录...")
         threeLogin.startThreeLogin(1)
     }
@@ -143,6 +150,10 @@ class LoginFrag1ViewModel : BaseViewModel() {
      * QQ登录
      */
     fun toQQ(view: View) {
+        if (!binding.clickSelect) {
+            SCToastUtil.showToast(activity, "请仔细阅读底部协议，并勾选", 2)
+            return
+        }
         showLoading(Job(), "正在发起QQ登录...")
         threeLogin.startThreeLogin(2)
     }
@@ -197,6 +208,7 @@ class LoginFrag1ViewModel : BaseViewModel() {
             }
 
             onFailed {
+                dismissLoading()
                 if (it.isNotRegister) {
                     // 继续完成注册步骤
                     MineApp.registerInfo.image = threeInfo.unionImage
@@ -259,6 +271,26 @@ class LoginFrag1ViewModel : BaseViewModel() {
             }
             onFailed {
                 dismissLoading()
+            }
+        }
+    }
+
+    /**
+     * 下一步
+     */
+    fun next(view: View) {
+        if (binding.phone!!.length < 11) return
+//        if (!binding.phone!!.matches(BaseApp.phoneRegex)) {
+//            SCToastUtil.showToast(activity, "请输入正确手机号", 2)
+//            return
+//        }
+        if (!binding.clickSelect) {
+            SCToastUtil.showToast(activity, "请仔细阅读底部协议，并勾选", 2)
+            return
+        }
+        mainDataSource.enqueue({ checkUserName(binding.phone!!) }) {
+            onSuccess {
+                mCheckUser = it
             }
         }
     }

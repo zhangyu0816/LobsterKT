@@ -1,22 +1,23 @@
 package com.yimi.rentme.fragment
 
 import androidx.appcompat.app.AppCompatActivity
+import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
-import com.yimi.rentme.databinding.FragLogin1Binding
-import com.yimi.rentme.vm.fragment.LoginFrag1ViewModel
+import com.yimi.rentme.databinding.FragLoginNameBinding
+import com.yimi.rentme.vm.fragment.LoginNameViewModel
 import com.zb.baselibs.activity.BaseFragment
 import org.simple.eventbus.Subscriber
 
-class LoginFrag1 : BaseFragment() {
+class LoginNameFrag : BaseFragment() {
 
-    private val viewModel by getViewModel(LoginFrag1ViewModel::class.java) {
-        binding = mBinding as FragLogin1Binding
-        activity = this@LoginFrag1.activity as AppCompatActivity
+    private val viewModel by getViewModel(LoginNameViewModel::class.java) {
+        binding = mBinding as FragLoginNameBinding
+        activity = this@LoginNameFrag.activity as AppCompatActivity
         binding.viewModel = this
     }
 
     override fun getRes(): Int {
-        return R.layout.frag_login_1
+        return R.layout.frag_login_name
     }
 
     override fun initView() {
@@ -29,6 +30,9 @@ class LoginFrag1 : BaseFragment() {
      */
     @Subscriber(tag = "lobsterVerifyCaptcha")
     private fun lobsterVerifyCaptcha(data: String) {
+        val dataList = data.split(",")
+        MineApp.registerInfo.bindPhone = dataList[0]
+        MineApp.registerInfo.captcha = dataList[1]
     }
 
     /**

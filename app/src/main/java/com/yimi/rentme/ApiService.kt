@@ -1,9 +1,6 @@
 package com.yimi.rentme
 
-import com.yimi.rentme.bean.CommonSwitch
-import com.yimi.rentme.bean.ImageCaptcha
-import com.yimi.rentme.bean.LoginInfo
-import com.yimi.rentme.bean.MineInfo
+import com.yimi.rentme.bean.*
 import com.zb.baselibs.bean.HttpWrapBean
 import retrofit2.http.*
 
@@ -60,4 +57,9 @@ interface ApiService {
         @Field("userName") userName: String,
         @Field("captcha") captcha: String
     ): HttpWrapBean<Any?>
+
+    // 验证 手机号是否注册
+    @FormUrlEncoded
+    @POST("api/Login_checkUserName")
+    suspend fun checkUserName(@Field("userName") userName: String): HttpWrapBean<CheckUser>
 }
