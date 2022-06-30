@@ -107,6 +107,7 @@
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.VideoPlayActivity" />
         <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.BindingPhoneActivity" />
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import com.yimi.rentme.R
 import com.yimi.rentme.databinding.FragLogin1Binding
 import com.yimi.rentme.vm.fragment.LoginFrag1ViewModel
 import com.zb.baselibs.activity.BaseFragment
+import org.simple.eventbus.Subscriber
 
 class LoginFrag1 : BaseFragment() {
 
@@ -19,6 +20,22 @@ class LoginFrag1 : BaseFragment() {
     }
 
     override fun initView() {
+        needEvenBus = true
         viewModel.initViewModel()
+    }
+
+    /**
+     * 继续完成注册步骤
+     */
+    @Subscriber(tag = "lobsterVerifyCaptcha")
+    private fun lobsterVerifyCaptcha(data: String) {
+    }
+
+    /**
+     * 已注册，只需绑定手机号
+     */
+    @Subscriber(tag = "lobsterBindingPhone")
+    private fun lobsterBindingPhone(data: String) {
+        viewModel.myInfo()
     }
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.BaseViewModel" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="right"
+            type="String" />
+
+    </data>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            onClickDelayed="@{viewModel::back}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:src="@mipmap/back_black_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@{title}"
+            android:textColor="@color/black_252"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            onClickDelayed="@{viewModel::right}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="15dp"
+            android:visibility="@{(right==null||right.empty)?View.GONE:View.VISIBLE}">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:background="@mipmap/clean_icon"
+                android:visibility="@{LobsterObjectUtil.isRightVisibility(right)?View.VISIBLE:View.GONE}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{right}"
+                android:textColor="@color/black_827"
+                android:textSize="12sp"
+                tools:text="全部已读" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

@@ -56,6 +56,6 @@ class MineApp : BaseApp() {
         const val CHAT_URL = "http://cimg.zuwo.la/"
         lateinit var videoPlayActivity: AppCompatActivity
         lateinit var mineInfo: MineInfo
-        val registerInfo = RegisterInfo()
+        var registerInfo = RegisterInfo()
     }
 }

@@ -4,4 +4,7 @@
     <string name="rule_1">《虾菇用户注册协议》</string>
     <string name="rule_2">《虾菇隐私政策》</string>
     <string name="rule_3">《虾菇用户协议及隐私政策》</string>
+    <string name="all_read">全部已读</string>
+    <string name="code_second"><Data><![CDATA[再次发送<font color="#4EFB52"><b>%d</b></font>s]]></Data></string>
+    <string name="code_second_finish"><Data><![CDATA[<font color="#ffffff"><u>重新发送验证码</u></font>]]></Data></string>
 </resources>

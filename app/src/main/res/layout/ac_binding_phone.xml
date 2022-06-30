@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.BindingPhoneViewModel" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="phone"
+            type="String" />
+
+        <variable
+            name="code"
+            type="String" />
+        <variable
+            name="remark"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/back_black_layout"
+            title="@{title}"
+            viewModel="@{viewModel}" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_bg_black_efe_radius10"
+                android:gravity="center_vertical"
+                android:maxLength="11"
+                android:paddingStart="15dp"
+                android:paddingTop="15dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="15dp"
+                android:singleLine="true"
+                android:text="@={phone}"
+                android:textColorHint="@color/black_c3b"
+                android:textCursorDrawable="@drawable/cursor_color_black_252"
+                android:textSize="14sp"
+                tools:text="18888888888" />
+
+            <TextView
+                onClickDelayed="@{viewModel::getCode}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:text="@{remark}"
+                android:textColor="@color/purple_7a4"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="获取验证码" />
+        </RelativeLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/btn_bg_black_efe_radius10"
+            android:hint="输入验证码"
+            android:inputType="number"
+            android:maxLength="4"
+            android:paddingStart="15dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="15dp"
+            android:paddingBottom="15dp"
+            android:singleLine="true"
+            android:text="@={code}"
+            android:textColorHint="@color/black_c3b"
+            android:textCursorDrawable="@drawable/cursor_color_black_252"
+            android:textSize="14sp" />
+
+        <TextView
+            onClickDelayed="@{viewModel::binding}"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/gradient_purple_6d5_ae7"
+            android:gravity="center"
+            android:text="绑定"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</layout>
