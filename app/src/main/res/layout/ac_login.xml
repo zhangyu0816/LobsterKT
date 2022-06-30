@@ -1,16 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
             type="com.yimi.rentme.vm.LoginViewModel" />
+
+        <variable
+            name="right"
+            type="String" />
     </data>
 
-    <FrameLayout
-        android:id="@+id/login_content"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
+        <FrameLayout
+            android:id="@+id/login_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="15dp">
+
+            <ImageView
+                onClickDelayed="@{viewModel::back}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:src="@mipmap/back_white_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:alpha="0.8"
+                android:text="@{right}"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="@{right.empty?View.GONE:View.VISIBLE}"
+                tools:text="密码登录" />
+        </RelativeLayout>
+    </RelativeLayout>
 </layout>

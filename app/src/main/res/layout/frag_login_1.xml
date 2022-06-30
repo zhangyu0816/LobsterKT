@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.fragment.LoginFrag1ViewModel" />
+
+        <variable
+            name="phone"
+            type="String" />
+
+        <variable
+            name="clickSelect"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:fitsSystemWindows="true">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="18dp"
+            android:text="登录/注册 更精彩"
+            android:textColor="@android:color/white"
+            android:textSize="27sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="45dp"
+            android:alpha="0.6"
+            android:text="输入手机号后，开始探索虾菇！未注册手机，\n将自动进入注册页面。"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_second"
+            android:layout_marginStart="38dp"
+            android:layout_marginEnd="38dp"
+            android:background="@drawable/btn_bg_white_tran_radius60">
+
+            <EditText
+                android:id="@+id/ed_phone"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="输入手机号注册或登录"
+                android:inputType="phone"
+                android:maxLength="11"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="#CDB1FF"
+                android:textCursorDrawable="@drawable/cursor_color_white"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:onClick="@{viewModel::cleanPhone}"
+                android:padding="15dp"
+                android:src="@mipmap/clean_phone_icon"
+                android:visibility="@{phone.empty?View.GONE:View.VISIBLE}" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:layout_above="@+id/url_layout"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                onClickDelayed="@{viewModel::toWX}"
+                android:layout_width="130dp"
+                android:layout_height="46dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/btn_bg_white_radius60"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@mipmap/login_by_wx_icon" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:gravity="center"
+                    android:text="微信  登录"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                onClickDelayed="@{viewModel::toQQ}"
+                android:layout_width="130dp"
+                android:layout_height="46dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/btn_bg_white_radius60"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@mipmap/login_by_qq_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="46dp"
+                    android:gravity="center"
+                    android:text="QQ  登录"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:visibility="visible" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/url_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:onClick="@{viewModel::clickSelect}"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@{clickSelect?@drawable/icon_select_light:@drawable/icon_select_dark}"
+                tools:background="@drawable/icon_select_light" />
+
+            <TextView
+                android:id="@+id/tv_click"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                tools:text="隐私政策" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

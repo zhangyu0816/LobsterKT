@@ -2,6 +2,7 @@ package com.yimi.rentme
 
 import androidx.appcompat.app.AppCompatActivity
 import com.yimi.rentme.bean.MineInfo
+import com.yimi.rentme.bean.RegisterInfo
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.getIntegerByAllName
 
@@ -55,5 +56,6 @@ class MineApp : BaseApp() {
         const val CHAT_URL = "http://cimg.zuwo.la/"
         lateinit var videoPlayActivity: AppCompatActivity
         lateinit var mineInfo: MineInfo
+        val registerInfo = RegisterInfo()
     }
 }
