@@ -12,7 +12,6 @@ import android.view.View
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.activity.BindingPhoneActivity
 import com.yimi.rentme.activity.MainActivity
-import com.yimi.rentme.bean.CheckUser
 import com.yimi.rentme.bean.RegisterInfo
 import com.yimi.rentme.databinding.FragLoginNameBinding
 import com.yimi.rentme.vm.BaseViewModel
@@ -31,8 +30,7 @@ class LoginNameViewModel : BaseViewModel() {
     private var baseUrlList = ArrayList<String>()
     private lateinit var threeLogin: ThreeLogin
     private val needMoreInfo = false
-    private var passErrorCount = 0
-    private lateinit var mCheckUser: CheckUser
+
 
     override fun initViewModel() {
         baseUrlList.add("正式服")
@@ -177,17 +175,17 @@ class LoginNameViewModel : BaseViewModel() {
         map["appVersion"] = activity.versionName()
         map["deviceHardwareInfo"] = getString("deviceHardwareInfo")
 
-        if (MineApp.registerInfo.bindPhone.isNotEmpty()) {
-            map["userName"] = MineApp.registerInfo.bindPhone
-            map["captcha"] = MineApp.registerInfo.captcha
-            map["moreImages"] = MineApp.registerInfo.moreImages
-            map["nick"] = MineApp.registerInfo.name
-            map["sex"] = MineApp.registerInfo.sex.toString()
-            map["birthday"] = MineApp.registerInfo.birthday
-            map["provinceId"] = "0"
-            map["cityId"] = "0"
-            map["districtId"] = "0"
-        }
+//        if (MineApp.registerInfo.bindPhone.isNotEmpty()) {
+//            map["userName"] = MineApp.registerInfo.bindPhone
+//            map["captcha"] = MineApp.registerInfo.captcha
+//            map["moreImages"] = MineApp.registerInfo.moreImages
+//            map["nick"] = MineApp.registerInfo.name
+//            map["sex"] = MineApp.registerInfo.sex.toString()
+//            map["birthday"] = MineApp.registerInfo.birthday
+//            map["provinceId"] = "0"
+//            map["cityId"] = "0"
+//            map["districtId"] = "0"
+//        }
         mainDataSource.enqueue({ loginByUnion(map) }) {
             onSuccess {
                 saveLong("userId", it.id)
@@ -195,16 +193,14 @@ class LoginNameViewModel : BaseViewModel() {
                 saveInteger("myIsThreeLogin", 1)
                 saveString("loginName", "")
                 saveString("loginPass", "")
-                activity.startActivity<BindingPhoneActivity>()
-                dismissLoading()
-//                if (it.phoneNum.isEmpty()) {
-//                    // 已注册，只需绑定手机号
-//                    activity.startActivity<BindingPhoneActivity>()
-//                    dismissLoading()
-//                } else if (needMoreInfo)
-//                    modifyMemberInfo()
-//                else
-//                    myInfo()
+                if (it.phoneNum.isEmpty()) {
+                    // 已注册，只需绑定手机号
+                    activity.startActivity<BindingPhoneActivity>()
+                    dismissLoading()
+                } else if (needMoreInfo)
+                    modifyMemberInfo()
+                else
+                    myInfo()
             }
 
             onFailed {
@@ -265,7 +261,6 @@ class LoginNameViewModel : BaseViewModel() {
                 dismissLoading()
                 MineApp.mineInfo = it
                 MineApp.registerInfo = RegisterInfo()
-                passErrorCount = 0
                 activity.startActivity<MainActivity>()
                 EventBus.getDefault().post("", "lobsterFinishLogin")
             }
@@ -290,7 +285,7 @@ class LoginNameViewModel : BaseViewModel() {
         }
         mainDataSource.enqueue({ checkUserName(binding.phone!!) }) {
             onSuccess {
-                mCheckUser = it
+                EventBus.getDefault().post(it.isRegister, "lobsterCheckRegister")
             }
         }
     }

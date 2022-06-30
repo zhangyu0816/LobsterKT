@@ -2,7 +2,6 @@ package com.yimi.rentme.vm
 
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.Build
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager

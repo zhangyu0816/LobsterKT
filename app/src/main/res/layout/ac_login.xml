@@ -13,6 +13,10 @@
         <variable
             name="right"
             type="String" />
+
+        <variable
+            name="showBack"
+            type="boolean" />
     </data>
 
     <RelativeLayout
@@ -32,11 +36,13 @@
             android:layout_marginEnd="15dp">
 
             <ImageView
+                android:id="@+id/iv_back"
                 onClickDelayed="@{viewModel::back}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:src="@mipmap/back_white_icon" />
+                android:src="@mipmap/back_white_icon"
+                android:visibility="@{showBack?View.VISIBLE:View.INVISIBLE}" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -44,6 +50,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:alpha="0.8"
+                android:onClick="@{viewModel::right}"
                 android:text="@{right}"
                 android:textColor="@color/white"
                 android:textSize="16sp"

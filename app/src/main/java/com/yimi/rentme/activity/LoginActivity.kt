@@ -1,27 +1,15 @@
 package com.yimi.rentme.activity
 
-import android.annotation.SuppressLint
-import android.os.Bundle
 import android.view.KeyEvent
-import android.view.View
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcLoginBinding
 import com.yimi.rentme.vm.LoginViewModel
-import com.zb.baselibs.activity.BaseActivity
-import com.zb.baselibs.app.BaseApp
-import com.zb.baselibs.utils.SCToastUtil
-import com.zb.baselibs.utils.StatusBarUtil
+import com.zb.baselibs.activity.BaseScreenActivity
+import kotlinx.android.synthetic.main.ac_login.*
+import org.simple.eventbus.EventBus
 import org.simple.eventbus.Subscriber
-import kotlin.system.exitProcess
 
-class LoginActivity : BaseActivity() {
-
-    @SuppressLint("SourceLockedOrientationActivity")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.RegisterTheme)
-        super.onCreate(savedInstanceState)
-        StatusBarUtil.transparencyBar(this)
-    }
+class LoginActivity : BaseScreenActivity() {
 
     private val viewModel by getViewModel(LoginViewModel::class.java) {
         binding = mBinding as AcLoginBinding
@@ -38,23 +26,35 @@ class LoginActivity : BaseActivity() {
         viewModel.initViewModel()
     }
 
+    /**
+     * 检测是否注册
+     */
+    @Subscriber(tag = "lobsterCheckRegister")
+    private fun lobsterCheckRegister(data: Int) {
+        viewModel.checkRegister(data)
+    }
+
+    /**
+     * 验证码登录
+     */
+    @Subscriber(tag = "lobsterLoginCode")
+    private fun lobsterLoginCode(data: String) {
+        viewModel.binding.right = "密码登录"
+        EventBus.getDefault().post(true, "lobsterLoginPass")
+    }
+
+    /**
+     * 关闭登录
+     */
     @Subscriber(tag = "lobsterFinishLogin")
     private fun lobsterFinishLogin(data: String) {
-       finish()
+        finish()
     }
 
     // 监听程序退出
-    private var exitTime: Long = 0
-
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (event.keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_DOWN) {
-            if (System.currentTimeMillis() - exitTime > 2000) {
-                SCToastUtil.showToast(activity, "再按一次退出程序", 2)
-                exitTime = System.currentTimeMillis()
-            } else {
-                BaseApp.exit()
-                exitProcess(0)
-            }
+            viewModel.back(iv_back)
             return true
         }
         return super.dispatchKeyEvent(event)

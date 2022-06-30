@@ -62,4 +62,19 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/Login_checkUserName")
     suspend fun checkUserName(@Field("userName") userName: String): HttpWrapBean<CheckUser>
+
+    // 用户登录验证码
+    @FormUrlEncoded
+    @POST("api/Login_loginCaptcha")
+    suspend fun loginCaptcha(@Field("userName") userName: String): HttpWrapBean<Any?>
+
+    // 根据验证码登录
+    @FormUrlEncoded
+    @POST("api/Login_captchaLogin")
+    suspend fun loginByCaptcha(@FieldMap map: Map<String, String>): HttpWrapBean<LoginInfo>
+
+    // 根据密码登录
+    @FormUrlEncoded
+    @POST("api/Login_login")
+    suspend fun loginByPass(@FieldMap map: Map<String, String>): HttpWrapBean<LoginInfo>
 }

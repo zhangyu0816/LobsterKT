@@ -22,7 +22,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
+        android:background="@mipmap/register_bg"
         android:fitsSystemWindows="true">
 
         <TextView
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="38dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="68dp"
             android:text="登录/注册 更精彩"
             android:textColor="@android:color/white"
             android:textSize="27sp"
@@ -85,38 +85,31 @@
                 android:visibility="@{phone.empty?View.GONE:View.VISIBLE}" />
         </RelativeLayout>
 
-        <LinearLayout
+        <TextView
             onClickDelayed="@{viewModel::next}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/three_layout"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="30dp"
+            android:drawableEnd="@{phone.length==11?@drawable/arrow_small_white_right_icon:@drawable/arrow_small_right_icon}"
+            android:drawablePadding="5dp"
             android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="下一步"
-                android:textColor="@{phone.length==11?@color/white:@color/white_66}"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:drawablePadding="5dp"
-                android:drawableEnd="@{phone.length==11?@drawable/arrow_small_white_right_icon:@drawable/arrow_small_right_icon}"
-                tools:textColor="@color/white_66"
-                tools:drawableEnd="@drawable/arrow_small_right_icon"/>
-        </LinearLayout>
+            android:text="下一步"
+            android:textColor="@{phone.length==11?@color/white:@color/white_66}"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:drawableEnd="@drawable/arrow_small_right_icon"
+            tools:textColor="@color/white_66" />
 
         <LinearLayout
             android:id="@+id/three_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:gravity="center"
             android:layout_above="@+id/url_layout"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <LinearLayout

@@ -35,6 +35,8 @@ class VideoPlayViewModel : BaseViewModel() {
     }
 
     fun toLogin(view: View) {
+        binding.videoView.stopPlayback() //停止播放视频,并且释放
+        binding.videoView.suspend() //在任何状态下释放媒体播放器
         activity.startActivity<LoginActivity>()
         activity.finish()
     }

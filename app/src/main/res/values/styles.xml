@@ -8,13 +8,6 @@
         <item name="colorPrimaryDark">@android:color/white</item>
     </style>
 
-    <style name="RegisterTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowEnableSplitTouch">false</item>
-        <item name="android:splitMotionEvents">false</item>
-        <item name="android:windowBackground">@mipmap/register_bg</item>
-    </style>
-
     <!-- 应用启动页(StartingWindow)的theme -->
     <style name="StartingWindowTheme" parent="AppTheme">
         <!--也可以设置成一张图片 -->

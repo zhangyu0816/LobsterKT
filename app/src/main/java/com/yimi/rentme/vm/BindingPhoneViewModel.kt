@@ -72,7 +72,7 @@ class BindingPhoneViewModel : BaseViewModel() {
                         binding.remark = "获取验证码"
                         timer!!.cancel()
                     }
-                })
+                }).show(activity.supportFragmentManager)
     }
 
     /**
