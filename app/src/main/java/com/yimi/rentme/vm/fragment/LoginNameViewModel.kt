@@ -63,7 +63,6 @@ class LoginNameViewModel : BaseViewModel() {
                 dismissLoading()
             }
         })
-        initUtil(activity)
     }
 
     /**

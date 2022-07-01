@@ -9,6 +9,7 @@ import com.yimi.rentme.fragment.LoginPassFrag
 import com.zb.baselibs.activity.BaseFragment
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.SCToastUtil
+import com.zb.baselibs.utils.initUtil
 import com.zb.baselibs.views.addFragment
 import com.zb.baselibs.views.removeFragment
 import org.simple.eventbus.EventBus
@@ -20,10 +21,10 @@ class LoginViewModel : BaseViewModel() {
     private lateinit var fragment: BaseFragment
     private var exitTime: Long = 0
 
-
     override fun initViewModel() {
         binding.right = ""
         binding.showBack = false
+        initUtil(activity)
         fragment = LoginNameFrag()
         activity.addFragment(fragment, R.id.login_content)
     }
