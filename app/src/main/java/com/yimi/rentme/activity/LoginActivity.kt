@@ -44,6 +44,38 @@ class LoginActivity : BaseScreenActivity() {
     }
 
     /**
+     * 选择性别
+     */
+    @Subscriber(tag = "lobsterRegisterSex")
+    private fun lobsterRegisterSex(data: String) {
+        viewModel.registerSex()
+    }
+
+    /**
+     * 填写昵称
+     */
+    @Subscriber(tag = "lobsterRegisterNick")
+    private fun lobsterRegisterNick(data: String) {
+        viewModel.registerNick()
+    }
+
+    /**
+     * 选择生日
+     */
+    @Subscriber(tag = "lobsterRegisterBirthday")
+    private fun lobsterRegisterBirthday(data: String) {
+        viewModel.registerBirthday()
+    }
+
+    /**
+     * 上传图片
+     */
+    @Subscriber(tag = "lobsterRegisterImage")
+    private fun lobsterRegisterImage(data: String) {
+        viewModel.registerImage()
+    }
+
+    /**
      * 关闭登录
      */
     @Subscriber(tag = "lobsterFinishLogin")

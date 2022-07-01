@@ -6,6 +6,7 @@ import com.yimi.rentme.R
 import com.yimi.rentme.databinding.FragLoginNameBinding
 import com.yimi.rentme.vm.fragment.LoginNameViewModel
 import com.zb.baselibs.activity.BaseFragment
+import org.simple.eventbus.EventBus
 import org.simple.eventbus.Subscriber
 
 class LoginNameFrag : BaseFragment() {
@@ -33,6 +34,7 @@ class LoginNameFrag : BaseFragment() {
         val dataList = data.split(",")
         MineApp.registerInfo.bindPhone = dataList[0]
         MineApp.registerInfo.captcha = dataList[1]
+        EventBus.getDefault().post("","lobsterRegisterSex")
     }
 
     /**

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.fragment.RegisterSexViewModel" />
+
+        <variable
+            name="sexIndex"
+            type="Integer" />
+
+        <variable
+            name="canNext"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/register_bg"
+        android:fitsSystemWindows="true">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="68dp"
+            android:text="选择性别"
+            android:textColor="@android:color/white"
+            android:textSize="27sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="45dp"
+            android:alpha="0.6"
+            android:text="请告诉我们你是小哥哥还是小姐姐哦～"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_second"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="75dp"
+            android:orientation="horizontal">
+
+            <TextView
+                onClickDelayed="@{v->viewModel.selectSex(1)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="@{sexIndex==1?1.0f:0.5f}"
+                android:gravity="center"
+                android:text="@string/sex_1"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:drawableTopCompat="@mipmap/boy_icon" />
+
+            <TextView
+                onClickDelayed="@{v->viewModel.selectSex(0)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="@{sexIndex==0?1.0f:0.5f}"
+                android:gravity="center"
+                android:text="@string/sex_0"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:drawableTopCompat="@mipmap/girl_icon" />
+        </LinearLayout>
+
+        <TextView
+            onClickDelayed="@{viewModel::next}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="50dp"
+            android:drawableEnd="@{canNext?@drawable/arrow_small_white_right_icon:@drawable/arrow_small_right_icon}"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="下一步"
+            android:textColor="@{canNext?@color/white:@color/white_66}"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:drawableEnd="@drawable/arrow_small_right_icon"
+            tools:textColor="@color/white_66" />
+    </RelativeLayout>
+</layout>

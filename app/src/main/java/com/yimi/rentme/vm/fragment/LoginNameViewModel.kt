@@ -56,6 +56,7 @@ class LoginNameViewModel : BaseViewModel() {
         setUrl()
         threeLogin = ThreeLogin(activity).setCallBack(object : ThreeLogin.CallBack {
             override fun success(threeInfo: ThreeInfo) {
+                MineApp.threeInfo = threeInfo
                 loginByUnion(threeInfo)
             }
 
@@ -282,8 +283,9 @@ class LoginNameViewModel : BaseViewModel() {
             SCToastUtil.showToast(activity, "请仔细阅读底部协议，并勾选", 2)
             return
         }
-        mainDataSource.enqueue({ checkUserName(binding.phone!!) }) {
+        mainDataSource.enqueueLoading({ checkUserName(binding.phone!!) }, "检测是否注册...") {
             onSuccess {
+                MineApp.threeInfo = ThreeInfo()
                 EventBus.getDefault().post(it.isRegister, "lobsterCheckRegister")
             }
         }

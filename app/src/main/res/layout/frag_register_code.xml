@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.fragment.RegisterCodeViewModel" />
+
+        <variable
+            name="phone"
+            type="String" />
+
+        <variable
+            name="codeRemark"
+            type="String" />
+
+        <variable
+            name="canNext"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/register_bg"
+        android:fitsSystemWindows="true">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="68dp"
+            android:text="注册虾菇"
+            android:textColor="@android:color/white"
+            android:textSize="27sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_code_remind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="20dp"
+            android:text="验证码已通过短信发送至："
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/phone_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_code_remind"
+            android:layout_marginStart="38dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:background="@drawable/circle_green" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@{LobsterObjectUtil.getPhone(phone)}"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="18989799141" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/phone_layout"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="38dp"
+                android:layout_marginTop="38dp"
+                android:text="输入获取的验证码"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="38dp"
+                    android:layout_marginEnd="38dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_code1"
+                        viewHeightSize="@{LobsterObjectUtil.getCodeWidth()}"
+                        viewWidthSize="@{LobsterObjectUtil.getCodeWidth()}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="70dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/btn_bg_white_radius11"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="32sp" />
+
+                    <TextView
+                        android:id="@+id/tv_code2"
+                        viewHeightSize="@{LobsterObjectUtil.getCodeWidth()}"
+                        viewWidthSize="@{LobsterObjectUtil.getCodeWidth()}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="70dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/btn_bg_white_radius11"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="32sp" />
+
+                    <TextView
+                        android:id="@+id/tv_code3"
+                        viewHeightSize="@{LobsterObjectUtil.getCodeWidth()}"
+                        viewWidthSize="@{LobsterObjectUtil.getCodeWidth()}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="70dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/btn_bg_white_radius11"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="32sp"
+                        tools:text="1" />
+
+                    <TextView
+                        android:id="@+id/tv_code4"
+                        viewHeightSize="@{LobsterObjectUtil.getCodeWidth()}"
+                        viewWidthSize="@{LobsterObjectUtil.getCodeWidth()}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="70dp"
+                        android:background="@drawable/btn_bg_white_radius11"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="32sp" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/ed_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="38dp"
+                    android:layout_marginEnd="38dp"
+                    android:background="@android:color/transparent"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:padding="20dp"
+                    android:textColor="@android:color/transparent"
+                    android:textCursorDrawable="@null"
+                    android:textSize="40sp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_second"
+                onClickDelayed="@{viewModel::resetCode}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="38dp"
+                android:layout_marginTop="19dp"
+                android:text="@{codeRemark}"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:text=" 再次发送14s" />
+        </LinearLayout>
+
+        <TextView
+            onClickDelayed="@{viewModel::next}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="50dp"
+            android:drawableEnd="@{canNext?@drawable/arrow_small_white_right_icon:@drawable/arrow_small_right_icon}"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="下一步"
+            android:textColor="@{canNext?@color/white:@color/white_66}"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:drawableEnd="@drawable/arrow_small_right_icon"
+            tools:textColor="@color/white_66" />
+    </RelativeLayout>
+</layout>

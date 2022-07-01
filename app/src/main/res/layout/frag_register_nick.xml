@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.fragment.RegisterNickViewModel" />
+
+        <variable
+            name="canNext"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/register_bg"
+        android:fitsSystemWindows="true">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="68dp"
+            android:text="输入昵称"
+            android:textColor="@android:color/white"
+            android:textSize="27sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="45dp"
+            android:alpha="0.6"
+            android:text="你想取什么名字，这是你在虾菇上使用的名字哦～"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/ed_nick"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="38dp"
+            android:layout_marginEnd="38dp"
+            android:background="@drawable/btn_bg_white_tran_radius60"
+            android:hint="输入你的昵称"
+            android:layout_below="@+id/tv_second"
+            android:maxLength="10"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:textColor="@color/white"
+            android:textColorHint="#CDB1FF"
+            android:textCursorDrawable="@drawable/cursor_color_white"
+            android:textSize="14sp" />
+
+        <TextView
+            onClickDelayed="@{viewModel::next}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="50dp"
+            android:drawableEnd="@{canNext?@drawable/arrow_small_white_right_icon:@drawable/arrow_small_right_icon}"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="下一步"
+            android:textColor="@{canNext?@color/white:@color/white_66}"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:drawableEnd="@drawable/arrow_small_right_icon"
+            tools:textColor="@color/white_66" />
+    </RelativeLayout>
+</layout>

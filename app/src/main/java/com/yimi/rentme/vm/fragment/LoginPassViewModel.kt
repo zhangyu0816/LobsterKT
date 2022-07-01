@@ -34,7 +34,7 @@ class LoginPassViewModel : BaseViewModel() {
             binding.pass = it
             binding.canNext = !binding.isCode && it.length > 5
         }
-
+        binding.codeRemark = ""
         array[0] = binding.tvCode1
         array[1] = binding.tvCode2
         array[2] = binding.tvCode3

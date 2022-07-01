@@ -4,8 +4,7 @@ import android.os.SystemClock
 import android.view.View
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcLoginBinding
-import com.yimi.rentme.fragment.LoginNameFrag
-import com.yimi.rentme.fragment.LoginPassFrag
+import com.yimi.rentme.fragment.*
 import com.zb.baselibs.activity.BaseFragment
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.SCToastUtil
@@ -71,7 +70,50 @@ class LoginViewModel : BaseViewModel() {
         if (isRegister == 1) {
             fragment = LoginPassFrag()
             binding.right = "验证码登录"
+        } else {
+            fragment = RegisterCodeFrag()
+            binding.right = ""
         }
+        activity.addFragment(fragment, R.id.login_content)
+        binding.showBack = true
+    }
+
+    /**
+     * 选择性别
+     */
+    fun registerSex() {
+        binding.right = ""
+        fragment = RegisterSexFrag()
+        activity.addFragment(fragment, R.id.login_content)
+        binding.showBack = true
+    }
+
+    /**
+     * 填写昵称
+     */
+    fun registerNick() {
+        binding.right = ""
+        fragment = RegisterSexFrag()
+        activity.addFragment(fragment, R.id.login_content)
+        binding.showBack = true
+    }
+
+    /**
+     * 填写昵称
+     */
+    fun registerBirthday() {
+        binding.right = ""
+        fragment = RegisterBirthdayFrag()
+        activity.addFragment(fragment, R.id.login_content)
+        binding.showBack = true
+    }
+
+    /**
+     * 选择图片
+     */
+    fun registerImage(){
+        binding.right = ""
+        fragment = RegisterImageFrag()
         activity.addFragment(fragment, R.id.login_content)
         binding.showBack = true
     }

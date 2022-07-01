@@ -9,4 +9,6 @@
     <string name="code_second_finish"><Data><![CDATA[<font color="#ffffff"><u>重新发送验证码</u></font>]]></Data></string>
     <string name="login_pass">密码登录</string>
     <string name="login_code">验证码登录</string>
+    <string name="sex_0">女</string>
+    <string name="sex_1">男</string>
 </resources>

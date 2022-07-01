@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.yimi.rentme.bean.MineInfo
 import com.yimi.rentme.bean.RegisterInfo
 import com.zb.baselibs.app.BaseApp
+import com.zb.baselibs.bean.ThreeInfo
 import com.zb.baselibs.utils.getIntegerByAllName
 
 class MineApp : BaseApp() {
@@ -57,5 +58,6 @@ class MineApp : BaseApp() {
         lateinit var videoPlayActivity: AppCompatActivity
         lateinit var mineInfo: MineInfo
         var registerInfo = RegisterInfo()
+        var threeInfo = ThreeInfo()
     }
 }
