@@ -1,11 +1,13 @@
 package com.yimi.rentme.fragment
 
+import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.FragLoginNameBinding
 import com.yimi.rentme.vm.fragment.LoginNameViewModel
 import com.zb.baselibs.activity.BaseFragment
+import com.zb.baselibs.app.BaseApp
 import org.simple.eventbus.EventBus
 import org.simple.eventbus.Subscriber
 
@@ -34,7 +36,12 @@ class LoginNameFrag : BaseFragment() {
         val dataList = data.split(",")
         MineApp.registerInfo.bindPhone = dataList[0]
         MineApp.registerInfo.captcha = dataList[1]
-        EventBus.getDefault().post("","lobsterRegisterSex")
+        BaseApp.fixedThreadPool.execute {
+            SystemClock.sleep(200)
+            viewModel.activity.runOnUiThread {
+                EventBus.getDefault().post("", "lobsterRegisterSex")
+            }
+        }
     }
 
     /**

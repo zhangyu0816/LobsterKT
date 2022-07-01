@@ -1,7 +1,6 @@
 package com.yimi.rentme.vm.fragment
 
 import android.view.View
-import com.yimi.rentme.MineApp
 import com.yimi.rentme.databinding.FragRegisterImageBinding
 import com.yimi.rentme.vm.BaseViewModel
 

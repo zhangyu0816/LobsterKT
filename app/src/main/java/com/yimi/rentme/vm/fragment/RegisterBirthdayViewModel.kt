@@ -18,7 +18,7 @@ class RegisterBirthdayViewModel : BaseViewModel() {
         binding.canNext = false
         binding.birthday = ""
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(500)
+            SystemClock.sleep(200)
             activity.runOnUiThread {
                 selectBirthday(binding.tvBirthday)
             }
@@ -35,6 +35,7 @@ class RegisterBirthdayViewModel : BaseViewModel() {
                 override fun sure(birthday: String) {
                     binding.birthday = birthday
                     MineApp.registerInfo.birthday = birthday
+                    binding.canNext = true
                 }
             }).show(activity.supportFragmentManager)
     }

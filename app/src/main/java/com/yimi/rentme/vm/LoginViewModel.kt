@@ -86,6 +86,12 @@ class LoginViewModel : BaseViewModel() {
         fragment = RegisterSexFrag()
         activity.addFragment(fragment, R.id.login_content)
         binding.showBack = true
+
+        val frag =
+            activity.supportFragmentManager.findFragmentById(R.id.login_content) as BaseFragment
+        if (frag is RegisterCodeFrag) {
+            activity.removeFragment(frag)
+        }
     }
 
     /**
@@ -93,7 +99,7 @@ class LoginViewModel : BaseViewModel() {
      */
     fun registerNick() {
         binding.right = ""
-        fragment = RegisterSexFrag()
+        fragment = RegisterNickFrag()
         activity.addFragment(fragment, R.id.login_content)
         binding.showBack = true
     }
@@ -111,7 +117,7 @@ class LoginViewModel : BaseViewModel() {
     /**
      * 选择图片
      */
-    fun registerImage(){
+    fun registerImage() {
         binding.right = ""
         fragment = RegisterImageFrag()
         activity.addFragment(fragment, R.id.login_content)

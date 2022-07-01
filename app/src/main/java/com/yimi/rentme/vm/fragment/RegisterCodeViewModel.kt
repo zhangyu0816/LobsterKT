@@ -22,7 +22,7 @@ class RegisterCodeViewModel : BaseViewModel() {
     override fun initViewModel() {
         binding.phone = MineApp.registerInfo.phone
         binding.canNext = false
-        binding.codeRemark = ""
+        binding.codeRemark = "注册验证码"
         array[0] = binding.tvCode1
         array[1] = binding.tvCode2
         array[2] = binding.tvCode3
@@ -87,6 +87,15 @@ class RegisterCodeViewModel : BaseViewModel() {
     }
 
     /**
+     * 下一步
+     */
+    fun next(view: View) {
+        if (binding.canNext) {
+            verifyCaptcha()
+        }
+    }
+
+    /**
      * 验证 注册验证码
      */
     private fun verifyCaptcha() {
@@ -95,7 +104,8 @@ class RegisterCodeViewModel : BaseViewModel() {
         }) {
             onSuccess {
                 MineApp.registerInfo.captcha = binding.edCode.text.toString()
-                EventBus.getDefault().post("","lobsterRegisterSex")
+                timer!!.cancel()
+                EventBus.getDefault().post("", "lobsterRegisterSex")
             }
             onFailed {
                 binding.codeRemark =
@@ -104,15 +114,6 @@ class RegisterCodeViewModel : BaseViewModel() {
                 timer!!.cancel()
                 canGetCode = true
             }
-        }
-    }
-
-    /**
-     * 下一步
-     */
-    fun next(view: View) {
-        if (binding.canNext) {
-            verifyCaptcha()
         }
     }
 }
