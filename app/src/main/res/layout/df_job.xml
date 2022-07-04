@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.JobDF" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_bg_white_radius_top20"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                onClickDelayed="@{dialog::cancel}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="取消"
+                android:textColor="@color/black_827"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                onClickDelayed="@{dialog::sure}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:padding="15dp"
+                android:text="确定"
+                android:textColor="@color/black_252"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#eeeeee" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <org.jaaksi.pickerview.widget.PickerView
+                android:id="@+id/title_pv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:pv_alignment="center"
+                app:pv_center_text_size="20sp"
+                app:pv_end_color="@color/black_9"
+                app:pv_out_text_size="16sp"
+                app:pv_start_color="@color/black_252"
+                app:pv_visible_item_count="5" />
+
+            <org.jaaksi.pickerview.widget.PickerView
+                android:id="@+id/name_pv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:pv_alignment="center"
+                app:pv_center_text_size="20sp"
+                app:pv_end_color="@color/black_9"
+                app:pv_out_text_size="16sp"
+                app:pv_start_color="@color/black_252"
+                app:pv_visible_item_count="5" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

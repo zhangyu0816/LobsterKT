@@ -90,4 +90,9 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/Login_login")
     suspend fun loginByPass(@FieldMap map: Map<String, String>): HttpWrapBean<LoginInfo>
+
+    // 用户注册
+    @FormUrlEncoded
+    @POST("api/Login_regist")
+    suspend fun register(@FieldMap map: Map<String, String>): HttpWrapBean<LoginInfo>
 }

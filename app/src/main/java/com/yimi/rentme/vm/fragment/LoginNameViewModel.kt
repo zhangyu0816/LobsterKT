@@ -173,17 +173,6 @@ class LoginNameViewModel : BaseViewModel() {
         map["appVersion"] = activity.versionName()
         map["deviceHardwareInfo"] = getString("deviceHardwareInfo")
 
-//        if (MineApp.registerInfo.bindPhone.isNotEmpty()) {
-//            map["userName"] = MineApp.registerInfo.bindPhone
-//            map["captcha"] = MineApp.registerInfo.captcha
-//            map["moreImages"] = MineApp.registerInfo.moreImages
-//            map["nick"] = MineApp.registerInfo.name
-//            map["sex"] = MineApp.registerInfo.sex.toString()
-//            map["birthday"] = MineApp.registerInfo.birthday
-//            map["provinceId"] = "0"
-//            map["cityId"] = "0"
-//            map["districtId"] = "0"
-//        }
         mainDataSource.enqueue({ loginByUnion(map) }) {
             onSuccess {
                 saveLong("userId", it.id)
@@ -208,42 +197,6 @@ class LoginNameViewModel : BaseViewModel() {
                         Pair("isRegister", true)
                     )
                 }
-            }
-        }
-    }
-
-    /**
-     * 更新用户信息
-     */
-    private fun modifyMemberInfo() {
-        val map = HashMap<String, String>()
-        if (MineApp.registerInfo.name.isNotEmpty())
-            map["nick"] = MineApp.registerInfo.name
-        if (MineApp.registerInfo.image.isNotEmpty())
-            map["image"] = MineApp.registerInfo.image
-        if (MineApp.registerInfo.moreImages.isNotEmpty())
-            map["moreImages"] = MineApp.registerInfo.moreImages
-        if (MineApp.registerInfo.personalitySign.isNotEmpty())
-            map["personalitySign"] = MineApp.registerInfo.personalitySign
-        if (MineApp.registerInfo.serviceTags.isNotEmpty())
-            map["serviceTags"] = MineApp.registerInfo.serviceTags
-        if (MineApp.registerInfo.birthday.isNotEmpty()) {
-            map["birthday"] = MineApp.registerInfo.birthday
-            map["age"] = DateUtil.getAge(MineApp.registerInfo.birthday, 31).toString()
-        }
-        if (MineApp.registerInfo.sex != -1)
-            map["sex"] = MineApp.registerInfo.sex.toString()
-        map["constellation"] = "0"
-        if (MineApp.registerInfo.job.isNotEmpty())
-            map["job"] = MineApp.registerInfo.job
-        map["provinceId"] = "0"
-        map["cityId"] = "0"
-        map["districtId"] = "0"
-        map["height"] = "0"
-        map["singleImage"] = ""
-        mainDataSource.enqueue({ modifyMemberInfo(map) }) {
-            onSuccess {
-                myInfo()
             }
         }
     }
@@ -285,5 +238,6 @@ class LoginNameViewModel : BaseViewModel() {
                 EventBus.getDefault().post(it.isRegister, "lobsterCheckRegister")
             }
         }
+
     }
 }

@@ -17,4 +17,5 @@ class RegisterInfo {
     var serviceTags = ""
     var image = ""
     var bindPhone = ""
+    var jobTitle = ""
 }

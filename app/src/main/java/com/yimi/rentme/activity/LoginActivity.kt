@@ -76,6 +76,14 @@ class LoginActivity : BaseScreenActivity() {
     }
 
     /**
+     * 上传图片
+     */
+    @Subscriber(tag = "lobsterRegisterMember")
+    private fun lobsterRegisterMember(data: String) {
+        viewModel.registerMember()
+    }
+
+    /**
      * 关闭登录
      */
     @Subscriber(tag = "lobsterFinishLogin")

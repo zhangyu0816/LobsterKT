@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.fragment.RegisterMemberViewModel" />
+
+        <variable
+            name="job"
+            type="String" />
+
+        <variable
+            name="personalitySign"
+            type="String" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/register_bg"
+        android:fitsSystemWindows="true">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="68dp"
+            android:text="快完成啦！"
+            android:textColor="@android:color/white"
+            android:textSize="27sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="45dp"
+            android:alpha="0.6"
+            android:text="最后补充好你的个人资料吧～不填写就显示默认"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/tv_start"
+            android:layout_below="@+id/tv_second"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="38dp"
+                android:paddingEnd="38dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="职业"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_job"
+                    onClickDelayed="@{viewModel::selectJob}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/btn_bg_white_tran_radius60"
+                    android:hint="设计师（默认）"
+                    android:paddingStart="25dp"
+                    android:paddingTop="13dp"
+                    android:paddingEnd="25dp"
+                    android:paddingBottom="13dp"
+                    android:text="@{job}"
+                    android:textColor="@color/white"
+                    android:textColorHint="#CDB1FF"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="个性签名"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_personality_sign"
+                    onClickDelayed="@{viewModel::editSign}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/btn_bg_white_tran_radius60"
+                    android:hint="有趣之人终相遇（默认）"
+                    android:paddingStart="25dp"
+                    android:paddingTop="13dp"
+                    android:paddingEnd="25dp"
+                    android:paddingBottom="13dp"
+                    android:text="@{personalitySign}"
+                    android:textColor="@color/white"
+                    android:textColorHint="#CDB1FF"
+                    android:textSize="14sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="个性标签"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        onClickDelayed="@{viewModel::selectTag}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
+                        android:text="编辑标签"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:drawableEndCompat="@drawable/arrow_small_white_right_icon" />
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    adapter="@{viewModel.adapter}"
+                    recyclerType="@{4}"
+                    android:layout_width="match_parent"
+                    android:layout_height="86dp"
+                    android:layout_marginTop="15dp" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <TextView
+            android:id="@+id/tv_start"
+            onClickDelayed="@{viewModel::next}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="50dp"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="开启虾菇"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:drawableEndCompat="@drawable/arrow_small_white_right_icon" />
+    </RelativeLayout>
+</layout>

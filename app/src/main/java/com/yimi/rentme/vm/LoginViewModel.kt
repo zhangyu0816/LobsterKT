@@ -123,4 +123,14 @@ class LoginViewModel : BaseViewModel() {
         activity.addFragment(fragment, R.id.login_content)
         binding.showBack = true
     }
+
+    /**
+     * 选择图片
+     */
+    fun registerMember() {
+        binding.right = ""
+        fragment = RegisterMemberFrag()
+        activity.addFragment(fragment, R.id.login_content)
+        binding.showBack = true
+    }
 }

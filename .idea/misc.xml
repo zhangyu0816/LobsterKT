@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/KotlinCommon/baseLibs/src/main/res/layout/df_birthday.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.222" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable/bg_splash.xml" value="0.222" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable/btn_bg_black_e5e_radius60.xml" value="0.222" />
@@ -27,6 +28,7 @@
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/ac_video_play.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/back_black_layout.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/df_image_captcha.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/df_job.xml" value="0.3609375" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_camera_image.xml" value="0.3564102564102564" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_login.xml" value="0.3609375" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_login_1.xml" value="0.3619791666666667" />
@@ -36,10 +38,12 @@
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_register_birthday.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_register_code.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_register_image.xml" value="0.297008547008547" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_register_member.xml" value="0.33" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_register_nick.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_register_sex.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_camera_image.xml" value="0.29615384615384616" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_file_model.xml" value="0.33" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_tag.xml" value="0.3609375" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/pay_result.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.222" />
       </map>

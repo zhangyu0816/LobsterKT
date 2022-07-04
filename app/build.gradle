@@ -78,4 +78,5 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(path: ':KotlinCommon:baseLibs')
+    kapt "androidx.room:room-compiler:2.3.0"
 }

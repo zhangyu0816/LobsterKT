@@ -17,6 +17,7 @@ import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import com.zb.baselibs.utils.saveInteger
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.startActivity
+import org.simple.eventbus.EventBus
 import java.io.File
 
 class RegisterImageViewModel : BaseViewModel() {
@@ -25,7 +26,7 @@ class RegisterImageViewModel : BaseViewModel() {
     private lateinit var photoManager: PhotoManager
 
     override fun initViewModel() {
-        binding.imageUrl = ""
+        binding.imageUrl = MineApp.registerInfo.image
         binding.canNext = false
         photoManager =
             PhotoManager(activity, mainDataSource, object : PhotoManager.OnUpLoadImageListener {
@@ -114,7 +115,7 @@ class RegisterImageViewModel : BaseViewModel() {
      */
     fun next(view: View) {
         if (binding.canNext) {
-
+            EventBus.getDefault().post("", "lobsterRegisterMember")
         }
     }
 }

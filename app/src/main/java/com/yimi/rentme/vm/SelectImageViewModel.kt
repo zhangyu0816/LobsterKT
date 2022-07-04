@@ -10,7 +10,6 @@ import com.yimi.rentme.databinding.AcSelectImageBinding
 import com.yimi.rentme.fragment.CameraImageFrag
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.views.replaceFragment
-import org.jetbrains.anko.runOnUiThread
 import org.simple.eventbus.EventBus
 
 class SelectImageViewModel : BaseViewModel() {
