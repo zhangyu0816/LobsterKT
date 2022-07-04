@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.yimi.rentme.R" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.SelectImageViewModel" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.FileModel" />
+    </data>
+
+    <LinearLayout
+        onClickDelayed="@{v->viewModel.selectFileTitle(item)}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/black"
+        android:orientation="horizontal">
+
+        <ImageView
+            defaultRes="@{R.mipmap.empty_icon}"
+            imageUrl="@{item.image}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.25f)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.25f)}"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="15dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/black"
+                android:text="@{item.fileName}"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/black"
+                android:text="@{String.valueOf(item.size)}"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

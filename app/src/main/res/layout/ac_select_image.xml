@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.SelectImageViewModel" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="showVideo"
+            type="boolean" />
+
+        <variable
+            name="showBottom"
+            type="boolean" />
+
+        <variable
+            name="index"
+            type="Integer" />
+
+        <variable
+            name="showFileModel"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:fitsSystemWindows="true">
+
+        <RelativeLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/black_252">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                onClickDelayed="@{viewModel::back}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:padding="15dp"
+                app:srcCompat="@mipmap/back_white_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:onClick="@{viewModel::selectTitle}"
+                android:text="@{title}"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="@{showVideo?View.GONE:View.VISIBLE}"
+                app:drawableEndCompat="@mipmap/arrow_xia"
+                tools:visibility="gone" />
+
+            <TextView
+                onClickDelayed="@{viewModel::upload}"
+                android:layout_width="60dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/btn_bg_purple_7a4_radius60"
+                android:gravity="center"
+                android:text="上传"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/camera_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:layout_below="@+id/top_layout" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/top_layout"
+            android:visibility="@{showFileModel?View.VISIBLE:View.GONE}">
+
+            <View
+                onClickDelayed="@{viewModel::selectTitle}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.5"
+                android:background="@android:color/black" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                adapter="@{viewModel.adapter}"
+                color="@{R.color.black_efe}"
+                size="@{1}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black_252"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{showBottom?View.VISIBLE:View.GONE}">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{v->viewModel.selectIndex(0)}"
+                android:text="相册"
+                android:textColor="@{index==0?@color/white:@color/white_cc}"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{v->viewModel.selectIndex(1)}"
+                android:text="拍视频"
+                android:textColor="@{index==1?@color/white:@color/white_cc}"
+                android:textSize="16sp"
+                android:visibility="@{showVideo?View.VISIBLE:View.GONE}" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{v->viewModel.selectIndex(2)}"
+                android:text="拍照"
+                android:textColor="@{index==2?@color/white:@color/white_cc}"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

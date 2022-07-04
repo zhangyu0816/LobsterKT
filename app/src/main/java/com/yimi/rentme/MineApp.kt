@@ -1,6 +1,7 @@
 package com.yimi.rentme
 
 import androidx.appcompat.app.AppCompatActivity
+import com.yimi.rentme.bean.FileModel
 import com.yimi.rentme.bean.MineInfo
 import com.yimi.rentme.bean.RegisterInfo
 import com.zb.baselibs.app.BaseApp
@@ -59,5 +60,8 @@ class MineApp : BaseApp() {
         lateinit var mineInfo: MineInfo
         var registerInfo = RegisterInfo()
         var threeInfo = ThreeInfo()
+        val cameraTitle = ArrayList<String>()
+        val fileList = ArrayList<FileModel>()
+        val selectImageList = ArrayList<String>()
     }
 }

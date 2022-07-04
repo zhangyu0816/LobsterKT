@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.yimi.rentme.R" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil"/>
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.fragment.CameraImageViewModel" />
+
+        <variable
+            name="item"
+            type="String" />
+
+        <variable
+            name="position"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            defaultRes="@{R.mipmap.empty_icon}"
+            imageUrl="@{item}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.25f)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.25f)}"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:onClick="@{v->viewModel.selectImage(item,position)}" />
+
+        <ImageView
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.25f)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.25f)}"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@{LobsterObjectUtil.cameraImageSelect(item)?@drawable/image_select:@drawable/image_unselect}" />
+    </RelativeLayout>
+</layout>

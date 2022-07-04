@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.fragment.CameraImageViewModel" />
+    </data>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/images_list"
+        adapter="@{viewModel.adapter}"
+        gridNum="@{4}"
+        includeEdge="@{true}"
+        recyclerType="@{2}"
+        size="@{4}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_252" />
+</layout>

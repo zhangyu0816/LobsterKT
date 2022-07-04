@@ -2,9 +2,22 @@ package com.yimi.rentme
 
 import com.yimi.rentme.bean.*
 import com.zb.baselibs.bean.HttpWrapBean
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface ApiService {
+
+    // 上传图片
+    @Multipart
+    @POST("YmUpload_image")
+    suspend fun uploadImages(
+        @Part("isCompre") isCompre: RequestBody,
+        @Part("isCutImage") isCutImage: RequestBody,
+        @Part("fileFileName") fileName: RequestBody,
+        @Part("fileContentType") fileContentType: RequestBody,
+        @Part file: MultipartBody.Part
+    ): HttpWrapBean<ResourceUrl>
 
     // 功能开关
     @GET("api/AppCommon_functionSwitch")

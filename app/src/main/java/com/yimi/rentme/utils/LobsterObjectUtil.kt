@@ -1,5 +1,6 @@
 package com.yimi.rentme.utils
 
+import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.dip2px
@@ -23,5 +24,10 @@ object LobsterObjectUtil {
     @JvmStatic
     fun getCodeWidth(): Int {
         return ((BaseApp.W - BaseApp.context.dip2px(106f)) / 4)
+    }
+
+    @JvmStatic
+    fun cameraImageSelect(image: String): Boolean {
+        return MineApp.selectImageList.contains(image)
     }
 }
