@@ -458,13 +458,13 @@ class PhotoManager(
                 statisticsUploadStatus()
                 if (reUploadCount <= maxReUpload)
                     reUploadByFail()
-                else listener.onError(photoFile)
+                else listener.onError(photoFile, it.errorMessage)
             }
         }
     }
 
     fun interface OnUpLoadImageListener {
         fun onSuccess()
-        fun onError(file: PhotoFile?) {}
+        fun onError(file: PhotoFile?, errorMsg: String) {}
     }
 }

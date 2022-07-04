@@ -2,9 +2,12 @@ package com.yimi.rentme.vm.fragment
 
 import android.Manifest
 import android.view.View
+import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.activity.SelectImageActivity
 import com.yimi.rentme.databinding.FragRegisterImageBinding
+import com.yimi.rentme.utils.luban.PhotoFile
+import com.yimi.rentme.utils.luban.PhotoManager
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
@@ -12,15 +15,34 @@ import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.utils.getInteger
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import com.zb.baselibs.utils.saveInteger
+import kotlinx.coroutines.Job
 import org.jetbrains.anko.startActivity
+import java.io.File
 
 class RegisterImageViewModel : BaseViewModel() {
 
     lateinit var binding: FragRegisterImageBinding
+    private lateinit var photoManager: PhotoManager
 
     override fun initViewModel() {
         binding.imageUrl = ""
         binding.canNext = false
+        photoManager =
+            PhotoManager(activity, mainDataSource, object : PhotoManager.OnUpLoadImageListener {
+                override fun onSuccess() {
+                    binding.imageUrl = photoManager.jointWebUrl(",")
+                    MineApp.registerInfo.image = binding.imageUrl!!
+                    MineApp.registerInfo.moreImages = binding.imageUrl!!
+                    binding.canNext = true
+                    photoManager.deleteAllFile()
+                    dismissLoading()
+                }
+
+                override fun onError(file: PhotoFile?, errorMsg: String) {
+                    SCToastUtil.showToast(activity, errorMsg, 2)
+                    dismissLoading()
+                }
+            })
     }
 
     /**
@@ -77,6 +99,14 @@ class RegisterImageViewModel : BaseViewModel() {
                 Pair("showBottom", true)
             )
         }
+    }
+
+    /**
+     * 上传图片
+     */
+    fun uploadImageList(imageList: ArrayList<String>) {
+        showLoading(Job(), "上传头像...")
+        photoManager.addFileUpload(0, File(imageList[0]))
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.yimi.rentme.vm.fragment
 
-import android.Manifest
 import android.graphics.Color
 import android.os.Build
 import android.text.Spannable
@@ -11,20 +10,16 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import com.yimi.rentme.MineApp
-import com.yimi.rentme.R
 import com.yimi.rentme.activity.BindingPhoneActivity
 import com.yimi.rentme.activity.MainActivity
-import com.yimi.rentme.activity.SelectImageActivity
 import com.yimi.rentme.bean.RegisterInfo
 import com.yimi.rentme.databinding.FragLoginNameBinding
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.activity.WebActivity
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.bean.ThreeInfo
-import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.dialog.SelectDF
 import com.zb.baselibs.utils.*
-import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.startActivity
 import org.simple.eventbus.EventBus
@@ -34,8 +29,6 @@ class LoginNameViewModel : BaseViewModel() {
     lateinit var binding: FragLoginNameBinding
     private var baseUrlList = ArrayList<String>()
     private lateinit var threeLogin: ThreeLogin
-    private val needMoreInfo = false
-
 
     override fun initViewModel() {
         baseUrlList.add("正式服")
@@ -202,9 +195,7 @@ class LoginNameViewModel : BaseViewModel() {
                     // 已注册，只需绑定手机号
                     activity.startActivity<BindingPhoneActivity>()
                     dismissLoading()
-                } else if (needMoreInfo)
-                    modifyMemberInfo()
-                else
+                } else
                     myInfo()
             }
 
@@ -279,72 +270,20 @@ class LoginNameViewModel : BaseViewModel() {
      * 下一步
      */
     fun next(view: View) {
-        if (checkPermissionGranted(
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-        ) {
-            activity.startActivity<SelectImageActivity>(
-                Pair("showBottom", true)
-            )
-        } else {
-            if (getInteger("image_permission", 0) == 0) {
-                saveInteger("image_permission", 1)
-                RemindDF(activity).setTitle("权限说明")
-                    .setContent(
-                        "提交本人真实头像时需要使用上传图片功能，我们将会申请相机、存储权限：" +
-                                "\n 1、申请相机权限--上传图片时获取拍摄照片功能，" +
-                                "\n 2、申请存储权限--上传图片时获取保存和读取图片功能，" +
-                                "\n 3、若您点击“同意”按钮，我们方可正式申请上述权限，以便拍摄照片及选取照片，完善个人信息，" +
-                                "\n 4、若您点击“拒绝”按钮，我们将不再主动弹出该提示，您也无法使用上传图片功能，不影响使用其他的虾菇功能/服务，" +
-                                "\n 5、您也可以通过“手机设置--应用--" + BaseApp.context.resources.getString(R.string.app_name) + "--权限”或app内“我的--设置--权限管理--权限”，手动开启或关闭相机、存储权限。"
-                    ).setSureName("同意").setCancelName("拒绝")
-                    .setCallBack(object : RemindDF.CallBack {
-                        override fun sure() {
-                            selectImage()
-                        }
-                    }).show(activity.supportFragmentManager)
-            } else {
-                SCToastUtil.showToast(
-                    activity,
-                    "可通过“手机设置--应用--${BaseApp.context.resources.getString(R.string.app_name)}--权限”，手动开启或关闭相机、存储权限。",
-                    2
-                )
-            }
-        }
-
-
-//        if (binding.phone!!.length < 11) return
-////        if (!binding.phone!!.matches(BaseApp.phoneRegex)) {
-////            SCToastUtil.showToast(activity, "请输入正确手机号", 2)
-////            return
-////        }
-//        if (!binding.clickSelect) {
-//            SCToastUtil.showToast(activity, "请仔细阅读底部协议，并勾选", 2)
+        if (binding.phone!!.length < 11) return
+//        if (!binding.phone!!.matches(BaseApp.phoneRegex)) {
+//            SCToastUtil.showToast(activity, "请输入正确手机号", 2)
 //            return
 //        }
-//        mainDataSource.enqueueLoading({ checkUserName(binding.phone!!) }, "检测是否注册...") {
-//            onSuccess {
-//                MineApp.threeInfo = ThreeInfo()
-//                EventBus.getDefault().post(it.isRegister, "lobsterCheckRegister")
-//            }
-//        }
-    }
-
-    /**
-     * 选择图片
-     */
-    private fun selectImage() {
-        launchMain {
-            activity.requestPermissionsForResult(
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = "为了更好的提供服务，需要获取相机权限和存储权限"
-            )
-            activity.startActivity<SelectImageActivity>(
-                Pair("showBottom", true)
-            )
+        if (!binding.clickSelect) {
+            SCToastUtil.showToast(activity, "请仔细阅读底部协议，并勾选", 2)
+            return
+        }
+        mainDataSource.enqueueLoading({ checkUserName(binding.phone!!) }, "检测是否注册...") {
+            onSuccess {
+                MineApp.threeInfo = ThreeInfo()
+                EventBus.getDefault().post(it.isRegister, "lobsterCheckRegister")
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.yimi.rentme.vm
 
+import android.os.SystemClock
 import android.view.View
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
@@ -7,7 +8,9 @@ import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.FileModel
 import com.yimi.rentme.databinding.AcSelectImageBinding
 import com.yimi.rentme.fragment.CameraImageFrag
+import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.views.replaceFragment
+import org.jetbrains.anko.runOnUiThread
 import org.simple.eventbus.EventBus
 
 class SelectImageViewModel : BaseViewModel() {
@@ -71,6 +74,12 @@ class SelectImageViewModel : BaseViewModel() {
      * 选择图片
      */
     fun upload(view: View) {
-        
+        EventBus.getDefault().post(MineApp.selectImageList, "lobsterUploadImageList")
+        BaseApp.fixedThreadPool.execute {
+            SystemClock.sleep(200)
+            activity.runOnUiThread {
+                back(binding.ivBack)
+            }
+        }
     }
 }

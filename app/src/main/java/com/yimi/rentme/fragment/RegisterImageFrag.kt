@@ -5,6 +5,7 @@ import com.yimi.rentme.R
 import com.yimi.rentme.databinding.FragRegisterImageBinding
 import com.yimi.rentme.vm.fragment.RegisterImageViewModel
 import com.zb.baselibs.activity.BaseFragment
+import org.simple.eventbus.Subscriber
 
 class RegisterImageFrag : BaseFragment() {
 
@@ -19,6 +20,15 @@ class RegisterImageFrag : BaseFragment() {
     }
 
     override fun initView() {
+        needEvenBus = true
         viewModel.initViewModel()
+    }
+
+    /**
+     * 上传图片
+     */
+    @Subscriber(tag = "lobsterUploadImageList")
+    private fun lobsterUploadImageList(data: ArrayList<String>) {
+        viewModel.uploadImageList(data)
     }
 }
