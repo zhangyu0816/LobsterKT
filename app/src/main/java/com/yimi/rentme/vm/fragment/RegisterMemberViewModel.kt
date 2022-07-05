@@ -1,5 +1,6 @@
 package com.yimi.rentme.vm.fragment
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.view.View
 import com.yimi.rentme.MineApp
@@ -9,6 +10,7 @@ import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.RegisterInfo
 import com.yimi.rentme.databinding.FragRegisterMemberBinding
 import com.yimi.rentme.dialog.JobDF
+import com.yimi.rentme.dialog.MemberEditDF
 import com.yimi.rentme.dialog.ServiceTagDF
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.bean.ThreeInfo
@@ -49,6 +51,7 @@ class RegisterMemberViewModel : BaseViewModel() {
                 override fun sure(jobTitle: String, jobName: String) {
                     MineApp.registerInfo.jobTitle = jobTitle
                     MineApp.registerInfo.job = jobName
+                    binding.job = jobName
                 }
 
             }).show(activity.supportFragmentManager)
@@ -57,7 +60,16 @@ class RegisterMemberViewModel : BaseViewModel() {
     /**
      * 填写个性签名
      */
-    fun editSign(view: View) {}
+    fun editSign(view: View) {
+        MemberEditDF(activity).setType(3).setHint("编辑个性签名...")
+            .setContent(MineApp.registerInfo.personalitySign)
+            .setLines(10).setCallBack(object : MemberEditDF.CallBack {
+                override fun sure(content: String) {
+                    MineApp.registerInfo.personalitySign = content
+                    binding.personalitySign = content
+                }
+            }).show(activity.supportFragmentManager)
+    }
 
     /**
      * 选择个性标签
@@ -65,8 +77,18 @@ class RegisterMemberViewModel : BaseViewModel() {
     fun selectTag(view: View) {
         ServiceTagDF(activity).setServiceTags(MineApp.registerInfo.serviceTags)
             .setCallBack(object : ServiceTagDF.CallBack {
+                @SuppressLint("NotifyDataSetChanged")
                 override fun sure(serviceTags: String) {
                     MineApp.registerInfo.serviceTags = serviceTags
+                    tagList.clear()
+                    adapter.notifyDataSetChanged()
+                    if (serviceTags.isNotEmpty()) {
+                        val tags = serviceTags.substring(1, serviceTags.length - 1).split("#")
+                        for (tag in tags)
+                            tagList.add(tag)
+                        adapter.notifyItemRangeChanged(0, tagList.size)
+                    }
+
                 }
             }).show(activity.supportFragmentManager)
     }

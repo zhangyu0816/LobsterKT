@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.MemberEditDF" />
+
+        <variable
+            name="content"
+            type="String" />
+
+        <variable
+            name="lines"
+            type="Integer" />
+
+        <variable
+            name="hint"
+            type="String" />
+
+        <variable
+            name="type"
+            type="Integer" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_bg_white_radius_top10"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                onClickDelayed="@{dialog::cancel}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="取消"
+                android:textColor="@color/black_827"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                onClickDelayed="@{dialog::sure}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:padding="15dp"
+                android:text="保存"
+                android:textColor="@color/black_252"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#eeeeee" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@{lines==1?@drawable/btn_bg_white_black_c3b_radius34:@drawable/empty_bg}">
+
+                <EditText
+                    android:id="@+id/ed_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/iv_close"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:hint="@{hint}"
+                    android:lines="@{lines}"
+                    android:maxLength="@{type==6?3:(type==2?10:200)}"
+                    android:padding="15dp"
+                    android:text="@={content}"
+                    android:textColor="@color/black_252"
+                    android:textColorHint="@color/black_c3b"
+                    android:textCursorDrawable="@drawable/cursor_color_black_252"
+                    tools:text="文件访问量礼物老玩家了我我发我" />
+
+                <ImageView
+                    android:id="@+id/iv_close"
+                    onClickDelayed="@{dialog::cleanContent}"
+                    viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(80)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(80)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
+                    android:background="@mipmap/close_icon"
+                    android:visibility="@{lines==1?View.VISIBLE:View.GONE}" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="15dp"
+                android:text="@{ObjectUtils.editMax(content,type==2?10:200)}"
+                android:textColor="@color/black_252"
+                android:textSize="12sp"
+                android:visibility="@{type==6?View.GONE:View.VISIBLE}" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

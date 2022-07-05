@@ -8,15 +8,23 @@
             type="String" />
     </data>
 
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:background="@drawable/btn_bg_white_radius11"
-        android:gravity="center"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:text="@{item}"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content"
+        android:paddingEnd="8dp"
+        android:paddingStart="1px"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:background="@drawable/btn_bg_white_radius11"
+            android:gravity="center"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="@{item}"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 </layout>
