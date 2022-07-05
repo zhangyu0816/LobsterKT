@@ -105,4 +105,12 @@ interface ApiService {
         @Field("deviceHardwareInfo") deviceHardwareInfo: String,
         @Field("usePl") usePl: Int
     ): HttpWrapBean<Any?>
+
+    // 我关注的人的动态列表
+    @FormUrlEncoded
+    @POST("api/Interactive_attentionDyn")
+    suspend fun attentionDyn(
+        @Field("pageNo") pageNo: Int,
+        @Field("timeSortType") timeSortType: Int
+    ): HttpWrapBean<ArrayList<DiscoverInfo>>
 }

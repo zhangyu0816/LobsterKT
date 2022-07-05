@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.views.FullScreenVideoView
+import com.yimi.rentme.views.NoDataView
 import com.yimi.rentme.views.TabView
 import com.zb.baselibs.utils.SCToastUtil
 
@@ -52,4 +53,9 @@ fun TextView.tabTextSize(isBig: Boolean) {
 @BindingAdapter(value = ["tabTitle", "tabSelect"], requireAll = false)
 fun TabView.setTab(tabTitle: String, tabSelect: Boolean) {
     this.selectTab(tabTitle, tabSelect)
+}
+
+@BindingAdapter(value = ["noDataRes", "noWifi"], requireAll = false)
+fun NoDataView.setNoDataInfo(noDataRes: Int, noWifi: Boolean) {
+    this.setNoDataInfo(noDataRes, noWifi)
 }

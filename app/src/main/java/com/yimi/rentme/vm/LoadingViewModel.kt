@@ -1,6 +1,7 @@
 package com.yimi.rentme.vm
 
 import android.os.SystemClock
+import android.util.Log
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.activity.LoginActivity
@@ -10,6 +11,7 @@ import com.yimi.rentme.databinding.AcLoadingBinding
 import com.zb.baselibs.activity.WebActivity
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RuleDF
+import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.utils.getInteger
 import com.zb.baselibs.utils.saveInteger
 import org.jetbrains.anko.startActivity
@@ -23,7 +25,8 @@ class LoadingViewModel : BaseViewModel() {
             SystemClock.sleep(2000)
             if (getInteger("rule") == 0)
                 RuleDF(activity).setContent(
-                    "欢迎您使用${BaseApp.context.resources.getString(R.string.app_name)}！${BaseApp.context.resources.getString(
+                    "欢迎您使用${BaseApp.context.resources.getString(R.string.app_name)}！${
+                        BaseApp.context.resources.getString(
                             R.string.app_name
                         )
                     }是由${BaseApp.context.resources.getString(R.string.company_name)}（以下简称“我们”）研发和运营的在线交友平台。我们将通过${
@@ -103,6 +106,8 @@ class LoadingViewModel : BaseViewModel() {
                     else
                         activity.startActivity<VideoPlayActivity>()
                     activity.finish()
+                } else if (it.isNoWIFI) {
+                    SCToastUtil.showToast(activity, "服务器链接失败，请检测网络", 2)
                 }
             }
         }

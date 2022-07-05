@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.yimi.rentme.R" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.fragment.FollowViewModel" />
+
+        <variable
+            name="noWifi"
+            type="boolean" />
+
+        <variable
+            name="noData"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refresh"
+            onLoadMoreListener="@{viewModel}"
+            onRefreshListener="@{viewModel}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{(noWifi||noData)?View.GONE:View.VISIBLE}">
+
+            <androidx.recyclerview.widget.RecyclerView
+                adapter="@{viewModel.adapter}"
+                recyclerType="@{3}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="7dp" />
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+        <com.yimi.rentme.views.NoDataView
+            noDataRes="@{R.mipmap.other_no_discover_data}"
+            noWifi="@{noWifi}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{(noWifi||noData)?View.VISIBLE:View.GONE}" />
+
+    </RelativeLayout>
+</layout>

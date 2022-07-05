@@ -9,6 +9,7 @@
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.222" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable/bg_splash.xml" value="0.222" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable/btn_bg_black_252_radius5.xml" value="0.2345" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable/btn_bg_black_252_radius60.xml" value="0.228" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable/btn_bg_black_e5e_radius60.xml" value="0.222" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable/btn_bg_black_efe_radius10.xml" value="0.222" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable/btn_bg_black_efe_radius40.xml" value="0.193" />
@@ -45,6 +46,7 @@
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/df_service_tag.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_camera_image.xml" value="0.3564102564102564" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_camera_take.xml" value="0.33" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_follow.xml" value="0.3366906474820144" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_login.xml" value="0.3609375" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_login_1.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_login_code.xml" value="0.3609375" />
@@ -54,6 +56,8 @@
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_main_chat.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_main_home.xml" value="0.33" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_main_mine.xml" value="0.3609375" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_member_discover.xml" value="0.271484375" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_member_video.xml" value="0.3609375" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_register_birthday.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_register_code.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_register_image.xml" value="0.297008547008547" />
@@ -62,10 +66,12 @@
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/frag_register_sex.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_camera_image.xml" value="0.29615384615384616" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_file_model.xml" value="0.33" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_follow_discover.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_service_tag.xml" value="0.29615384615384616" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_tab.xml" value="0.18385416666666668" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_tag.xml" value="0.3609375" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_tag_list.xml" value="0.18385416666666668" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/no_data_view.xml" value="0.3609375" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/pay_result.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/tab_view.xml" value="0.3609375" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.222" />

@@ -5,9 +5,14 @@ import android.animation.PropertyValuesHolder
 import android.os.SystemClock
 import android.view.View
 import android.view.animation.Animation
+import com.yimi.rentme.R
 import com.yimi.rentme.databinding.FragMainHomeBinding
+import com.yimi.rentme.fragment.FollowFrag
+import com.yimi.rentme.fragment.MemberDiscoverFrag
+import com.yimi.rentme.fragment.MemberVideoFrag
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
+import com.zb.baselibs.views.replaceFragment
 
 class MainHomeViewModel : BaseViewModel() {
 
@@ -47,11 +52,11 @@ class MainHomeViewModel : BaseViewModel() {
      */
     fun selectIndex(index: Int) {
         binding.index = index
-//        when(index){
-//            0->
-//            1->
-//            2->
-//        }
+        when (index) {
+            0 -> activity.replaceFragment(FollowFrag(), R.id.home_content)
+            1 -> activity.replaceFragment(MemberDiscoverFrag(0L), R.id.home_content)
+            2 -> activity.replaceFragment(MemberVideoFrag(0L), R.id.home_content)
+        }
     }
 
     /**
