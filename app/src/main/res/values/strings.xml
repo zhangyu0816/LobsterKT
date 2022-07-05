@@ -12,4 +12,7 @@
     <string name="sex_0">女</string>
     <string name="sex_1">男</string>
     <string name="select_tag">%s X</string>
+    <string name="tab_follow">关注</string>
+    <string name="tab_recommend">推荐</string>
+    <string name="tab_video">小视频</string>
 </resources>

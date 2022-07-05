@@ -21,4 +21,9 @@ class MainHomeFrag : BaseFragment() {
     override fun initView() {
         viewModel.initViewModel()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.onDestroy()
+    }
 }

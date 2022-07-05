@@ -3,9 +3,11 @@ package com.yimi.rentme.adapter
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.net.Uri
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.views.FullScreenVideoView
+import com.yimi.rentme.views.TabView
 import com.zb.baselibs.utils.SCToastUtil
 
 @BindingAdapter("videoUrl")
@@ -40,4 +42,14 @@ fun FullScreenVideoView.setVideoUrl(videoUrl: String) {
     }
     this.setVideoURI(Uri.parse(videoUrl))
     this.start()
+}
+
+@BindingAdapter("isBig")
+fun TextView.tabTextSize(isBig: Boolean) {
+    this.textSize = if (isBig) 16f else 14f
+}
+
+@BindingAdapter(value = ["tabTitle", "tabSelect"], requireAll = false)
+fun TabView.setTab(tabTitle: String, tabSelect: Boolean) {
+    this.selectTab(tabTitle, tabSelect)
 }

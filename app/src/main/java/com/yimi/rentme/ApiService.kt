@@ -95,4 +95,14 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/Login_regist")
     suspend fun register(@FieldMap map: Map<String, String>): HttpWrapBean<LoginInfo>
+
+    // 更新设备信息
+    @FormUrlEncoded
+    @POST("api/Login_modifyPushInfo")
+    suspend fun modifyPushInfo(
+        @Field("deviceCode") deviceCode: String,
+        @Field("channelId") channelId: String,
+        @Field("deviceHardwareInfo") deviceHardwareInfo: String,
+        @Field("usePl") usePl: Int
+    ): HttpWrapBean<Any?>
 }

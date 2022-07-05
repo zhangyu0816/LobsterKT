@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="tabSelect"
+            type="boolean" />
+
+        <variable
+            name="title"
+            type="String" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            fakeBold="@{tabSelect}"
+            isBig="@{tabSelect}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@{title}"
+            android:textColor="@{tabSelect?@color/black_252:@color/black_827}"
+            tools:textSize="14sp"
+            tools:textStyle="bold" />
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="3dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/btn_bg_purple_7a4_radius60"
+            android:visibility="@{tabSelect?View.VISIBLE:View.INVISIBLE}" />
+    </RelativeLayout>
+</layout>

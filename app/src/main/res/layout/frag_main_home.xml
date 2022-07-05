@@ -3,19 +3,107 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
         <variable
             name="viewModel"
             type="com.yimi.rentme.vm.fragment.MainHomeViewModel" />
+
+        <variable
+            name="index"
+            type="Integer" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
-        <TextView
+        <RelativeLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal">
+
+                <com.yimi.rentme.views.TabView
+                    onClickDelayed="@{v->viewModel.selectIndex(0)}"
+                    tabSelect="@{index==0}"
+                    tabTitle="@{@string/tab_follow}"
+                    android:layout_width="70dp"
+                    android:layout_height="40dp"
+                    android:gravity="center" />
+
+                <com.yimi.rentme.views.TabView
+                    onClickDelayed="@{v->viewModel.selectIndex(1)}"
+                    tabSelect="@{index==1}"
+                    tabTitle="@{@string/tab_recommend}"
+                    android:layout_width="70dp"
+                    android:layout_height="40dp"
+                    android:gravity="center" />
+
+                <com.yimi.rentme.views.TabView
+                    onClickDelayed="@{v->viewModel.selectIndex(2)}"
+                    tabSelect="@{index==2}"
+                    tabTitle="@{@string/tab_video}"
+                    android:layout_width="70dp"
+                    android:layout_height="40dp"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/i_search"
+                onClickDelayed="@{viewModel::toSearch}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="15dp"
+                android:src="@mipmap/search_icon" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/home_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/top_layout" />
+
+        <RelativeLayout
+            onClickDelayed="@{viewModel::publishDiscover}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(237)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(237)}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="主页"
-            android:layout_centerInParent="true"/>
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="15dp">
+
+            <View
+                android:id="@+id/circle_view"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(237)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(237)}"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/circle_yellow_fbc"
+                android:visibility="gone"/>
+
+            <ImageView
+                imageRes="@{R.mipmap.discover_icon}"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(180)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(180)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
     </RelativeLayout>
 </layout>
