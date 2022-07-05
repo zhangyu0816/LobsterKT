@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.ServiceTagDF" />
+
+        <variable
+            name="item"
+            type="String" />
+
+        <variable
+            name="position"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:background="@drawable/btn_bg_purple_7a4_radius60"
+            android:gravity="center"
+            android:onClick="@{v->dialog.deleteTag(position)}"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="@{String.format(@string/select_tag,item)}"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="是为谔谔分 X" />
+    </RelativeLayout>
+</layout>

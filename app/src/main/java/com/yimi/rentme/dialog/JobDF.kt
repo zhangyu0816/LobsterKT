@@ -16,7 +16,7 @@ import com.zb.baselibs.utils.SimulateNetAPI
 import org.jaaksi.pickerview.widget.DefaultCenterDecoration
 import org.json.JSONArray
 
-class JobDF(activity: AppCompatActivity) : BaseDialogFragment(activity) {
+class JobDF(activity: AppCompatActivity) : BaseDialogFragment(activity, false, false) {
 
     private lateinit var binding: DfJobBinding
     private var jobTitle = ""
@@ -79,7 +79,8 @@ class JobDF(activity: AppCompatActivity) : BaseDialogFragment(activity) {
         binding.dialog = this
         jobDaoManager = JobDaoManager(BaseApp.context)
         BaseApp.fixedThreadPool.execute {
-            jobNameList = jobDaoManager.getJobList(jobTitle.ifEmpty { jobTitleList[0] }) as ArrayList<String>
+            jobNameList =
+                jobDaoManager.getJobList(jobTitle.ifEmpty { jobTitleList[0] }) as ArrayList<String>
             if (jobNameList.size == 0) {
                 val data = SimulateNetAPI.getOriginalFundData("job.json")
                 val array = JSONArray(data)
@@ -96,7 +97,8 @@ class JobDF(activity: AppCompatActivity) : BaseDialogFragment(activity) {
                         }
                     }
                 }
-                jobNameList = jobDaoManager.getJobList(jobTitle.ifEmpty { jobTitleList[0] }) as ArrayList<String>
+                jobNameList =
+                    jobDaoManager.getJobList(jobTitle.ifEmpty { jobTitleList[0] }) as ArrayList<String>
             }
             activity.runOnUiThread {
                 mTitle = jobTitle.ifEmpty { jobTitleList[0] }

@@ -45,14 +45,14 @@ class JobDaoManager(private val context: Context) {
     private val dao by lazy { database.getJobInfoDao() }
 
     /**
-     * 保存城市
+     * 保存工作
      */
     fun insert(jobInfo: JobInfo) {
         dao.insert(jobInfo)
     }
 
     /**
-     * 获取省份中所有城市信息
+     * 获取工作类中所有工作信息
      */
     fun getJobList(jobTitle: String): MutableList<String> {
         return dao.queryJobList(jobTitle)

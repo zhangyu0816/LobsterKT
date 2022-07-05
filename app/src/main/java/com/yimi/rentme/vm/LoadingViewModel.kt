@@ -23,8 +23,7 @@ class LoadingViewModel : BaseViewModel() {
             SystemClock.sleep(2000)
             if (getInteger("rule") == 0)
                 RuleDF(activity).setContent(
-                    "欢迎您使用${BaseApp.context.resources.getString(R.string.app_name)}！${
-                        BaseApp.context.resources.getString(
+                    "欢迎您使用${BaseApp.context.resources.getString(R.string.app_name)}！${BaseApp.context.resources.getString(
                             R.string.app_name
                         )
                     }是由${BaseApp.context.resources.getString(R.string.company_name)}（以下简称“我们”）研发和运营的在线交友平台。我们将通过${

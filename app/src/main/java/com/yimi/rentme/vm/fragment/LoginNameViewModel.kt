@@ -31,6 +31,7 @@ class LoginNameViewModel : BaseViewModel() {
     private lateinit var threeLogin: ThreeLogin
 
     override fun initViewModel() {
+        MineApp.registerInfo.serviceTags = "#旅行#摄影#乐观主义#老实孩子#简单#音乐会#"
         baseUrlList.add("正式服")
         baseUrlList.add("敏耀")
         binding.clickSelect = false
@@ -238,6 +239,5 @@ class LoginNameViewModel : BaseViewModel() {
                 EventBus.getDefault().post(it.isRegister, "lobsterCheckRegister")
             }
         }
-
     }
 }

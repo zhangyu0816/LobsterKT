@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.ServiceTagDF" />
+
+        <variable
+            name="showTag"
+            type="boolean" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_bg_white_radius_top10"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                onClickDelayed="@{dialog::cancel}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="取消"
+                android:textColor="@color/black_827"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                onClickDelayed="@{dialog::sure}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:padding="15dp"
+                android:text="保存"
+                android:textColor="@color/black_252"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#eeeeee" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="@drawable/btn_bg_black_252_radius5"
+                android:orientation="vertical"
+                android:padding="15dp"
+                android:visibility="@{showTag?View.GONE:View.VISIBLE}">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="为什么要添加标签？"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="标签可以在个人主页中展示自己哦～让更多人更加了解你！也能寻找到志同道合的好友和对的那个人！"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                adapter="@{dialog.selectAdapter}"
+                recyclerType="@{4}"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:visibility="@{showTag?View.VISIBLE:View.GONE}" />
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            adapter="@{dialog.tabAdapter}"
+            recyclerType="@{1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@color/black_efe" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            adapter="@{dialog.tagAdapter}"
+            recyclerType="@{4}"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:padding="8dp" />
+    </LinearLayout>
+</layout>

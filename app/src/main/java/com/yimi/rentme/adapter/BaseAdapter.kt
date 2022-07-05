@@ -61,13 +61,13 @@ class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
         if (holder != null) {
             holder.binding!!.setVariable(BR.item, t)
             holder.binding!!.setVariable(BR.position, position)
-//            holder.binding!!.setVariable(BR.isSelect, selectIndex == position)
+            holder.binding!!.setVariable(BR.isSelect, selectIndex == position)
 //            holder.binding!!.setVariable(BR.isLast, list!!.size - 1 == position)
 //            if (selectPosition != -1)
 //                holder.binding!!.setVariable(BR.selectPosition, selectPosition)
-//            if (dialog != null) {
-//                holder.binding!!.setVariable(BR.dialog, dialog)
-//            }
+            if (dialog != null) {
+                holder.binding!!.setVariable(BR.dialog, dialog)
+            }
             if (viewModel != null) {
                 holder.binding!!.setVariable(BR.viewModel, viewModel)
             }

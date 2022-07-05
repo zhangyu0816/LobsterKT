@@ -11,4 +11,5 @@
     <string name="login_code">验证码登录</string>
     <string name="sex_0">女</string>
     <string name="sex_1">男</string>
+    <string name="select_tag">%s X</string>
 </resources>

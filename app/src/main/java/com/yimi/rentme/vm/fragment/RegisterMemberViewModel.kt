@@ -9,6 +9,7 @@ import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.RegisterInfo
 import com.yimi.rentme.databinding.FragRegisterMemberBinding
 import com.yimi.rentme.dialog.JobDF
+import com.yimi.rentme.dialog.ServiceTagDF
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.bean.ThreeInfo
 import com.zb.baselibs.utils.*
@@ -61,7 +62,14 @@ class RegisterMemberViewModel : BaseViewModel() {
     /**
      * 选择个性标签
      */
-    fun selectTag(view: View) {}
+    fun selectTag(view: View) {
+        ServiceTagDF(activity).setServiceTags(MineApp.registerInfo.serviceTags)
+            .setCallBack(object : ServiceTagDF.CallBack {
+                override fun sure(serviceTags: String) {
+                    MineApp.registerInfo.serviceTags = serviceTags
+                }
+            }).show(activity.supportFragmentManager)
+    }
 
     /**
      * 下一步
