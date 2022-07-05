@@ -78,6 +78,7 @@ class CameraImageViewModel : BaseViewModel() {
      * 选择图片
      */
     fun upload(view: View) {
+        EventBus.getDefault().post(MineApp.selectImageList,"lobsterUploadImageList")
         BaseApp.fixedThreadPool.execute {
             SystemClock.sleep(200)
             activity.runOnUiThread {

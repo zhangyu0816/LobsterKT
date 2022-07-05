@@ -97,7 +97,7 @@ class RegisterMemberViewModel : BaseViewModel() {
      * 下一步
      */
     fun next(view: View) {
-        if (MineApp.registerInfo.openId.isEmpty())
+        if (MineApp.threeInfo.openId.isEmpty())
             register()
         else
             loginByUnion(MineApp.threeInfo)

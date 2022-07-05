@@ -12,7 +12,7 @@ class RegisterSexViewModel : BaseViewModel() {
 
     override fun initViewModel() {
         binding.sexIndex = MineApp.threeInfo.unionSex
-        binding.canNext = false
+        binding.canNext = MineApp.threeInfo.unionSex!=2
     }
 
     /**

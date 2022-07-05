@@ -12,7 +12,7 @@ class RegisterNickViewModel : BaseViewModel() {
     lateinit var binding: FragRegisterNickBinding
 
     override fun initViewModel() {
-        binding.canNext = false
+        binding.canNext = MineApp.threeInfo.unionNick.isNotEmpty()
         MineApp.registerInfo.name = MineApp.threeInfo.unionNick
         binding.edNick.setText(MineApp.threeInfo.unionNick)
         binding.edNick.afterTextChanged {

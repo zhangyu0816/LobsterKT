@@ -26,7 +26,7 @@ class RegisterImageViewModel : BaseViewModel() {
     private lateinit var photoManager: PhotoManager
 
     override fun initViewModel() {
-        binding.imageUrl = MineApp.registerInfo.image
+        binding.imageUrl = ""
         binding.canNext = false
         photoManager =
             PhotoManager(activity, mainDataSource, object : PhotoManager.OnUpLoadImageListener {

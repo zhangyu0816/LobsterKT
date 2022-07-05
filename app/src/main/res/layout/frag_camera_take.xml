@@ -1,16 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
             type="com.yimi.rentme.vm.fragment.CameraTakeViewModel" />
+
+        <variable
+            name="sizeIndex"
+            type="Integer" />
+
+        <variable
+            name="lightIndex"
+            type="Integer" />
+
+        <variable
+            name="isCreate"
+            type="boolean" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <FrameLayout
+            android:id="@+id/camera_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:visibility="@{isCreate?View.VISIBLE:View.GONE}">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:onClick="@{viewModel::reset}"
+                android:padding="15dp"
+                app:srcCompat="@mipmap/back_black_icon" />
+
+            <TextView
+                onClickDelayed="@{viewModel::upload}"
+                android:layout_width="60dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/btn_bg_purple_7a4_radius60"
+                android:gravity="center"
+                android:text="上传"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{isCreate?View.GONE:View.VISIBLE}">
+
+            <ImageView
+                onClickDelayed="@{viewModel::back}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:padding="15dp"
+                app:srcCompat="@mipmap/cancel" />
+
+            <ImageView
+                android:id="@+id/camera_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:onClick="@{v->viewModel.changeSizeIndex(sizeIndex==0?1:0)}"
+                android:padding="15dp"
+                android:src="@{sizeIndex==0?@drawable/photo_size_9_16:@drawable/photo_size_3_4}" />
+
+            <ImageView
+                android:id="@+id/camera_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/camera_size"
+                android:onClick="@{v->viewModel.changeLightIndex(lightIndex==0?1:0)}"
+                android:padding="15dp"
+                android:src="@{lightIndex==0?@drawable/photo_light_close:@drawable/photo_light_open}" />
+
+            <ImageView
+                android:id="@+id/camera_id"
+                onClickDelayed="@{viewModel::changeCameraId}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/camera_light"
+                android:padding="15dp"
+                app:srcCompat="@mipmap/photo_change" />
+        </RelativeLayout>
+
+        <View
+            onClickDelayed="@{viewModel::createPhoto}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/circle_btn"
+            android:visibility="@{isCreate?View.GONE:View.VISIBLE}" />
     </RelativeLayout>
 </layout>
