@@ -1,21 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="com.yimi.rentme.R" />
+
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
             type="com.yimi.rentme.vm.fragment.CameraImageViewModel" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="showFileModel"
+            type="boolean" />
     </data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/images_list"
-        adapter="@{viewModel.adapter}"
-        gridNum="@{4}"
-        includeEdge="@{true}"
-        recyclerType="@{2}"
-        size="@{4}"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black_252" />
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/black_252">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                onClickDelayed="@{viewModel::back}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:padding="15dp"
+                app:srcCompat="@mipmap/back_white_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:onClick="@{viewModel::selectTitle}"
+                android:text="@{title}"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:drawableEndCompat="@mipmap/arrow_xia"
+                tools:visibility="gone" />
+
+            <TextView
+                onClickDelayed="@{viewModel::upload}"
+                android:layout_width="60dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/btn_bg_purple_7a4_radius60"
+                android:gravity="center"
+                android:text="上传"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/images_list"
+            adapter="@{viewModel.adapter}"
+            gridNum="@{4}"
+            includeEdge="@{true}"
+            recyclerType="@{2}"
+            size="@{4}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/top_layout"
+            android:background="@color/black_252" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/top_layout"
+            android:visibility="@{showFileModel?View.VISIBLE:View.GONE}">
+
+            <View
+                onClickDelayed="@{viewModel::selectTitle}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.5"
+                android:background="@android:color/black" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                adapter="@{viewModel.fileAdapter}"
+                color="@{R.color.black_efe}"
+                size="@{1}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+    </RelativeLayout>
+
 </layout>

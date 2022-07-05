@@ -2,7 +2,9 @@ package com.yimi.rentme.vm.fragment
 
 import android.annotation.SuppressLint
 import android.database.Cursor
+import android.os.SystemClock
 import android.provider.MediaStore
+import android.view.View
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.adapter.BaseAdapter
@@ -25,30 +27,63 @@ class CameraImageViewModel : BaseViewModel() {
     private lateinit var cur: Cursor
     private var mPosition = -1
 
+    lateinit var fileAdapter: BaseAdapter<FileModel>
+    private val fileList = ArrayList<FileModel>()
+
     override fun initViewModel() {
-        MineApp.fileList.add(FileModel("所有图片", "", 0))
+        binding.title = "所有图片"
+        binding.showFileModel = false
+        fileList.add(FileModel("所有图片", "", 0))
         imageMap["所有图片"] = ArrayList()
         cur = activity.contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null,
             null
         )!!
         adapter = BaseAdapter(activity, R.layout.item_camera_image, imageList, this)
+
+        fileAdapter = BaseAdapter(activity, R.layout.item_file_model, fileList, this)
         // 获取相机内照片
         buildImagesBucketList()
     }
 
+    override fun back(view: View) {
+        super.back(view)
+        EventBus.getDefault().post("", "lobsterCameraFinish")
+    }
+
     /**
-     * 更新图片库
+     * 选择文件集合
+     */
+    fun selectTitle(view: View) {
+        binding.showFileModel = !binding.showFileModel
+    }
+
+    /**
+     * 标题集合
      */
     @SuppressLint("NotifyDataSetChanged")
-    fun updateImageList(fileName: String) {
+    fun selectFileTitle(item: FileModel) {
+        binding.showFileModel = false
+        binding.title = item.fileName
         imageList.clear()
         MineApp.selectImageList.clear()
         mPosition = -1
         adapter.notifyDataSetChanged()
-        imageList.addAll(imageMap[fileName]!!)
+        imageList.addAll(imageMap[item.fileName]!!)
         imageList.reverse()
         adapter.notifyItemRangeChanged(0, imageList.size)
+    }
+
+    /**
+     * 选择图片
+     */
+    fun upload(view: View) {
+        BaseApp.fixedThreadPool.execute {
+            SystemClock.sleep(200)
+            activity.runOnUiThread {
+                back(binding.ivBack)
+            }
+        }
     }
 
     /**
@@ -77,7 +112,7 @@ class CameraImageViewModel : BaseViewModel() {
                     val path = cur.getString(photoPathIndex)
                     val fileName = cur.getString(1)
                     var hasName = false
-                    for (fileModel in MineApp.fileList) {
+                    for (fileModel in fileList) {
                         if (fileName == null) break
                         if (fileModel.fileName == fileName) {
                             hasName = true
@@ -85,7 +120,7 @@ class CameraImageViewModel : BaseViewModel() {
                         }
                     }
                     if (!hasName) {
-                        MineApp.fileList.add(FileModel(fileName!!, "", 0))
+                        fileList.add(FileModel(fileName!!, "", 0))
                         imageMap[fileName] = ArrayList()
                     }
                     file = File(path)
@@ -102,7 +137,7 @@ class CameraImageViewModel : BaseViewModel() {
                 imageList.addAll(imageMap["所有图片"]!!)
                 imageList.reverse()
                 adapter.notifyItemRangeChanged(0, imageList.size)
-                for (item in MineApp.fileList) {
+                for (item in fileList) {
                     val temp = imageMap[item.fileName]!!
                     if (temp.isNotEmpty()) {
                         temp.reverse()
@@ -110,8 +145,7 @@ class CameraImageViewModel : BaseViewModel() {
                         item.size = temp.size
                     }
                 }
-                EventBus.getDefault().post("", "lobsterUpdateFileModel")
-
+                fileAdapter.notifyItemRangeChanged(0, fileList.size)
             }
         }
     }

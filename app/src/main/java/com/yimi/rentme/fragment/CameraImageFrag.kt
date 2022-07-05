@@ -5,7 +5,6 @@ import com.yimi.rentme.R
 import com.yimi.rentme.databinding.FragCameraImageBinding
 import com.yimi.rentme.vm.fragment.CameraImageViewModel
 import com.zb.baselibs.activity.BaseFragment
-import org.simple.eventbus.Subscriber
 
 class CameraImageFrag : BaseFragment() {
 
@@ -20,15 +19,6 @@ class CameraImageFrag : BaseFragment() {
     }
 
     override fun initView() {
-        needEvenBus = true
         viewModel.initViewModel()
-    }
-
-    /**
-     * 更新图片库
-     */
-    @Subscriber(tag = "lobsterUpdateImageList")
-    private fun lobsterUpdateImageList(data: String) {
-        viewModel.updateImageList(data)
     }
 }

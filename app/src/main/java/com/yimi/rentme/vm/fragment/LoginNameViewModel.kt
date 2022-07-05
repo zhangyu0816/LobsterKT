@@ -12,6 +12,7 @@ import android.view.View
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.activity.BindingPhoneActivity
 import com.yimi.rentme.activity.MainActivity
+import com.yimi.rentme.activity.SelectImageActivity
 import com.yimi.rentme.bean.RegisterInfo
 import com.yimi.rentme.databinding.FragLoginNameBinding
 import com.yimi.rentme.vm.BaseViewModel
@@ -224,20 +225,23 @@ class LoginNameViewModel : BaseViewModel() {
      * 下一步
      */
     fun next(view: View) {
-        if (binding.phone!!.length < 11) return
-//        if (!binding.phone!!.matches(BaseApp.phoneRegex)) {
-//            SCToastUtil.showToast(activity, "请输入正确手机号", 2)
+//        if (binding.phone!!.length < 11) return
+////        if (!binding.phone!!.matches(BaseApp.phoneRegex)) {
+////            SCToastUtil.showToast(activity, "请输入正确手机号", 2)
+////            return
+////        }
+//        if (!binding.clickSelect) {
+//            SCToastUtil.showToast(activity, "请仔细阅读底部协议，并勾选", 2)
 //            return
 //        }
-        if (!binding.clickSelect) {
-            SCToastUtil.showToast(activity, "请仔细阅读底部协议，并勾选", 2)
-            return
-        }
-        mainDataSource.enqueueLoading({ checkUserName(binding.phone!!) }, "检测是否注册...") {
-            onSuccess {
-                MineApp.threeInfo = ThreeInfo()
-                EventBus.getDefault().post(it.isRegister, "lobsterCheckRegister")
-            }
-        }
+//        mainDataSource.enqueueLoading({ checkUserName(binding.phone!!) }, "检测是否注册...") {
+//            onSuccess {
+//                MineApp.threeInfo = ThreeInfo()
+//                EventBus.getDefault().post(it.isRegister, "lobsterCheckRegister")
+//            }
+//        }
+        activity.startActivity<SelectImageActivity>(
+            Pair("showBottom", true)
+        )
     }
 }

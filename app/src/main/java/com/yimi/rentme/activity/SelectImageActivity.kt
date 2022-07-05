@@ -30,10 +30,10 @@ class SelectImageActivity : BaseColorActivity(com.zb.baselibs.R.color.black_252)
     }
 
     /**
-     * 更新文件集合
+     * 关闭
      */
-    @Subscriber(tag = "lobsterUpdateFileModel")
-    private fun lobsterUpdateFileModel(data: String) {
-        viewModel.updateFileModel()
+    @Subscriber(tag = "lobsterCameraFinish")
+    private fun lobsterCameraFinish(data: String) {
+        viewModel.finish()
     }
 }

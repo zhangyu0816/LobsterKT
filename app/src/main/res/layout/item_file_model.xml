@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.yimi.rentme.vm.SelectImageViewModel" />
+            type="com.yimi.rentme.vm.fragment.CameraImageViewModel" />
 
         <variable
             name="item"
