@@ -1,12 +1,23 @@
 package com.yimi.rentme.activity
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.yimi.rentme.R
+import com.yimi.rentme.databinding.AcMainBinding
+import com.yimi.rentme.vm.MainViewModel
+import com.zb.baselibs.activity.BaseScreenActivity
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+class MainActivity : BaseScreenActivity() {
+
+    private val viewModel by getViewModel(MainViewModel::class.java) {
+        binding = mBinding as AcMainBinding
+        activity = this@MainActivity
+        binding.viewModel = this
+    }
+
+    override fun getRes(): Int {
+        return R.layout.ac_main
+    }
+
+    override fun initView() {
+        viewModel.initViewModel()
     }
 }

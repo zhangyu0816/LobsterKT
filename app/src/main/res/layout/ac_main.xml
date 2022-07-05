@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.MainViewModel" />
+
+        <variable
+            name="index"
+            type="Integer" />
+
+        <variable
+            name="unReadCount"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            viewWidthSize="@{-1}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByHeight(0.4f)}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_red_white"/>
+
+        <FrameLayout
+            android:id="@+id/main_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/linearLayout2" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_above="@+id/linearLayout2"
+            android:background="#EFEEF1" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@{index==0?@drawable/ground_select_icon:@drawable/ground_unselect_icon}"
+                android:drawablePadding="2dp"
+                android:gravity="center"
+                android:onClick="@{v->viewModel.selectIndex(0)}"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="广场"
+                android:textColor="@color/black_3e4"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@{index==1?@drawable/card_select_icon:@drawable/card_unselect_icon}"
+                android:drawablePadding="2dp"
+                android:gravity="center"
+                android:onClick="@{v->viewModel.selectIndex(1)}"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="虾菇"
+                android:textColor="@color/black_3e4"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:drawableTop="@{index==2?@drawable/chat_select_icon:@drawable/chat_unselect_icon}"
+                    android:drawablePadding="2dp"
+                    android:gravity="center"
+                    android:onClick="@{v->viewModel.selectIndex(2)}"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="对话"
+                    android:textColor="@color/black_3e4"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignEnd="@+id/tv_chat"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="-5dp"
+                    android:background="@drawable/circle_white_red"
+                    android:gravity="center"
+                    android:text="@{ObjectUtils.count(unReadCount)}"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    android:visibility="@{unReadCount==0?View.GONE:View.VISIBLE}"
+                    tools:text="···" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_mine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:drawableTop="@{index==3?@drawable/mine_select_icon:@drawable/mine_unselect_icon}"
+                    android:drawablePadding="2dp"
+                    android:gravity="center"
+                    android:onClick="@{v->viewModel.selectIndex(3)}"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="我的"
+                    android:textColor="@color/black_3e4"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</layout>
