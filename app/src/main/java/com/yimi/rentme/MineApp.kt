@@ -1,8 +1,10 @@
 package com.yimi.rentme
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import com.yimi.rentme.bean.MineInfo
 import com.yimi.rentme.bean.RegisterInfo
+import com.yimi.rentme.roomdata.FollowDaoManager
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.bean.ThreeInfo
 import com.zb.baselibs.utils.getIntegerByAllName
@@ -60,5 +62,8 @@ class MineApp : BaseApp() {
         var registerInfo = RegisterInfo()
         var threeInfo = ThreeInfo()
         val selectImageList = ArrayList<String>()
+
+        @SuppressLint("StaticFieldLeak")
+        lateinit var followDaoManager: FollowDaoManager
     }
 }

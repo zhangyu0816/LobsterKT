@@ -113,4 +113,9 @@ interface ApiService {
         @Field("pageNo") pageNo: Int,
         @Field("timeSortType") timeSortType: Int
     ): HttpWrapBean<ArrayList<DiscoverInfo>>
+
+    // 获取他人信息
+    @FormUrlEncoded
+    @POST("api/Contact_otherInfo")
+    suspend fun otherInfo(@Field("otherUserId") otherUserId: Long): HttpWrapBean<MemberInfo>
 }

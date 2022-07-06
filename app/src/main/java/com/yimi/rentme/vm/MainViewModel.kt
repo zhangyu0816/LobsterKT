@@ -6,12 +6,14 @@ import android.os.Build
 import android.os.SystemClock
 import android.provider.Settings
 import android.telephony.TelephonyManager
+import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcMainBinding
 import com.yimi.rentme.fragment.MainCardFrag
 import com.yimi.rentme.fragment.MainChatFrag
 import com.yimi.rentme.fragment.MainHomeFrag
 import com.yimi.rentme.fragment.MainMineFrag
+import com.yimi.rentme.roomdata.FollowDaoManager
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.utils.*
@@ -24,7 +26,7 @@ class MainViewModel : BaseViewModel() {
 
     override fun initViewModel() {
         selectIndex(0)
-
+        MineApp.followDaoManager = FollowDaoManager(BaseApp.context)
         // 设备信息
         if (checkPermissionGranted(Manifest.permission.READ_PHONE_STATE)) {
             setDeviceCode()

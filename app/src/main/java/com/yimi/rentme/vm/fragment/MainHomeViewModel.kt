@@ -32,7 +32,7 @@ class MainHomeViewModel : BaseViewModel() {
         BaseApp.fixedThreadPool.execute {
             SystemClock.sleep(200)
             activity.runOnUiThread {
-                binding.circleView.visibility = View.VISIBLE
+                binding.publishLayout.visibility = View.VISIBLE
                 pvh!!.start()
             }
         }

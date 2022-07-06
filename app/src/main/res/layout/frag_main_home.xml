@@ -77,9 +77,8 @@
             android:layout_below="@+id/top_layout" />
 
         <RelativeLayout
+            android:id="@+id/publish_layout"
             onClickDelayed="@{viewModel::publishDiscover}"
-            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(237)}"
-            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(237)}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -89,21 +88,16 @@
 
             <View
                 android:id="@+id/circle_view"
-                viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(237)}"
-                viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(237)}"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_centerInParent="true"
-                android:background="@drawable/circle_yellow_fbc"
-                android:visibility="gone"/>
+                android:background="@drawable/circle_yellow_fbc"/>
 
             <ImageView
-                imageRes="@{R.mipmap.discover_icon}"
-                viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(180)}"
-                viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(180)}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"
+                android:background="@mipmap/discover_icon"/>
         </RelativeLayout>
     </RelativeLayout>
 </layout>
