@@ -6,9 +6,7 @@ import android.net.Uri
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.yimi.rentme.MineApp
-import com.yimi.rentme.views.FullScreenVideoView
-import com.yimi.rentme.views.NoDataView
-import com.yimi.rentme.views.TabView
+import com.yimi.rentme.views.*
 import com.zb.baselibs.utils.SCToastUtil
 
 @BindingAdapter("videoUrl")
@@ -58,4 +56,17 @@ fun TabView.setTab(tabTitle: String, tabSelect: Boolean) {
 @BindingAdapter(value = ["noDataRes", "noWifi"], requireAll = false)
 fun NoDataView.setNoDataInfo(noDataRes: Int, noWifi: Boolean) {
     this.setNoDataInfo(noDataRes, noWifi)
+}
+
+@BindingAdapter("bottleTitleIsPlay")
+fun BottleTitleView.setBottleTitle(bottleTitleIsPlay: Boolean) {
+    if (bottleTitleIsPlay)
+        this.start()
+    else
+        this.stop()
+}
+
+@BindingAdapter("dpValue")
+fun RoundRelativeLayout.setDpValue(dpValue: Float) {
+    this.setDpValue(dpValue)
 }

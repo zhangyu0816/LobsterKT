@@ -6,7 +6,7 @@
 
         <import type="android.view.View" />
 
-        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
 
         <variable
             name="viewModel"
@@ -67,7 +67,7 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:visibility="@{isCode?View.VISIBLE:View.GONE}"/>
+                android:visibility="@{isCode?View.VISIBLE:View.GONE}" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="@{LobsterObjectUtil.getPhone(phone)}"
+                    android:text="@{ObjectUtils.getPhone(phone)}"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -99,9 +99,9 @@
                 android:alpha="0.6"
                 android:text="输入密码后请点击“开启虾菇”即刻进入虾菇世界！"
                 android:textColor="@color/white"
-                android:visibility="@{isCode?View.GONE:View.VISIBLE}"
                 android:textSize="12sp"
-                tools:visibility="gone"/>
+                android:visibility="@{isCode?View.GONE:View.VISIBLE}"
+                tools:visibility="gone" />
 
             <EditText
                 android:id="@+id/ed_pass"
@@ -119,14 +119,14 @@
                 android:textColorHint="#CDB1FF"
                 android:textCursorDrawable="@drawable/cursor_color_white"
                 android:textSize="16sp"
-                android:visibility="@{isCode?View.GONE:View.VISIBLE}"/>
+                android:visibility="@{isCode?View.GONE:View.VISIBLE}" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_below="@+id/phone_layout"
+            android:orientation="vertical"
             android:visibility="@{isCode?View.VISIBLE:View.GONE}">
 
             <TextView
@@ -154,8 +154,8 @@
 
                     <TextView
                         android:id="@+id/tv_code1"
-                        viewHeightSize="@{LobsterObjectUtil.getCodeWidth()}"
-                        viewWidthSize="@{LobsterObjectUtil.getCodeWidth()}"
+                        viewHeightSize="@{ObjectUtils.getCodeWidth()}"
+                        viewWidthSize="@{ObjectUtils.getCodeWidth()}"
                         android:layout_width="wrap_content"
                         android:layout_height="70dp"
                         android:layout_marginEnd="10dp"
@@ -167,8 +167,8 @@
 
                     <TextView
                         android:id="@+id/tv_code2"
-                        viewHeightSize="@{LobsterObjectUtil.getCodeWidth()}"
-                        viewWidthSize="@{LobsterObjectUtil.getCodeWidth()}"
+                        viewHeightSize="@{ObjectUtils.getCodeWidth()}"
+                        viewWidthSize="@{ObjectUtils.getCodeWidth()}"
                         android:layout_width="wrap_content"
                         android:layout_height="70dp"
                         android:layout_marginEnd="10dp"
@@ -180,8 +180,8 @@
 
                     <TextView
                         android:id="@+id/tv_code3"
-                        viewHeightSize="@{LobsterObjectUtil.getCodeWidth()}"
-                        viewWidthSize="@{LobsterObjectUtil.getCodeWidth()}"
+                        viewHeightSize="@{ObjectUtils.getCodeWidth()}"
+                        viewWidthSize="@{ObjectUtils.getCodeWidth()}"
                         android:layout_width="wrap_content"
                         android:layout_height="70dp"
                         android:layout_marginEnd="10dp"
@@ -194,8 +194,8 @@
 
                     <TextView
                         android:id="@+id/tv_code4"
-                        viewHeightSize="@{LobsterObjectUtil.getCodeWidth()}"
-                        viewWidthSize="@{LobsterObjectUtil.getCodeWidth()}"
+                        viewHeightSize="@{ObjectUtils.getCodeWidth()}"
+                        viewWidthSize="@{ObjectUtils.getCodeWidth()}"
                         android:layout_width="wrap_content"
                         android:layout_height="70dp"
                         android:background="@drawable/btn_bg_white_radius11"

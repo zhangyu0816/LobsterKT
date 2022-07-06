@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+    </data>
+
+    <com.yimi.rentme.views.RoundRelativeLayout
+        dpValue="@{10f}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_bg"
+            viewHeightSize="@{LobsterObjectUtil.getBottleBgHeight(460f)}"
+            viewWidthSize="@{-1}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/bottle_title_bg" />
+
+        <ImageView
+            android:id="@+id/iv_back_weak"
+            viewHeightSize="@{LobsterObjectUtil.getBottleBgHeight(189f)}"
+            viewWidthSize="@{-1}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_bg"
+            android:background="@mipmap/bottle_weak_back_icon" />
+
+        <ImageView
+            android:id="@+id/iv_bottle"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(411)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(354)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_bg"
+            android:layout_alignParentEnd="true"
+            android:background="@mipmap/bottle_icon" />
+
+        <ImageView
+            android:id="@+id/iv_front_weak"
+            viewHeightSize="@{LobsterObjectUtil.getBottleBgHeight(192f)}"
+            viewWidthSize="@{-1}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_bg"
+            android:layout_alignParentEnd="true"
+            android:background="@mipmap/bottle_weak_front_icon" />
+
+
+        <ImageView
+            android:id="@+id/iv_bottle_light"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(351)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(333)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_bg"
+            android:layout_alignParentEnd="true"
+            android:background="@mipmap/bottle_light_icon" />
+
+        <ImageView
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(232)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(748)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="65dp"
+            android:background="@mipmap/bottle_title_text_icon" />
+
+    </com.yimi.rentme.views.RoundRelativeLayout>
+
+</layout>

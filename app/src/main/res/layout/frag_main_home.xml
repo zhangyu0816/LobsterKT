@@ -70,11 +70,25 @@
                 android:src="@mipmap/search_icon" />
         </RelativeLayout>
 
-        <FrameLayout
-            android:id="@+id/home_content"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/top_layout" />
+            android:layout_below="@+id/top_layout"
+            android:orientation="vertical">
+
+            <com.yimi.rentme.views.BottleTitleView
+                onClickDelayed="@{viewModel::toBottle}"
+                bottleTitleIsPlay="@{index==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:visibility="@{index==1?View.VISIBLE:View.GONE}" />
+
+            <FrameLayout
+                android:id="@+id/home_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/publish_layout"
@@ -91,13 +105,13 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_centerInParent="true"
-                android:background="@drawable/circle_yellow_fbc"/>
+                android:background="@drawable/circle_yellow_fbc" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@mipmap/discover_icon"/>
+                android:background="@mipmap/discover_icon" />
         </RelativeLayout>
     </RelativeLayout>
 </layout>

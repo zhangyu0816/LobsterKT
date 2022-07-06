@@ -56,7 +56,6 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
             onSuccess {
                 binding.noData = false
                 binding.noWifi = false
-                dismissLoading()
                 for (item in it) {
                     BaseApp.fixedThreadPool.execute {
                         val url = item.videoUrl.ifEmpty {
@@ -96,6 +95,7 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                         }
                     }
                 }
+                dismissLoading()
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
             }

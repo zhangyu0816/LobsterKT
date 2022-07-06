@@ -37,7 +37,7 @@ class MainHomeViewModel : BaseViewModel() {
             }
         }
 
-        selectIndex(0)
+        selectIndex(1)
     }
 
     override fun onDestroy() {
@@ -63,6 +63,11 @@ class MainHomeViewModel : BaseViewModel() {
      * 搜索
      */
     fun toSearch(view: View) {}
+
+    /**
+     * 漂流瓶
+     */
+    fun toBottle(view: View) {}
 
     /**
      * 上传动态
