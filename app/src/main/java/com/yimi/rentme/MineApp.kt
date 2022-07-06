@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.yimi.rentme.bean.MineInfo
 import com.yimi.rentme.bean.RegisterInfo
 import com.yimi.rentme.roomdata.FollowDaoManager
+import com.yimi.rentme.roomdata.GoodDaoManager
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.bean.ThreeInfo
 import com.zb.baselibs.utils.getIntegerByAllName
@@ -69,5 +70,8 @@ class MineApp : BaseApp() {
 
         @SuppressLint("StaticFieldLeak")
         lateinit var followDaoManager: FollowDaoManager
+
+        @SuppressLint("StaticFieldLeak")
+        lateinit var goodDaoManager: GoodDaoManager
     }
 }

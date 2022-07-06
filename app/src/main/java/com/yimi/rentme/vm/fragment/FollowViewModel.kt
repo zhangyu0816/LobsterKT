@@ -11,7 +11,9 @@ import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.databinding.FragFollowBinding
 import com.yimi.rentme.roomdata.FollowInfo
+import com.yimi.rentme.roomdata.GoodInfo
 import com.yimi.rentme.utils.PicSizeUtil
+import com.yimi.rentme.views.GoodView
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.getLong
@@ -23,6 +25,9 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
     lateinit var adapter: BaseAdapter<DiscoverInfo>
     private val discoverInfoList = ArrayList<DiscoverInfo>()
     private var pageNo = 1
+    private var prePosition = -1
+    private lateinit var discoverInfo: DiscoverInfo
+    private var friendDynId = 0L
 
     override fun initViewModel() {
         adapter = BaseAdapter(activity, R.layout.item_follow_discover, discoverInfoList, this)
@@ -149,5 +154,60 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
      */
     fun toMemberDetail(position: Int) {
 
+    }
+
+    /**
+     * 点赞
+     */
+    fun doLike(view: View, position: Int) {
+        prePosition = position
+        discoverInfo = discoverInfoList[position]
+        friendDynId = discoverInfo.friendDynId
+        val goodView = view as GoodView
+        BaseApp.fixedThreadPool.execute {
+            val goodInfo = MineApp.goodDaoManager.getGood(friendDynId)
+            activity.runOnUiThread {
+                if (goodInfo == null) {
+                    goodView.playLike()
+                    dynDoLike()
+                }
+            }
+        }
+    }
+
+    /**
+     * 点赞
+     */
+    private fun dynDoLike() {
+        mainDataSource.enqueue({ dynDoLike(friendDynId) }) {
+            onSuccess {
+                val goodInfo = GoodInfo()
+                goodInfo.friendDynId = friendDynId
+                goodInfo.mainUserId = getLong("userId")
+                BaseApp.fixedThreadPool.execute {
+                    MineApp.goodDaoManager.insert(goodInfo)
+                    discoverInfo.goodNum = discoverInfo.goodNum + 1
+                    discoverInfo.isLike = true
+                    activity.runOnUiThread {
+                        adapter.notifyItemChanged(prePosition)
+                    }
+                }
+            }
+            onFailToast { false }
+            onFailed {
+                if (it.errorMessage == "已经赞过了") {
+                    val goodInfo = GoodInfo()
+                    goodInfo.friendDynId = friendDynId
+                    goodInfo.mainUserId = getLong("userId")
+                    BaseApp.fixedThreadPool.execute {
+                        MineApp.goodDaoManager.insert(goodInfo)
+                        discoverInfo.isLike = true
+                        activity.runOnUiThread {
+                            adapter.notifyItemChanged(prePosition)
+                        }
+                    }
+                }
+            }
+        }
     }
 }

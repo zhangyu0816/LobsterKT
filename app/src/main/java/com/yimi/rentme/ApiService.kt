@@ -128,4 +128,14 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/Interactive_personOtherDyn")
     suspend fun personOtherDyn(@FieldMap map: Map<String, String>): HttpWrapBean<ArrayList<DiscoverInfo>>
+
+    // 取消点赞
+    @FormUrlEncoded
+    @POST("api/Interactive_dynCancelLike")
+    suspend fun dynCancelLike(@Field("friendDynId") friendDynId: Long): HttpWrapBean<Any?>
+
+    // 给动态点赞
+    @FormUrlEncoded
+    @POST("api/Interactive_dynDoLike")
+    suspend fun dynDoLike(@Field("friendDynId") friendDynId: Long): HttpWrapBean<Any?>
 }

@@ -14,6 +14,7 @@ import com.yimi.rentme.fragment.MainChatFrag
 import com.yimi.rentme.fragment.MainHomeFrag
 import com.yimi.rentme.fragment.MainMineFrag
 import com.yimi.rentme.roomdata.FollowDaoManager
+import com.yimi.rentme.roomdata.GoodDaoManager
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.utils.*
@@ -27,6 +28,7 @@ class MainViewModel : BaseViewModel() {
     override fun initViewModel() {
         selectIndex(0)
         MineApp.followDaoManager = FollowDaoManager(BaseApp.context)
+        MineApp.goodDaoManager = GoodDaoManager(BaseApp.context)
         // 设备信息
         if (checkPermissionGranted(Manifest.permission.READ_PHONE_STATE)) {
             setDeviceCode()
