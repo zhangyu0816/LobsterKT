@@ -9,7 +9,8 @@ data class FollowInfo(
     @PrimaryKey
     var otherUserId: Long = 0L,
     var nick: String = "",
-    var image: String = "",
+    var image: String = "", // 头像
+    var images: String = "", // 形象图
     var isFollow: Boolean = false,
     var mainUserId: Long = 0L // 拥有的
 ) {
@@ -32,10 +33,22 @@ interface FollowInfoDao {
     fun queryFollow(otherUserId: Long, mainUserId: Long): Boolean
 
     /**
-     * 获取关注中图片
+     * 获取关注中头像
      */
     @Query("select image from FollowInfo where otherUserId=:otherUserId and mainUserId=:mainUserId")
     fun queryImage(otherUserId: Long, mainUserId: Long): String
+
+    /**
+     * 获取关注中形象图
+     */
+    @Query("select images from FollowInfo where otherUserId=:otherUserId and mainUserId=:mainUserId")
+    fun queryImages(otherUserId: Long, mainUserId: Long): String
+
+    /**
+     * 获取关注中昵称
+     */
+    @Query("select nick from FollowInfo where otherUserId=:otherUserId and mainUserId=:mainUserId")
+    fun queryNick(otherUserId: Long, mainUserId: Long): String
 }
 
 @Database(entities = [FollowInfo::class], version = 1, exportSchema = false)
@@ -68,9 +81,23 @@ class FollowDaoManager(private val context: Context) {
     }
 
     /**
-     * 获取关注中图片
+     * 获取关注中头像
      */
     fun getImage(otherUserId: Long): String {
         return dao.queryImage(otherUserId, getLong("userId"))
+    }
+
+    /**
+     * 获取关注中形象图
+     */
+    fun getImages(otherUserId: Long): String {
+        return dao.queryImages(otherUserId, getLong("userId"))
+    }
+
+    /**
+     * 获取关注中昵称
+     */
+    fun getNick(otherUserId: Long): String {
+        return dao.queryNick(otherUserId, getLong("userId"))
     }
 }

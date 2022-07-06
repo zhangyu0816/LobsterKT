@@ -6,7 +6,7 @@ import com.yimi.rentme.vm.BaseViewModel
 class MemberVideoViewModel : BaseViewModel() {
 
     lateinit var binding: FragMemberVideoBinding
-    var userId = 0L // 用户Id
+    var otherUserId = 0L // 用户Id
 
     override fun initViewModel() {
 

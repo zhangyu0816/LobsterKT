@@ -6,7 +6,7 @@ import com.yimi.rentme.databinding.FragMemberVideoBinding
 import com.yimi.rentme.vm.fragment.MemberVideoViewModel
 import com.zb.baselibs.activity.BaseFragment
 
-class MemberVideoFrag(private val userId: Long) : BaseFragment() {
+class MemberVideoFrag(private val otherUserId: Long) : BaseFragment() {
 
     private val viewModel by getViewModel(MemberVideoViewModel::class.java) {
         binding = mBinding as FragMemberVideoBinding
@@ -19,7 +19,7 @@ class MemberVideoFrag(private val userId: Long) : BaseFragment() {
     }
 
     override fun initView() {
-        viewModel.userId = userId
+        viewModel.otherUserId = otherUserId
         viewModel.initViewModel()
     }
 }

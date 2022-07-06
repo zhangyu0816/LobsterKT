@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.NoDataViewBinding
-import com.yimi.rentme.databinding.TabViewBinding
 
 class NoDataView : RelativeLayout {
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(

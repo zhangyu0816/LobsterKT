@@ -118,4 +118,14 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/Contact_otherInfo")
     suspend fun otherInfo(@Field("otherUserId") otherUserId: Long): HttpWrapBean<MemberInfo>
+
+    // 推荐
+    @FormUrlEncoded
+    @POST("api/Interactive_dynPiazzaList")
+    suspend fun dynPiazzaList(@FieldMap map: Map<String, String>): HttpWrapBean<ArrayList<DiscoverInfo>>
+
+    // 个人动态
+    @FormUrlEncoded
+    @POST("api/Interactive_personOtherDyn")
+    suspend fun personOtherDyn(@FieldMap map: Map<String, String>): HttpWrapBean<ArrayList<DiscoverInfo>>
 }

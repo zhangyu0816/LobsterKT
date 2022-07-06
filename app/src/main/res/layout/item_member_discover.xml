@@ -4,9 +4,9 @@
 
     <data>
 
-        <import type="com.zb.baselibs.utils.ObjectUtils" />
-
         <import type="android.view.View" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
 
         <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
 
@@ -14,7 +14,7 @@
 
         <variable
             name="viewModel"
-            type="com.yimi.rentme.vm.fragment.FollowViewModel" />
+            type="com.yimi.rentme.vm.fragment.MemberDiscoverViewModel" />
 
         <variable
             name="item"
@@ -115,7 +115,6 @@
                         android:visibility="invisible">
 
                         <ImageView
-                            android:id="@+id/iv_like"
                             viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(54)}"
                             viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(54)}"
                             android:layout_width="wrap_content"
@@ -136,37 +135,37 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!--                <LinearLayout-->
-        <!--                    android:id="@+id/good_layout"-->
-        <!--                    android:layout_width="wrap_content"-->
-        <!--                    android:layout_height="wrap_content"-->
-        <!--                    android:layout_alignBottom="@+id/top_layout"-->
-        <!--                    android:layout_alignParentEnd="true"-->
-        <!--                    android:layout_marginEnd="15dp"-->
-        <!--                    android:gravity="center_vertical"-->
-        <!--                    android:orientation="horizontal"-->
-        <!--                    android:paddingStart="35dp"-->
-        <!--                    android:paddingTop="35dp"-->
-        <!--                    android:paddingEnd="1dp">-->
+        <LinearLayout
+            android:id="@+id/good_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/top_layout"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="35dp"
+            android:paddingTop="35dp"
+            android:paddingEnd="1dp">
 
-        <!--                    <com.zb.lib_base.views.GoodView-->
-        <!--                        android:id="@+id/good_view"-->
-        <!--                        isGrey="@{true}"-->
-        <!--                        isLike="@{GoodDb.getInstance().hasGood(item.friendDynId)}"-->
-        <!--                        onClickDelayed="@{v->viewModel.doLike(v,position)}"-->
-        <!--                        android:layout_width="40dp"-->
-        <!--                        android:layout_height="40dp"-->
-        <!--                        android:layout_marginStart="5dp"-->
-        <!--                        android:gravity="center" />-->
+            <com.yimi.rentme.views.GoodView
+                android:id="@+id/good_view"
+                isGrey="@{true}"
+                isLike="@{GoodDb.getInstance().hasGood(item.friendDynId)}"
+                onClickDelayed="@{v->viewModel.doLike(v,position)}"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:gravity="center" />
 
-        <!--                    <TextView-->
-        <!--                        android:layout_width="wrap_content"-->
-        <!--                        android:layout_height="wrap_content"-->
-        <!--                        android:layout_marginStart="-5dp"-->
-        <!--                        android:text='@{String.format("%d",item.goodNum)}'-->
-        <!--                        android:textColor="#cccccc"-->
-        <!--                        android:textSize="14sp"-->
-        <!--                        tools:text="7" />-->
-        <!--                </LinearLayout>-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="-5dp"
+                android:text='@{String.format("%d",item.goodNum)}'
+                android:textColor="#cccccc"
+                android:textSize="14sp"
+                tools:text="7" />
+        </LinearLayout>
     </RelativeLayout>
 </layout>

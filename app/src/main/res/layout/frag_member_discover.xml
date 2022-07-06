@@ -3,14 +3,51 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
         <variable
             name="viewModel"
             type="com.yimi.rentme.vm.fragment.MemberDiscoverViewModel" />
+
+        <variable
+            name="noWifi"
+            type="boolean" />
+
+        <variable
+            name="noData"
+            type="boolean" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refresh"
+            onLoadMoreListener="@{viewModel}"
+            onRefreshListener="@{viewModel}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black_efe"
+            android:visibility="@{(noWifi||noData)?View.GONE:View.VISIBLE}">
+
+            <androidx.recyclerview.widget.RecyclerView
+                adapter="@{viewModel.adapter}"
+                recyclerType="@{3}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="7dp" />
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+        <com.yimi.rentme.views.NoDataView
+            onClickDelayed="@{viewModel::updateData}"
+            noDataRes="@{R.mipmap.other_no_discover_data}"
+            noWifi="@{noWifi}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{(noWifi||noData)?View.VISIBLE:View.GONE}" />
+
+    </RelativeLayout>
 </layout>

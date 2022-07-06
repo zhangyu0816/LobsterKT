@@ -62,6 +62,10 @@ class MineApp : BaseApp() {
         var registerInfo = RegisterInfo()
         var threeInfo = ThreeInfo()
         val selectImageList = ArrayList<String>()
+        var provinceId = 0L
+        var cityId = 0L
+        var districtId = 0L
+        var sex = 0
 
         @SuppressLint("StaticFieldLeak")
         lateinit var followDaoManager: FollowDaoManager

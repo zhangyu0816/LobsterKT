@@ -3,6 +3,7 @@ package com.yimi.rentme.utils
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.zb.baselibs.app.BaseApp
+import com.zb.baselibs.utils.ObjectUtils
 
 object LobsterObjectUtil {
 
@@ -21,5 +22,10 @@ object LobsterObjectUtil {
     @JvmStatic
     fun cameraImageSelect(image: String): Boolean {
         return MineApp.selectImageList.contains(image)
+    }
+
+    @JvmStatic
+    fun getImageHeight(scale: Float, width: Int, height: Int): Int {
+        return (ObjectUtils.getViewSizeByWidth(scale) * height.toFloat() / width.toFloat()).toInt()
     }
 }

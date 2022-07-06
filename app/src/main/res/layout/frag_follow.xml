@@ -30,6 +30,7 @@
             onRefreshListener="@{viewModel}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/black_efe"
             android:visibility="@{(noWifi||noData)?View.GONE:View.VISIBLE}">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -41,8 +42,9 @@
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
         <com.yimi.rentme.views.NoDataView
-            noDataRes="@{R.mipmap.other_no_discover_data}"
+            noDataRes="@{R.mipmap.no_anth_data}"
             noWifi="@{noWifi}"
+            onClickDelayed="@{viewModel::updateData}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{(noWifi||noData)?View.VISIBLE:View.GONE}" />

@@ -1,8 +1,7 @@
 package com.yimi.rentme.vm.fragment
 
 import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
-import android.util.Log
+import android.view.View
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
@@ -12,13 +11,11 @@ import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.databinding.FragFollowBinding
 import com.yimi.rentme.roomdata.FollowInfo
+import com.yimi.rentme.utils.PicSizeUtil
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
-import com.zb.baselibs.utils.awesome.DownLoadUtil
-import com.zb.baselibs.utils.getImageFile
 import com.zb.baselibs.utils.getLong
 import kotlinx.coroutines.Job
-import org.jetbrains.anko.runOnUiThread
 
 class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
 
@@ -47,6 +44,13 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
     }
 
     /**
+     * 刷新
+     */
+    fun updateData(view: View) {
+        onRefresh(binding.refresh)
+    }
+
+    /**
      * 我关注的动态列表
      */
     private fun attentionDyn() {
@@ -60,36 +64,36 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                     BaseApp.fixedThreadPool.execute {
                         val url = item.videoUrl.ifEmpty {
                             if (item.images.isEmpty())
-                                MineApp.followDaoManager.getImage(item.otherUserId)
+                                MineApp.followDaoManager.getImages(item.otherUserId).split(",")[0]
                             else
                                 item.images.split(",")[0]
                         }
+                        item.nick = MineApp.followDaoManager.getNick(item.otherUserId)
+                        item.image = MineApp.followDaoManager.getImage(item.otherUserId)
+                        item.images = MineApp.followDaoManager.getImages(item.otherUserId)
                         if (url.contains(".mp4")) {
                             val start = discoverInfoList.size
                             discoverInfoList.add(item)
                             adapter.notifyItemRangeChanged(start, discoverInfoList.size)
                         } else {
-                            DownLoadUtil.downLoad(
-                                url, getImageFile(), object : DownLoadUtil.CallBack {
-                                    override fun onFinish(filePath: String) {
+                            PicSizeUtil.getPicSize(
+                                activity, url, object : PicSizeUtil.OnPicListener {
+                                    override fun onImageSize(width: Int, height: Int) {
                                         val start = discoverInfoList.size
-                                        val bitmap = BitmapFactory.decodeFile(filePath)
-                                        if (bitmap != null) {
-                                            item.width = bitmap.width
-                                            item.height = bitmap.height
-                                        }
+                                        item.width = width
+                                        item.height = height
                                         discoverInfoList.add(item)
                                         if (MineApp.followDaoManager.getFollow(item.otherUserId)) {
-                                            adapter.notifyItemRangeChanged(
-                                                start, discoverInfoList.size
-                                            )
+                                            activity.runOnUiThread {
+                                                adapter.notifyItemRangeChanged(
+                                                    start, discoverInfoList.size
+                                                )
+                                            }
                                         } else {
                                             activity.runOnUiThread {
-                                                setImage(start, item.otherUserId)
+                                                otherInfo(start, item.otherUserId)
                                             }
-
                                         }
-                                        Log.e("downLoad", "${bitmap.width}____${bitmap.height}")
                                     }
                                 })
                         }
@@ -115,13 +119,14 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
     /**
      * 保存关注信息
      */
-    private fun setImage(start: Int, otherUserId: Long) {
+    private fun otherInfo(start: Int, otherUserId: Long) {
         mainDataSource.enqueue({ otherInfo(otherUserId) }) {
             onSuccess {
                 BaseApp.fixedThreadPool.execute {
                     val followInfo = FollowInfo()
                     followInfo.isFollow = true
-                    followInfo.image = it.singleImage
+                    followInfo.image = it.image
+                    followInfo.images = it.moreImages.ifEmpty { it.singleImage }
                     followInfo.nick = it.nick
                     followInfo.otherUserId = otherUserId
                     followInfo.mainUserId = getLong("userId")
@@ -130,5 +135,19 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                 }
             }
         }
+    }
+
+    /**
+     * 跳至动态详情
+     */
+    fun toDiscoverDetail(position: Int) {
+
+    }
+
+    /**.
+     * 跳至用户详情
+     */
+    fun toMemberDetail(position: Int) {
+
     }
 }

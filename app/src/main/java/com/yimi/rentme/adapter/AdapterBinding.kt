@@ -3,9 +3,11 @@ package com.yimi.rentme.adapter
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.net.Uri
+import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.yimi.rentme.MineApp
+import com.yimi.rentme.R
 import com.yimi.rentme.views.*
 import com.zb.baselibs.utils.SCToastUtil
 
@@ -69,4 +71,23 @@ fun BottleTitleView.setBottleTitle(bottleTitleIsPlay: Boolean) {
 @BindingAdapter("dpValue")
 fun RoundRelativeLayout.setDpValue(dpValue: Float) {
     this.setDpValue(dpValue)
+}
+
+@BindingAdapter(value = ["isLike", "isGrey", "isLightGrey"], requireAll = false)
+fun GoodView.likeStatus(isLike: Boolean, isGrey: Boolean, isLightGrey: Boolean) {
+    if (isGrey) {
+        this.findViewById<View>(R.id.iv_unLike)
+            .setBackgroundResource(R.drawable.like_unselect_grey_icon)
+    } else if (isLightGrey) {
+        this.findViewById<View>(R.id.iv_unLike).setBackgroundResource(R.drawable.icon_like_gray_big)
+    } else {
+        this.findViewById<View>(R.id.iv_unLike).setBackgroundResource(R.drawable.like_unselect_icon)
+    }
+    if (isLike) {
+        this.findViewById<View>(R.id.iv_like).visibility = View.VISIBLE
+        this.findViewById<View>(R.id.iv_unLike).visibility = View.GONE
+    } else {
+        this.findViewById<View>(R.id.iv_like).visibility = View.GONE
+        this.findViewById<View>(R.id.iv_unLike).visibility = View.VISIBLE
+    }
 }

@@ -1,7 +1,6 @@
 package com.yimi.rentme.vm
 
 import android.os.SystemClock
-import android.util.Log
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.activity.LoginActivity
