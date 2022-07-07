@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.fragment.MemberVideoViewModel" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.DiscoverInfo" />
+
+        <variable
+            name="position"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        viewHeightSize="@{-2}"
+        viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.5f)}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            onClickDelayed="@{v->viewModel.toDiscoverVideo(position)}"
+            viewHeightSize="@{-2}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.48f)}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="7dp">
+
+            <ImageView
+                android:id="@+id/roundImageView"
+                defaultRes="@{R.mipmap.empty_icon}"
+                imageUrl='@{item.images.empty?item.videoUrl:item.images.split(",")[0]}'
+                roundSize="@{5}"
+                viewHeightSize="@{LobsterObjectUtil.getLogoHeight(0.48f)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.48f)}"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+            <LinearLayout
+                android:id="@+id/good_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="15dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.yimi.rentme.views.GoodView
+                    android:id="@+id/good_view"
+                    isGrey="@{true}"
+                    isLike="@{item.isLike}"
+                    onClickDelayed="@{v->viewModel.doLike(v,position)}"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center" />
+
+                <TextView
+                    tools:text="7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-5dp"
+                    android:shadowColor="#4d000000"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="1"
+                    android:text='@{String.format("%d",item.goodNum)}'
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="10dp"
+                android:shadowColor="#4d000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="1"
+                android:singleLine="true"
+                android:text="@{item.text.empty?item.friendTitle:item.text}"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

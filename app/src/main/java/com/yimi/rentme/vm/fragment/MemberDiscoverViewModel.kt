@@ -36,8 +36,14 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
         adapter = BaseAdapter(activity, R.layout.item_member_discover, discoverInfoList, this)
         when (otherUserId) {
             0L -> dynPiazzaList()
-            1L -> personOtherDyn()
-            else -> otherInfo()
+            1L -> {
+                binding.noDataRes = R.mipmap.my_no_discover_data
+                personOtherDyn()
+            }
+            else ->{
+                binding.noDataRes = R.mipmap.other_no_discover_data
+                otherInfo()
+            }
         }
     }
 
@@ -101,9 +107,6 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
                 binding.noWifi = it.isNoWIFI
-                if (it.isNoData) {
-                    binding.noData = discoverInfoList.size == 0
-                }
             }
         }
     }

@@ -37,7 +37,7 @@ class MainHomeViewModel : BaseViewModel() {
             }
         }
 
-        selectIndex(1)
+        selectIndex(2)
     }
 
     override fun onDestroy() {

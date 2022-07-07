@@ -28,4 +28,9 @@ object LobsterObjectUtil {
     fun getImageHeight(scale: Float, width: Int, height: Int): Int {
         return (ObjectUtils.getViewSizeByWidth(scale) * height.toFloat() / width.toFloat()).toInt()
     }
+
+    @JvmStatic
+    fun getLogoHeight(scale: Float): Int {
+        return (ObjectUtils.getViewSizeByWidth(scale) * 510f / 345f).toInt()
+    }
 }

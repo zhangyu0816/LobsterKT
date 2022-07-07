@@ -18,6 +18,10 @@
         <variable
             name="noData"
             type="boolean" />
+
+        <variable
+            name="noDataRes"
+            type="Integer" />
     </data>
 
     <RelativeLayout
@@ -43,7 +47,7 @@
 
         <com.yimi.rentme.views.NoDataView
             onClickDelayed="@{viewModel::updateData}"
-            noDataRes="@{R.mipmap.other_no_discover_data}"
+            noDataRes="@{noDataRes}"
             noWifi="@{noWifi}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
