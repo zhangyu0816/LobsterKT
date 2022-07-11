@@ -7,11 +7,13 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
+import com.yimi.rentme.activity.MemberDetailActivity
 import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.MemberInfo
 import com.yimi.rentme.databinding.AcSearchBinding
 import com.zb.baselibs.utils.SCToastUtil
 import kotlinx.coroutines.Job
+import org.jetbrains.anko.startActivity
 
 class SearchViewModel : BaseViewModel(), OnLoadMoreListener {
 
@@ -88,5 +90,9 @@ class SearchViewModel : BaseViewModel(), OnLoadMoreListener {
     /**
      * 用户详情
      */
-    fun toMemberDetail(otherUserId: Long) {}
+    fun toMemberDetail(otherUserId: Long) {
+        activity.startActivity<MemberDetailActivity>(
+            Pair("otherUserId", otherUserId)
+        )
+    }
 }

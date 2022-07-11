@@ -6,6 +6,8 @@ import android.os.SystemClock
 import android.view.View
 import android.view.animation.Animation
 import com.yimi.rentme.R
+import com.yimi.rentme.activity.BottleActivity
+import com.yimi.rentme.activity.PublishDiscoverActivity
 import com.yimi.rentme.activity.SearchActivity
 import com.yimi.rentme.databinding.FragMainHomeBinding
 import com.yimi.rentme.fragment.FollowFrag
@@ -71,10 +73,14 @@ class MainHomeViewModel : BaseViewModel() {
     /**
      * 漂流瓶
      */
-    fun toBottle(view: View) {}
+    fun toBottle(view: View) {
+        activity.startActivity<BottleActivity>()
+    }
 
     /**
      * 上传动态
      */
-    fun publishDiscover(view: View) {}
+    fun publishDiscover(view: View) {
+        activity.startActivity<PublishDiscoverActivity>()
+    }
 }

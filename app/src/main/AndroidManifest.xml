@@ -117,6 +117,12 @@
         <activity android:name=".activity.BindingPhoneActivity" />
         <activity android:name=".activity.SelectImageActivity" />
         <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.MemberDetailActivity" />
+        <activity android:name=".activity.BottleActivity" />
+        <activity android:name=".activity.PublishDiscoverActivity" />
+        <activity android:name=".activity.DiscoverDetailActivity" />
+        <activity android:name=".activity.VideoDetailActivity" />
+        <activity android:name=".activity.VideoListActivity" />
     </application>
 
 </manifest>

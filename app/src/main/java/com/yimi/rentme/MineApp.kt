@@ -2,6 +2,7 @@ package com.yimi.rentme
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
+import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.bean.MineInfo
 import com.yimi.rentme.bean.RegisterInfo
 import com.yimi.rentme.roomdata.FollowDaoManager
@@ -63,6 +64,7 @@ class MineApp : BaseApp() {
         var registerInfo = RegisterInfo()
         var threeInfo = ThreeInfo()
         val selectImageList = ArrayList<String>()
+        var discoverInfoList = ArrayList<DiscoverInfo>()
         var provinceId = 0L
         var cityId = 0L
         var districtId = 0L

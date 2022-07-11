@@ -7,6 +7,8 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
+import com.yimi.rentme.activity.DiscoverDetailActivity
+import com.yimi.rentme.activity.MemberDetailActivity
 import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.bean.MemberInfo
@@ -18,6 +20,7 @@ import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.getLong
 import kotlinx.coroutines.Job
+import org.jetbrains.anko.startActivity
 
 class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
 
@@ -96,7 +99,7 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
         map["cityId"] = MineApp.cityId.toString()
         map["pageNo"] = pageNo.toString()
         map["dynType"] = "1"
-        if (MineApp.sex != -1) map["sex"] = MineApp.sex.toString()
+        map["sex"] = if (MineApp.sex == 0) "1" else "0"
         mainDataSource.enqueue({ dynPiazzaList(map) }) {
             onSuccess {
                 updateDiscoverInfoList(it)
@@ -220,14 +223,18 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
      * 跳至动态详情
      */
     fun toDiscoverDetail(position: Int) {
-
+        activity.startActivity<MemberDetailActivity>(
+            Pair("otherUserId", discoverInfoList[position].userId)
+        )
     }
 
     /**.
      * 跳至用户详情
      */
     fun toMemberDetail(position: Int) {
-
+        activity.startActivity<DiscoverDetailActivity>(
+            Pair("friendDynId", discoverInfoList[position].friendDynId)
+        )
     }
 
     /**

@@ -7,6 +7,8 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
+import com.yimi.rentme.activity.DiscoverDetailActivity
+import com.yimi.rentme.activity.MemberDetailActivity
 import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.databinding.FragFollowBinding
@@ -18,6 +20,7 @@ import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.getLong
 import kotlinx.coroutines.Job
+import org.jetbrains.anko.startActivity
 
 class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
 
@@ -146,14 +149,18 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
      * 跳至动态详情
      */
     fun toDiscoverDetail(position: Int) {
-
+        activity.startActivity<DiscoverDetailActivity>(
+            Pair("friendDynId", discoverInfoList[position].friendDynId)
+        )
     }
 
     /**.
      * 跳至用户详情
      */
     fun toMemberDetail(position: Int) {
-
+        activity.startActivity<MemberDetailActivity>(
+            Pair("otherUserId", discoverInfoList[position].otherUserId)
+        )
     }
 
     /**

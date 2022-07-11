@@ -7,6 +7,8 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
+import com.yimi.rentme.activity.VideoDetailActivity
+import com.yimi.rentme.activity.VideoListActivity
 import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.databinding.FragMemberVideoBinding
@@ -16,6 +18,7 @@ import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.getLong
 import kotlinx.coroutines.Job
+import org.jetbrains.anko.startActivity
 
 class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
 
@@ -93,7 +96,7 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
         map["cityId"] = MineApp.cityId.toString()
         map["pageNo"] = pageNo.toString()
         map["dynType"] = "2"
-        if (MineApp.sex != -1) map["sex"] = MineApp.sex.toString()
+        map["sex"] = if (MineApp.sex == 0) "1" else "0"
         mainDataSource.enqueue({ dynPiazzaList(map) }) {
             onSuccess {
                 binding.noData = false
@@ -177,8 +180,14 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
     fun toDiscoverVideo(position: Int) {
         if (otherUserId == 0L) {
             // 视频列表
+            MineApp.discoverInfoList.clear()
+            MineApp.discoverInfoList.addAll(discoverInfoList)
+            activity.startActivity<VideoListActivity>()
         } else {
             // 视频详情
+            activity.startActivity<VideoDetailActivity>(
+                Pair("friendDynId", discoverInfoList[position].friendDynId)
+            )
         }
     }
 
