@@ -7,6 +7,7 @@ import com.yimi.rentme.bean.MineInfo
 import com.yimi.rentme.bean.RegisterInfo
 import com.yimi.rentme.roomdata.FollowDaoManager
 import com.yimi.rentme.roomdata.GoodDaoManager
+import com.yimi.rentme.roomdata.LikeTypeDaoManager
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.bean.ThreeInfo
 import com.zb.baselibs.utils.getIntegerByAllName
@@ -77,5 +78,8 @@ class MineApp : BaseApp() {
 
         @SuppressLint("StaticFieldLeak")
         lateinit var goodDaoManager: GoodDaoManager
+
+        @SuppressLint("StaticFieldLeak")
+        lateinit var likeTypeDaoManager: LikeTypeDaoManager
     }
 }

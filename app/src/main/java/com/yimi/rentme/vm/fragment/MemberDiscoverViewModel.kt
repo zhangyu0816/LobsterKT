@@ -223,17 +223,17 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
      * 跳至动态详情
      */
     fun toDiscoverDetail(position: Int) {
-        activity.startActivity<MemberDetailActivity>(
-            Pair("otherUserId", discoverInfoList[position].userId)
+        activity.startActivity<DiscoverDetailActivity>(
+            Pair("friendDynId", discoverInfoList[position].friendDynId)
         )
     }
 
-    /**.
+    /**
      * 跳至用户详情
      */
     fun toMemberDetail(position: Int) {
-        activity.startActivity<DiscoverDetailActivity>(
-            Pair("friendDynId", discoverInfoList[position].friendDynId)
+        activity.startActivity<MemberDetailActivity>(
+            Pair("otherUserId", discoverInfoList[position].userId)
         )
     }
 

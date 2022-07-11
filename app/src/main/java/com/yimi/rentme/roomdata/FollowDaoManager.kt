@@ -8,10 +8,9 @@ import com.zb.baselibs.utils.getLong
 data class FollowInfo(
     @PrimaryKey
     var otherUserId: Long = 0L,
-    var nick: String = "",
-    var image: String = "", // 头像
-    var images: String = "", // 形象图
-    var isFollow: Boolean = false,
+    var nick: String = "", // 用户昵称
+    var image: String = "", // 用户头像
+    var images: String = "", // 用户形象图
     var mainUserId: Long = 0L // 拥有的
 ) {
     @Ignore
@@ -29,26 +28,14 @@ interface FollowInfoDao {
     /**
      * 获取关注中是否已关注
      */
-    @Query("select isFollow from FollowInfo where otherUserId=:otherUserId and mainUserId=:mainUserId")
-    fun queryFollow(otherUserId: Long, mainUserId: Long): Boolean
+    @Query("select * from FollowInfo where otherUserId=:otherUserId and mainUserId=:mainUserId")
+    fun queryFollowInfo(otherUserId: Long, mainUserId: Long): FollowInfo?
 
     /**
-     * 获取关注中头像
+     * 删除关注
      */
-    @Query("select image from FollowInfo where otherUserId=:otherUserId and mainUserId=:mainUserId")
-    fun queryImage(otherUserId: Long, mainUserId: Long): String
-
-    /**
-     * 获取关注中形象图
-     */
-    @Query("select images from FollowInfo where otherUserId=:otherUserId and mainUserId=:mainUserId")
-    fun queryImages(otherUserId: Long, mainUserId: Long): String
-
-    /**
-     * 获取关注中昵称
-     */
-    @Query("select nick from FollowInfo where otherUserId=:otherUserId and mainUserId=:mainUserId")
-    fun queryNick(otherUserId: Long, mainUserId: Long): String
+    @Query("delete from FollowInfo where otherUserId=:otherUserId and mainUserId=:mainUserId")
+    fun deleteFollowInfo(otherUserId: Long, mainUserId: Long)
 }
 
 @Database(entities = [FollowInfo::class], version = 1, exportSchema = false)
@@ -76,28 +63,14 @@ class FollowDaoManager(private val context: Context) {
     /**
      * 获取关注中是否已关注
      */
-    fun getFollow(otherUserId: Long): Boolean {
-        return dao.queryFollow(otherUserId, getLong("userId"))
+    fun getFollowInfo(otherUserId: Long): FollowInfo? {
+        return dao.queryFollowInfo(otherUserId, getLong("userId"))
     }
 
     /**
-     * 获取关注中头像
+     * 删除关注
      */
-    fun getImage(otherUserId: Long): String {
-        return dao.queryImage(otherUserId, getLong("userId"))
-    }
-
-    /**
-     * 获取关注中形象图
-     */
-    fun getImages(otherUserId: Long): String {
-        return dao.queryImages(otherUserId, getLong("userId"))
-    }
-
-    /**
-     * 获取关注中昵称
-     */
-    fun getNick(otherUserId: Long): String {
-        return dao.queryNick(otherUserId, getLong("userId"))
+    fun deleteFollowInfo(otherUserId: Long){
+        return dao.deleteFollowInfo(otherUserId, getLong("userId"))
     }
 }

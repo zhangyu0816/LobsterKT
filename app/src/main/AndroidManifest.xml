@@ -123,6 +123,7 @@
         <activity android:name=".activity.DiscoverDetailActivity" />
         <activity android:name=".activity.VideoDetailActivity" />
         <activity android:name=".activity.VideoListActivity" />
+        <activity android:name=".activity.MNImageBrowserActivity" />
     </application>
 
 </manifest>

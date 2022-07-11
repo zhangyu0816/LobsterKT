@@ -143,4 +143,28 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/SimpleRent_search")
     suspend fun search(@FieldMap map: Map<String, String>): HttpWrapBean<ArrayList<MemberInfo>>
+
+    // 动态详情
+    @FormUrlEncoded
+    @POST("api/Interactive_dynDetail")
+    suspend fun dynDetail(@Field("friendDynId") friendDynId: Long): HttpWrapBean<DiscoverInfo>
+
+    // 分享
+    @GET("api/Share_memberInfoConf")
+    suspend fun memberInfoConf(): HttpWrapBean<ShareInfo>
+
+    // 关注状态
+    @FormUrlEncoded
+    @POST("api/Collect_attentionStatus")
+    suspend fun attentionStatus(@Field("otherUserId") otherUserId: Long): HttpWrapBean<Any?>
+
+    // 关注他人
+    @FormUrlEncoded
+    @POST("api/Collect_attentionOther")
+    suspend fun attentionOther(@Field("otherUserId") otherUserId: Long): HttpWrapBean<Any?>
+
+    // 取消关注
+    @FormUrlEncoded
+    @POST("api/Collect_cancelAttention")
+    suspend fun cancelAttention(@Field("otherUserId") otherUserId: Long): HttpWrapBean<Any?>
 }

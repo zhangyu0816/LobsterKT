@@ -16,4 +16,6 @@
     <string name="tab_recommend">推荐</string>
     <string name="tab_video">小视频</string>
     <string name="service_tag_remind">无个性，不签名</string>
+    <string name="attention_true">立即关注</string>
+    <string name="attention_false">取消关注</string>
 </resources>

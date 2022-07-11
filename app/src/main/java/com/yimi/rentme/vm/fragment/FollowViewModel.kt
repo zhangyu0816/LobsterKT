@@ -31,6 +31,7 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
     private var prePosition = -1
     private lateinit var discoverInfo: DiscoverInfo
     private var friendDynId = 0L
+    private var followInfo: FollowInfo? = null
 
     override fun initViewModel() {
         adapter = BaseAdapter(activity, R.layout.item_follow_discover, discoverInfoList, this)
@@ -70,15 +71,17 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                 binding.noWifi = false
                 for (item in it) {
                     BaseApp.fixedThreadPool.execute {
+                        followInfo = MineApp.followDaoManager.getFollowInfo(item.otherUserId)
+                        if (followInfo != null) {
+                            item.nick = followInfo!!.nick
+                            item.image = followInfo!!.image
+                        }
                         val url = item.videoUrl.ifEmpty {
                             if (item.images.isEmpty())
-                                MineApp.followDaoManager.getImages(item.otherUserId).split(",")[0]
+                                item.image
                             else
                                 item.images.split(",")[0]
                         }
-                        item.nick = MineApp.followDaoManager.getNick(item.otherUserId)
-                        item.image = MineApp.followDaoManager.getImage(item.otherUserId)
-                        item.images = MineApp.followDaoManager.getImages(item.otherUserId)
                         if (url.contains(".mp4")) {
                             val start = discoverInfoList.size
                             discoverInfoList.add(item)
@@ -91,7 +94,7 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                                         item.width = width
                                         item.height = height
                                         discoverInfoList.add(item)
-                                        if (MineApp.followDaoManager.getFollow(item.otherUserId)) {
+                                        if (followInfo != null) {
                                             activity.runOnUiThread {
                                                 adapter.notifyItemRangeChanged(
                                                     start, discoverInfoList.size
@@ -132,7 +135,6 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
             onSuccess {
                 BaseApp.fixedThreadPool.execute {
                     val followInfo = FollowInfo()
-                    followInfo.isFollow = true
                     followInfo.image = it.image
                     followInfo.images = it.moreImages.ifEmpty { it.singleImage }
                     followInfo.nick = it.nick
