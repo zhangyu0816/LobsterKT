@@ -215,11 +215,12 @@ class RegisterMemberViewModel : BaseViewModel() {
     /**
      * 获取用户信息
      */
-    private fun myInfo() {
-        mainDataSource.enqueue({ myInfo() }) {
+    private fun myInfo() {mainDataSource.enqueue({ myInfo()
+         }) {
             onSuccess {
                 dismissLoading()
                 MineApp.mineInfo = it
+                MineApp.sex = it.sex
                 MineApp.registerInfo = RegisterInfo()
                 activity.startActivity<MainActivity>()
                 EventBus.getDefault().post("", "lobsterFinishLogin")

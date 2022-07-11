@@ -3,6 +3,7 @@ package com.yimi.rentme.utils
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.zb.baselibs.app.BaseApp
+import com.zb.baselibs.utils.DateUtil
 import com.zb.baselibs.utils.ObjectUtils
 
 object LobsterObjectUtil {
@@ -32,5 +33,10 @@ object LobsterObjectUtil {
     @JvmStatic
     fun getLogoHeight(scale: Float): Int {
         return (ObjectUtils.getViewSizeByWidth(scale) * 510f / 345f).toInt()
+    }
+
+    @JvmStatic
+    fun getAge(birthday:String,age:Int):String{
+        return DateUtil.getAge(birthday,age).toString()
     }
 }

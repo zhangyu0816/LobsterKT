@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.SearchViewModel" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.MemberInfo" />
+
+        <variable
+            name="position"
+            type="Integer" />
+    </data>
+
+    <LinearLayout
+        onClickDelayed="@{v->viewModel.toMemberDetail(item.userId)}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <ImageView
+            imageUrl="@{item.singleImage}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(150)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(150)}"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            tools:src="@mipmap/ic_launcher" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{item.nick}"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                tools:text="白熊仙女" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:background="@{item.sex == 0 ? @drawable/age_pink_bg : @drawable/age_blue_bg}"
+                android:drawableStart="@{item.sex==0?@drawable/sex_female_single:@drawable/sex_male_single}"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:paddingVertical="2dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:text='@{String.valueOf(LobsterObjectUtil.getAge(item.birthday,item.age))}'
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                tools:background="@drawable/age_pink_bg"
+                tools:drawableStart="@drawable/sex_female_single"
+                tools:text="23" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:singleLine="true"
+                android:text='@{item.serviceTags.empty?@string/service_tag_remind:item.serviceTags.substring(1).replace("#"," ")}'
+                android:textColor="@color/black_9"
+                android:textSize="14sp"
+                tools:text="无个性，不签名" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

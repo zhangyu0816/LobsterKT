@@ -116,6 +116,7 @@
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.BindingPhoneActivity" />
         <activity android:name=".activity.SelectImageActivity" />
+        <activity android:name=".activity.SearchActivity" />
     </application>
 
 </manifest>

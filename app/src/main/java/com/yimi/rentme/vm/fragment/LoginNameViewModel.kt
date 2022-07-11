@@ -210,6 +210,7 @@ class LoginNameViewModel : BaseViewModel() {
             onSuccess {
                 dismissLoading()
                 MineApp.mineInfo = it
+                MineApp.sex = it.sex
                 MineApp.registerInfo = RegisterInfo()
                 activity.startActivity<MainActivity>()
                 EventBus.getDefault().post("", "lobsterFinishLogin")

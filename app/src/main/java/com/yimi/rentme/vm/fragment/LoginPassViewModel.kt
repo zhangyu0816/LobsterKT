@@ -184,6 +184,7 @@ class LoginPassViewModel : BaseViewModel() {
             onSuccess {
                 dismissLoading()
                 MineApp.mineInfo = it
+                MineApp.sex = it.sex
                 passErrorCount = 0
                 activity.startActivity<MainActivity>()
                 EventBus.getDefault().post("", "lobsterFinishLogin")

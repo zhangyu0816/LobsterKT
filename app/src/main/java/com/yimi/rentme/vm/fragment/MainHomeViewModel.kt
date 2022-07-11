@@ -6,6 +6,7 @@ import android.os.SystemClock
 import android.view.View
 import android.view.animation.Animation
 import com.yimi.rentme.R
+import com.yimi.rentme.activity.SearchActivity
 import com.yimi.rentme.databinding.FragMainHomeBinding
 import com.yimi.rentme.fragment.FollowFrag
 import com.yimi.rentme.fragment.MemberDiscoverFrag
@@ -13,6 +14,7 @@ import com.yimi.rentme.fragment.MemberVideoFrag
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.views.replaceFragment
+import org.jetbrains.anko.startActivity
 
 class MainHomeViewModel : BaseViewModel() {
 
@@ -37,7 +39,7 @@ class MainHomeViewModel : BaseViewModel() {
             }
         }
 
-        selectIndex(2)
+        selectIndex(1)
     }
 
     override fun onDestroy() {
@@ -62,7 +64,9 @@ class MainHomeViewModel : BaseViewModel() {
     /**
      * 搜索
      */
-    fun toSearch(view: View) {}
+    fun toSearch(view: View) {
+        activity.startActivity<SearchActivity>()
+    }
 
     /**
      * 漂流瓶

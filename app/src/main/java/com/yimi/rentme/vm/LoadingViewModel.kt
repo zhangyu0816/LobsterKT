@@ -94,6 +94,7 @@ class LoadingViewModel : BaseViewModel() {
         mainDataSource.enqueue({ myInfo() }) {
             onSuccess {
                 MineApp.mineInfo = it
+                MineApp.sex = it.sex
                 activity.startActivity<MainActivity>()
                 activity.finish()
             }

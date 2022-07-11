@@ -138,4 +138,9 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/Interactive_dynDoLike")
     suspend fun dynDoLike(@Field("friendDynId") friendDynId: Long): HttpWrapBean<Any?>
+
+    // 搜索
+    @FormUrlEncoded
+    @POST("api/SimpleRent_search")
+    suspend fun search(@FieldMap map: Map<String, String>): HttpWrapBean<ArrayList<MemberInfo>>
 }

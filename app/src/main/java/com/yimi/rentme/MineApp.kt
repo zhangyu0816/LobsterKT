@@ -67,6 +67,8 @@ class MineApp : BaseApp() {
         var cityId = 0L
         var districtId = 0L
         var sex = 0
+        var minAge = 0
+        var maxAge = 100
 
         @SuppressLint("StaticFieldLeak")
         lateinit var followDaoManager: FollowDaoManager

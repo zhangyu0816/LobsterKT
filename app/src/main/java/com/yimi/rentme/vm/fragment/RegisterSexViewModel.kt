@@ -22,6 +22,7 @@ class RegisterSexViewModel : BaseViewModel() {
         binding.sexIndex = index
         binding.canNext = true
         MineApp.registerInfo.sex = index
+        MineApp.sex = index
     }
 
     /**
