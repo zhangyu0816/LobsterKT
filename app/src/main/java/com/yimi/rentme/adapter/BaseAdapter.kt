@@ -62,7 +62,7 @@ class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
             holder.binding!!.setVariable(BR.item, t)
             holder.binding!!.setVariable(BR.position, position)
             holder.binding!!.setVariable(BR.isSelect, selectIndex == position)
-//            holder.binding!!.setVariable(BR.isLast, list!!.size - 1 == position)
+            holder.binding!!.setVariable(BR.isLast, list!!.size - 1 == position)
 //            if (selectPosition != -1)
 //                holder.binding!!.setVariable(BR.selectPosition, selectPosition)
             if (dialog != null) {

@@ -16,6 +16,7 @@ import com.github.chrisbanes.photoview.PhotoView
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcMnimageBrowserBinding
+import com.yimi.rentme.dialog.ReviewDF
 import com.yimi.rentme.utils.imagebrowser.MyMNImage
 import com.yimi.rentme.utils.imagebrowser.OnDiscoverClickListener
 import com.zb.baselibs.app.BaseApp
@@ -152,6 +153,23 @@ class MNImageBrowserViewModel : BaseViewModel() {
                 MineApp.goodDaoManager.getGood(friendDynId) != null
             binding.discoverInfo = MyMNImage.imageBrowserConfig.discoverInfo
         }
+    }
+
+    /**
+     * 评论
+     */
+    fun toReview(view: View) {
+        ReviewDF(activity).setMainDataSource(mainDataSource)
+            .setFriendDynId(binding.discoverInfo!!.friendDynId)
+            .setReviews(binding.discoverInfo!!.reviews)
+            .setOtherUserId(binding.discoverInfo!!.userId)
+            .setCallBack(object : ReviewDF.CallBack {
+                override fun sure() {
+                    MyMNImage.imageBrowserConfig.discoverInfo!!.reviews += 1
+                    binding.discoverInfo = MyMNImage.imageBrowserConfig.discoverInfo
+                }
+            })
+            .show(activity.supportFragmentManager)
     }
 
     private fun initViewPager() {

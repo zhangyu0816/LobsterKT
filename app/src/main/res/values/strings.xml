@@ -20,4 +20,9 @@
     <string name="attention_false">取消关注</string>
     <string name="follow_true">关注</string>
     <string name="follow_false">已关注</string>
+    <string name="reviews">评论(%d)</string>
+    <string name="at_name">\@ %s</string>
+    <string name="at_nick">\@%s</string>
+    <string name="review_info"><Data><![CDATA[<font color="#9599A1">%s</font>  <font color="#2C2B31">%s</font>]]></Data></string>
+    <string name="review_info_1"><Data><![CDATA[<font color="#2C2B31"><b>%s</b></font> <font color="#9596A1"><small>%s</small></font>]]></Data></string>
 </resources>

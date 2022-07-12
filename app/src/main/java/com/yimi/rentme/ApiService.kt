@@ -167,4 +167,17 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/Collect_cancelAttention")
     suspend fun cancelAttention(@Field("otherUserId") otherUserId: Long): HttpWrapBean<Any?>
+
+    // 查看评论
+    @FormUrlEncoded
+    @POST("api/Interactive_seeReviews")
+    suspend fun seeReviews(
+        @Field("friendDynId") friendDynId: Long, @Field("timeSortType") timeSortType: Int,
+        @Field("pageNo") pageNo: Int, @Field("row") row: Int
+    ): HttpWrapBean<ArrayList<Review>>
+
+    // 给动态评论
+    @FormUrlEncoded
+    @POST("api/Interactive_dynDoReview")
+    suspend fun dynDoReview(@FieldMap map: Map<String, String>): HttpWrapBean<Any?>
 }

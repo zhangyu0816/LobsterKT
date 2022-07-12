@@ -122,9 +122,6 @@ class DiscoverDetailViewModel : BaseViewModel() {
                                 dynDoLike()
                             }
 
-                            override fun review() {
-                            }
-
                             override fun share() {
                             }
                         })
