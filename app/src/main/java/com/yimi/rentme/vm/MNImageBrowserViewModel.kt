@@ -16,6 +16,7 @@ import com.github.chrisbanes.photoview.PhotoView
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcMnimageBrowserBinding
+import com.yimi.rentme.dialog.FunctionDF
 import com.yimi.rentme.dialog.ReviewDF
 import com.yimi.rentme.utils.imagebrowser.MyMNImage
 import com.yimi.rentme.utils.imagebrowser.OnDiscoverClickListener
@@ -170,6 +171,46 @@ class MNImageBrowserViewModel : BaseViewModel() {
                 }
             })
             .show(activity.supportFragmentManager)
+    }
+
+    /**
+     * 分享
+     */
+    fun toShare(view: View) {
+        mainDataSource.enqueue({ memberInfoConf() }) {
+            onSuccess {
+                val sharedName =
+                    it.text.replace("{userId}", binding.discoverInfo!!.userId.toString())
+                        .replace("{nick}", binding.discoverInfo!!.nick)
+                val content =
+                    binding.discoverInfo!!.text.ifEmpty { binding.discoverInfo!!.friendTitle }
+                val sharedUrl: String =
+                    BaseApp.baseUrl + "mobile/Dyn_dynDetail?friendDynId=" + binding.discoverInfo!!.friendDynId
+                FunctionDF(activity).setUmImage(
+                    binding.discoverInfo!!.image.replace(
+                        "YM0000",
+                        "430X430"
+                    )
+                ).setSharedName(sharedName).setContent(content).setSharedUrl(sharedUrl)
+                    .setOtherUserId(binding.discoverInfo!!.userId).setIsVideo(false)
+                    .setIsDiscover(true).setIsList(false)
+                    .setCallBack(object : FunctionDF.CallBack {
+                        override fun report() {
+                        }
+
+                        override fun gift() {
+                        }
+
+                        override fun delete() {
+                        }
+
+                        override fun like() {
+                        }
+                    })
+                    .show(activity.supportFragmentManager)
+            }
+        }
+
     }
 
     private fun initViewPager() {
