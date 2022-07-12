@@ -21,9 +21,9 @@ import org.jetbrains.anko.startActivity
 class MainHomeViewModel : BaseViewModel() {
 
     lateinit var binding: FragMainHomeBinding
-    private lateinit var pvhSY: PropertyValuesHolder
-    private lateinit var pvhSX: PropertyValuesHolder
-    private lateinit var pvhA: PropertyValuesHolder
+    private var pvhSY: PropertyValuesHolder? = null
+    private var pvhSX: PropertyValuesHolder? = null
+    private var pvhA: PropertyValuesHolder? = null
     private var pvh: ObjectAnimator? = null
 
     override fun initViewModel() {
@@ -48,6 +48,9 @@ class MainHomeViewModel : BaseViewModel() {
         super.onDestroy()
         if (pvh != null)
             pvh!!.cancel()
+        pvhSY = null
+        pvhSX = null
+        pvhA = null
         pvh = null
     }
 

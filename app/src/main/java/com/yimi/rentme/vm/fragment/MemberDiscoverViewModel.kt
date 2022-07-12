@@ -43,7 +43,7 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 binding.noDataRes = R.mipmap.my_no_discover_data
                 personOtherDyn()
             }
-            else ->{
+            else -> {
                 binding.noDataRes = R.mipmap.other_no_discover_data
                 otherInfo()
             }
@@ -223,8 +223,10 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
      * 跳至动态详情
      */
     fun toDiscoverDetail(position: Int) {
+        prePosition = position
+        discoverInfo = discoverInfoList[position]
         activity.startActivity<DiscoverDetailActivity>(
-            Pair("friendDynId", discoverInfoList[position].friendDynId)
+            Pair("friendDynId", discoverInfo.friendDynId)
         )
     }
 
@@ -232,8 +234,10 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
      * 跳至用户详情
      */
     fun toMemberDetail(position: Int) {
+        prePosition = position
+        discoverInfo = discoverInfoList[position]
         activity.startActivity<MemberDetailActivity>(
-            Pair("otherUserId", discoverInfoList[position].userId)
+            Pair("otherUserId", discoverInfo.userId)
         )
     }
 
@@ -257,6 +261,15 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 }
             }
         }
+    }
+
+    /**
+     * 点赞数量
+     */
+    fun doLike(friendDynId: Long) {
+        discoverInfo.isLike = true
+        discoverInfo.goodNum++
+        adapter.notifyItemChanged(prePosition)
     }
 
     /**

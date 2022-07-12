@@ -5,6 +5,7 @@ import com.yimi.rentme.R
 import com.yimi.rentme.databinding.FragMemberVideoBinding
 import com.yimi.rentme.vm.fragment.MemberVideoViewModel
 import com.zb.baselibs.activity.BaseFragment
+import org.simple.eventbus.Subscriber
 
 class MemberVideoFrag(private val otherUserId: Long) : BaseFragment() {
 
@@ -19,7 +20,16 @@ class MemberVideoFrag(private val otherUserId: Long) : BaseFragment() {
     }
 
     override fun initView() {
+        needEvenBus = true
         viewModel.otherUserId = otherUserId
         viewModel.initViewModel()
+    }
+
+    /**
+     * 点赞
+     */
+    @Subscriber(tag = "lobsterDoLike")
+    private fun lobsterDoLike(data: String) {
+        viewModel.doLike(data.toLong())
     }
 }

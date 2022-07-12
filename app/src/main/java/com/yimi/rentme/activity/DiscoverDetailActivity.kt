@@ -18,9 +18,15 @@ class DiscoverDetailActivity : BaseScreenActivity() {
     }
 
     override fun initView() {
+        needEvenBus = true
         val extras = intent.extras
         if (extras != null)
             viewModel.friendDynId = extras.getLong("friendDynId")
         viewModel.initViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
     }
 }

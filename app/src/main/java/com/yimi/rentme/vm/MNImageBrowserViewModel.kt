@@ -1,17 +1,24 @@
 package com.yimi.rentme.vm
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.animation.Animation
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.github.chrisbanes.photoview.PhotoView
+import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcMnimageBrowserBinding
 import com.yimi.rentme.utils.imagebrowser.MyMNImage
+import com.yimi.rentme.utils.imagebrowser.OnDiscoverClickListener
+import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.views.imagebrowser.base.ImageBrowserConfig
 import com.zb.baselibs.views.imagebrowser.listener.ImageEngine
 import com.zb.baselibs.views.imagebrowser.listener.OnClickListener
@@ -36,10 +43,15 @@ class MNImageBrowserViewModel : BaseViewModel() {
     //监听
     private var onLongClickListener: OnLongClickListener? = null
     private var onClickListener: OnClickListener? = null
+    private var onDiscoverClickListener: OnDiscoverClickListener? = null
     private lateinit var imageBrowserAdapter: MyAdapter
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var mCurrentView: View
+
+    private var translationY: PropertyValuesHolder? = null
+    private var alpha: PropertyValuesHolder? = null
+    private var pvh: ObjectAnimator? = null
 
     @SuppressLint("SetTextI18n")
     override fun initViewModel() {
@@ -49,7 +61,18 @@ class MNImageBrowserViewModel : BaseViewModel() {
         imageEngine = MyMNImage.imageBrowserConfig.imageEngine!!
         onClickListener = MyMNImage.imageBrowserConfig.onClickListener
         onLongClickListener = MyMNImage.imageBrowserConfig.onLongClickListener
+        onDiscoverClickListener = MyMNImage.imageBrowserConfig.onDiscoverClickListener
         binding.numberIndicator.text = "${currentPosition + 1}/${imageUrlList.size}"
+        binding.discoverInfo = MyMNImage.imageBrowserConfig.discoverInfo
+        binding.isFollow = false
+        if (binding.discoverInfo != null) {
+            BaseApp.fixedThreadPool.execute {
+                binding.isFollow =
+                    MineApp.followDaoManager.getFollowInfo(binding.discoverInfo!!.userId) != null
+                binding.discoverInfo!!.isLike =
+                    MineApp.goodDaoManager.getGood(binding.discoverInfo!!.friendDynId) != null
+            }
+        }
         initViewPager()
     }
 
@@ -58,6 +81,9 @@ class MNImageBrowserViewModel : BaseViewModel() {
         activity.finish()
     }
 
+    /**
+     * 删除图片
+     */
     @SuppressLint("SetTextI18n")
     fun delete(view: View) {
         imageBrowserAdapter.destroyItem(
@@ -73,6 +99,58 @@ class MNImageBrowserViewModel : BaseViewModel() {
             }
             binding.numberIndicator.text = "${currentPosition + 1}/${imageUrlList.size}"
             initViewPager()
+        }
+    }
+
+    /**
+     * 关注
+     */
+    fun follow(view: View) {
+        if (onDiscoverClickListener != null) {
+            onDiscoverClickListener!!.follow()
+        }
+    }
+
+    /**
+     * 更新关注
+     */
+    fun updateFollow(isFollow: Boolean) {
+        binding.isFollow = isFollow
+    }
+
+    /**
+     * 点赞
+     */
+    fun doLike(view: View) {
+        if (!binding.discoverInfo!!.isLike) {
+            binding.likeLayout.visibility = View.VISIBLE
+            translationY = PropertyValuesHolder.ofFloat("translationY", 0f, -50f)
+            alpha = PropertyValuesHolder.ofFloat("alpha", 1f, 0f)
+            pvh = ObjectAnimator.ofPropertyValuesHolder(binding.likeLayout, translationY, alpha)
+                .setDuration(1000)
+            pvh!!.repeatCount = Animation.INFINITE
+            pvh!!.start()
+            BaseApp.fixedThreadPool.execute {
+                SystemClock.sleep(1000)
+                activity.runOnUiThread {
+                    binding.likeLayout.visibility = View.GONE
+                }
+            }
+            if (onDiscoverClickListener != null) {
+                onDiscoverClickListener!!.good()
+            }
+        }
+    }
+
+    /**
+     * 点赞
+     */
+    fun doLike(friendDynId: Long) {
+        MyMNImage.imageBrowserConfig.discoverInfo!!.goodNum++
+        BaseApp.fixedThreadPool.execute {
+            MyMNImage.imageBrowserConfig.discoverInfo!!.isLike =
+                MineApp.goodDaoManager.getGood(friendDynId) != null
+            binding.discoverInfo = MyMNImage.imageBrowserConfig.discoverInfo
         }
     }
 

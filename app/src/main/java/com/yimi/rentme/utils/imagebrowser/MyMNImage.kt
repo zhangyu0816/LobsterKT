@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.yimi.rentme.bean.DiscoverInfo
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.views.imagebrowser.base.ImageBrowserConfig
 import com.zb.baselibs.views.imagebrowser.listener.ImageEngine
@@ -16,53 +17,49 @@ import com.zb.baselibs.views.imagebrowser.listener.OnLongClickListener
 
 object MyMNImage {
 
-    var imageBrowserConfig = ImageBrowserConfig()
-    private var index: Int = 0
-    private lateinit var sourceImageList: ArrayList<String>
-    private var transformType: ImageBrowserConfig.TransformType? = null
-    private lateinit var callBack: ImageBrowserConfig.StartBack
-    private var clickListener: OnClickListener? = null
-    private var longClickListener: OnLongClickListener? = null
+    var imageBrowserConfig = MyImageBrowserConfig()
 
     fun setIndex(index: Int): MyMNImage {
-        MyMNImage.index = index
+        imageBrowserConfig.position = index
         return this
     }
 
     fun setSourceImageList(sourceImageList: ArrayList<String>): MyMNImage {
-        MyMNImage.sourceImageList = sourceImageList
+        imageBrowserConfig.imageList = sourceImageList
         return this
     }
 
-    fun setTransformType(transformType: ImageBrowserConfig.TransformType?): MyMNImage {
-        MyMNImage.transformType = transformType
+    fun setTransformType(transformType: ImageBrowserConfig.TransformType): MyMNImage {
+        imageBrowserConfig.transformType = transformType
         return this
     }
 
     fun setCallBack(callBack: ImageBrowserConfig.StartBack): MyMNImage {
-        MyMNImage.callBack = callBack
+        imageBrowserConfig.callBack = callBack
         return this
     }
 
     fun setClickListener(clickListener: OnClickListener?): MyMNImage {
-        MyMNImage.clickListener = clickListener
+        imageBrowserConfig.onClickListener = clickListener
         return this
     }
 
     fun setLongClickListener(longClickListener: OnLongClickListener?): MyMNImage {
-        MyMNImage.longClickListener = longClickListener
+        imageBrowserConfig.onLongClickListener = longClickListener
+        return this
+    }
+
+    fun setDiscoverClickListener(discoverClickListener: OnDiscoverClickListener): MyMNImage {
+        imageBrowserConfig.onDiscoverClickListener = discoverClickListener
+        return this
+    }
+
+    fun setDiscoverInfo(discoverInfo: DiscoverInfo): MyMNImage {
+        imageBrowserConfig.discoverInfo = discoverInfo
         return this
     }
 
     fun imageBrowser() {
-        imageBrowserConfig.imageList = sourceImageList
-        imageBrowserConfig.position = index
-        if (transformType != null)
-            imageBrowserConfig.transformType = transformType as ImageBrowserConfig.TransformType
-        if (clickListener != null)
-            imageBrowserConfig.onClickListener = clickListener
-        if (longClickListener != null)
-            imageBrowserConfig.onLongClickListener = longClickListener
         imageBrowserConfig.imageEngine = object : ImageEngine {
             override fun loadImage(context: Context, url: String, imageView: ImageView) {
                 val cropOptions = RequestOptions().fitCenter()
@@ -92,6 +89,6 @@ object MyMNImage {
                     })
             }
         }
-        imageBrowserConfig.show(callBack)
+        imageBrowserConfig.show(imageBrowserConfig.callBack)
     }
 }

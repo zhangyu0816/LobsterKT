@@ -6,6 +6,7 @@ import com.yimi.rentme.databinding.AcMnimageBrowserBinding
 import com.yimi.rentme.vm.MNImageBrowserViewModel
 import com.zb.baselibs.activity.BaseScreenActivity
 import kotlinx.android.synthetic.main.ac_mnimage_browser.*
+import org.simple.eventbus.Subscriber
 
 class MNImageBrowserActivity : BaseScreenActivity() {
 
@@ -20,12 +21,29 @@ class MNImageBrowserActivity : BaseScreenActivity() {
     }
 
     override fun initView() {
+        needEvenBus = true
         viewModel.initViewModel()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         viewModel.onDestroy()
+    }
+
+    /**
+     * 关注
+     */
+    @Subscriber(tag = "lobsterUpdateFollow")
+    private fun lobsterUpdateFollow(data: Boolean) {
+        viewModel.updateFollow(data)
+    }
+
+    /**
+     * 点赞
+     */
+    @Subscriber(tag = "lobsterDoLike")
+    private fun lobsterDoLike(data: String) {
+        viewModel.doLike(data.toLong())
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

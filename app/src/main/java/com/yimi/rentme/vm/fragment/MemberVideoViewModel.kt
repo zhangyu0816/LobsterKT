@@ -186,7 +186,7 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
         } else {
             // 视频详情
             activity.startActivity<VideoDetailActivity>(
-                Pair("friendDynId", discoverInfoList[position].friendDynId)
+                Pair("friendDynId", discoverInfo.friendDynId)
             )
         }
     }
@@ -209,6 +209,20 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
                     goodView.playUnlike()
                     dynCancelLike()
                 }
+            }
+        }
+    }
+
+    /**
+     * 点赞数量
+     */
+    fun doLike(friendDynId: Long) {
+        for (i in 0 until discoverInfoList.size) {
+            if (friendDynId == discoverInfoList[i].friendDynId) {
+                discoverInfoList[i].isLike = true
+                discoverInfoList[i].goodNum++
+                adapter.notifyItemChanged(i)
+                return
             }
         }
     }

@@ -1,8 +1,7 @@
 package com.yimi.rentme.vm
 
+import android.os.SystemClock
 import android.view.View
-import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.activity.MNImageBrowserActivity
 import com.yimi.rentme.activity.MemberDetailActivity
@@ -10,18 +9,17 @@ import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.bean.MemberInfo
 import com.yimi.rentme.databinding.AcDiscoverDetailBinding
 import com.yimi.rentme.roomdata.FollowInfo
+import com.yimi.rentme.roomdata.GoodInfo
 import com.yimi.rentme.roomdata.LikeTypeInfo
 import com.yimi.rentme.utils.imagebrowser.MyMNImage
+import com.yimi.rentme.utils.imagebrowser.OnDiscoverClickListener
 import com.zb.baselibs.adapter.loadImage
 import com.zb.baselibs.adapter.viewSize
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.bean.Ads
-import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.utils.getLong
 import com.zb.baselibs.views.imagebrowser.base.ImageBrowserConfig
-import com.zb.baselibs.views.imagebrowser.listener.OnClickListener
 import com.zb.baselibs.views.xbanner.ImageLoader
-import com.zb.baselibs.views.xbanner.XBanner
 import com.zb.baselibs.views.xbanner.XUtils
 import com.zb.baselibs.views.xbanner.XUtils.showBanner
 import org.jetbrains.anko.startActivity
@@ -50,6 +48,11 @@ class DiscoverDetailViewModel : BaseViewModel() {
     override fun back(view: View) {
         super.back(view)
         activity.finish()
+    }
+
+    fun onResume() {
+        if (discoverInfo.friendDynId != 0L)
+            attentionStatus()
     }
 
     /**
@@ -106,8 +109,25 @@ class DiscoverDetailViewModel : BaseViewModel() {
             },
             object : XUtils.ClickCallBack {
                 override fun clickItem(position: Int, imageList: ArrayList<String>?) {
+                    if (discoverInfo.friendDynId == 0L) return
                     MyMNImage.setIndex(0).setSourceImageList(sourceImageList)
                         .setTransformType(ImageBrowserConfig.TransformType.TransformDepthPage)
+                        .setDiscoverInfo(discoverInfo)
+                        .setDiscoverClickListener(object : OnDiscoverClickListener {
+                            override fun follow() {
+                                follow(binding.tvFollow)
+                            }
+
+                            override fun good() {
+                                dynDoLike()
+                            }
+
+                            override fun review() {
+                            }
+
+                            override fun share() {
+                            }
+                        })
                         .setCallBack(object : ImageBrowserConfig.StartBack {
                             override fun onStartActivity() {
                                 activity.startActivity<MNImageBrowserActivity>()
@@ -175,7 +195,7 @@ class DiscoverDetailViewModel : BaseViewModel() {
                     followInfo.images =
                         binding.memberInfo!!.moreImages.ifEmpty { binding.memberInfo!!.singleImage }
                     followInfo.nick = binding.memberInfo!!.nick
-                    followInfo.otherUserId = discoverInfo.otherUserId
+                    followInfo.otherUserId = discoverInfo.userId
                     followInfo.mainUserId = getLong("userId")
                     MineApp.followDaoManager.insert(followInfo)
                 }
@@ -183,7 +203,7 @@ class DiscoverDetailViewModel : BaseViewModel() {
             onFailed {
                 binding.isFollow = false
                 BaseApp.fixedThreadPool.execute {
-                    MineApp.followDaoManager.deleteFollowInfo(discoverInfo.otherUserId)
+                    MineApp.followDaoManager.deleteFollowInfo(discoverInfo.userId)
                 }
             }
         }
@@ -201,10 +221,9 @@ class DiscoverDetailViewModel : BaseViewModel() {
                     followInfo.images =
                         binding.memberInfo!!.moreImages.ifEmpty { binding.memberInfo!!.singleImage }
                     followInfo.nick = binding.memberInfo!!.nick
-                    followInfo.otherUserId = discoverInfo.otherUserId
+                    followInfo.otherUserId = discoverInfo.userId
                     followInfo.mainUserId = getLong("userId")
                     MineApp.followDaoManager.insert(followInfo)
-
                     activity.runOnUiThread {
                         binding.isFollow = true
                     }
@@ -220,7 +239,7 @@ class DiscoverDetailViewModel : BaseViewModel() {
                         followInfo.images =
                             binding.memberInfo!!.moreImages.ifEmpty { binding.memberInfo!!.singleImage }
                         followInfo.nick = binding.memberInfo!!.nick
-                        followInfo.otherUserId = discoverInfo.otherUserId
+                        followInfo.otherUserId = discoverInfo.userId
                         followInfo.mainUserId = getLong("userId")
                         MineApp.followDaoManager.insert(followInfo)
 
@@ -241,7 +260,7 @@ class DiscoverDetailViewModel : BaseViewModel() {
         mainDataSource.enqueue({ cancelAttention(discoverInfo.userId) }) {
             onSuccess {
                 BaseApp.fixedThreadPool.execute {
-                    MineApp.followDaoManager.deleteFollowInfo(discoverInfo.otherUserId)
+                    MineApp.followDaoManager.deleteFollowInfo(discoverInfo.userId)
                     activity.runOnUiThread {
                         binding.isFollow = false
                     }
@@ -250,14 +269,45 @@ class DiscoverDetailViewModel : BaseViewModel() {
             }
             onFailToast { false }
             onFailed {
-                if (it.errorMessage == "你还没关注我啊") {
+                if (it.errorMessage == "已经取消了") {
                     BaseApp.fixedThreadPool.execute {
-                        MineApp.followDaoManager.deleteFollowInfo(discoverInfo.otherUserId)
+                        MineApp.followDaoManager.deleteFollowInfo(discoverInfo.userId)
                         activity.runOnUiThread {
                             binding.isFollow = false
                         }
                     }
                     EventBus.getDefault().post(false, "lobsterUpdateFollow")
+                }
+            }
+        }
+    }
+
+    /**
+     * 点赞
+     */
+    private fun dynDoLike() {
+        mainDataSource.enqueue({ dynDoLike(friendDynId) }) {
+            onSuccess {
+                val goodInfo = GoodInfo()
+                goodInfo.friendDynId = friendDynId
+                goodInfo.mainUserId = getLong("userId")
+                BaseApp.fixedThreadPool.execute {
+                    MineApp.goodDaoManager.insert(goodInfo)
+                    SystemClock.sleep(200)
+                    EventBus.getDefault().post(friendDynId.toString(), "lobsterDoLike")
+                }
+            }
+            onFailToast { false }
+            onFailed {
+                if (it.errorMessage == "已经赞过了") {
+                    val goodInfo = GoodInfo()
+                    goodInfo.friendDynId = friendDynId
+                    goodInfo.mainUserId = getLong("userId")
+                    BaseApp.fixedThreadPool.execute {
+                        MineApp.goodDaoManager.insert(goodInfo)
+                        SystemClock.sleep(200)
+                        EventBus.getDefault().post(friendDynId.toString(), "lobsterDoLike")
+                    }
                 }
             }
         }

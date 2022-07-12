@@ -102,7 +102,7 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                                             }
                                         } else {
                                             activity.runOnUiThread {
-                                                otherInfo(start, item.otherUserId)
+                                                otherInfo(start, item.userId)
                                             }
                                         }
                                     }

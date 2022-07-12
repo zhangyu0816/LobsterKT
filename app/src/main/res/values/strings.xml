@@ -18,4 +18,6 @@
     <string name="service_tag_remind">无个性，不签名</string>
     <string name="attention_true">立即关注</string>
     <string name="attention_false">取消关注</string>
+    <string name="follow_true">关注</string>
+    <string name="follow_false">已关注</string>
 </resources>

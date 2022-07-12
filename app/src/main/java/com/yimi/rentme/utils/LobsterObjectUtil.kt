@@ -36,7 +36,12 @@ object LobsterObjectUtil {
     }
 
     @JvmStatic
-    fun getAge(birthday:String,age:Int):String{
-        return DateUtil.getAge(birthday,age).toString()
+    fun getAge(birthday: String, age: Int): String {
+        return DateUtil.getAge(birthday, age).toString()
+    }
+
+    @JvmStatic
+    fun getTimeToToday(strDate: String): String {
+        return DateUtil.getTimeToToday(strDate)
     }
 }
