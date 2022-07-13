@@ -32,4 +32,12 @@ class MemberVideoFrag(private val otherUserId: Long) : BaseFragment() {
     private fun lobsterDoLike(data: String) {
         viewModel.doLike(data.toLong())
     }
+
+    /**
+     * 取消点赞
+     */
+    @Subscriber(tag = "lobsterCancelLike")
+    private fun lobsterCancelLike(data: String) {
+        viewModel.cancelLike(data.toLong())
+    }
 }

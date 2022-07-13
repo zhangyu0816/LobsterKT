@@ -46,6 +46,14 @@ class MNImageBrowserActivity : BaseScreenActivity() {
         viewModel.doLike(data.toLong())
     }
 
+    /**
+     * 取消点赞
+     */
+    @Subscriber(tag = "lobsterCancelLike")
+    private fun lobsterCancelLike(data: String) {
+        viewModel.cancelLike(data.toLong())
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             viewModel.back(iv_back)

@@ -1,6 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.DiscoverReviewDF" />
+
+        <variable
+            name="isMine"
+            type="boolean" />
+
+        <variable
+            name="content"
+            type="String" />
+
+        <variable
+            name="isLike"
+            type="boolean" />
+
+        <variable
+            name="hint"
+            type="String" />
+
+        <variable
+            name="discoverInfo"
+            type="com.yimi.rentme.bean.DiscoverInfo" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
+            android:background="@color/black_efe" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white">
+
+            <ImageView
+                android:id="@+id/iv_gift"
+                onClickDelayed="@{dialog::selectGift}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:visibility="@{isMine?View.GONE:View.VISIBLE}"
+                app:srcCompat="@mipmap/gift_icon" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toStartOf="@+id/right_layout"
+                android:layout_toEndOf="@+id/iv_gift"
+                android:background="@drawable/btn_bg_black_efe_radius40"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/ed_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="@{hint}"
+                    android:imeOptions="actionSend"
+                    android:paddingStart="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp"
+                    android:singleLine="true"
+                    android:text="@={content}"
+                    android:textColor="@color/black_827"
+                    android:textColorHint="#C3BDCD"
+                    android:textCursorDrawable="@drawable/cursor_color_black_827"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/right_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.yimi.rentme.views.GoodView
+                    android:id="@+id/good_view"
+                    isLike="@{isLike}"
+                    onClickDelayed="@{dialog::dynLike}"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center" />
+
+                <TextView
+                    onClickDelayed="@{dialog::dynLike}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginEnd="15dp"
+                    android:text="@{discoverInfo.goodNum==0?@string/discover_good:String.valueOf(discoverInfo.goodNum)}"
+                    android:textColor="#303846"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text="7" />
+
+                <TextView
+                    onClickDelayed="@{dialog::toReviewList}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:text="@{discoverInfo.reviews==0?@string/discover_review:String.valueOf(discoverInfo.reviews)}"
+                    android:textColor="#303846"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:drawableStartCompat="@mipmap/comment_icon"
+                    tools:text="7" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</layout>

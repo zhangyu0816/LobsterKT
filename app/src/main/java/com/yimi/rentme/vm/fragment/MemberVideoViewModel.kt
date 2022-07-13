@@ -228,6 +228,20 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
     }
 
     /**
+     * 取消点赞数量
+     */
+    fun cancelLike(friendDynId: Long) {
+        for (i in 0 until discoverInfoList.size) {
+            if (friendDynId == discoverInfoList[i].friendDynId) {
+                discoverInfoList[i].isLike = false
+                discoverInfoList[i].goodNum--
+                adapter.notifyItemChanged(i)
+                return
+            }
+        }
+    }
+
+    /**
      * 点赞
      */
     private fun dynDoLike() {

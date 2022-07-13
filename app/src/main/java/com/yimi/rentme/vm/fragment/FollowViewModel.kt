@@ -20,6 +20,7 @@ import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.getLong
 import kotlinx.coroutines.Job
+import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.startActivity
 
 class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
@@ -85,7 +86,9 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                         if (url.contains(".mp4")) {
                             val start = discoverInfoList.size
                             discoverInfoList.add(item)
-                            adapter.notifyItemRangeChanged(start, discoverInfoList.size)
+                            activity.runOnUiThread {
+                                adapter.notifyItemRangeChanged(start, discoverInfoList.size)
+                            }
                         } else {
                             PicSizeUtil.getPicSize(
                                 activity, url, object : PicSizeUtil.OnPicListener {
@@ -141,7 +144,9 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                     followInfo.otherUserId = otherUserId
                     followInfo.mainUserId = getLong("userId")
                     MineApp.followDaoManager.insert(followInfo)
-                    adapter.notifyItemRangeChanged(start, discoverInfoList.size)
+                    activity.runOnUiThread {
+                        adapter.notifyItemRangeChanged(start, discoverInfoList.size)
+                    }
                 }
             }
         }

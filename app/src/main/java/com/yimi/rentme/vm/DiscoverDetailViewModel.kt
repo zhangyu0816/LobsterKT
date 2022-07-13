@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.SystemClock
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
@@ -16,15 +17,13 @@ import com.yimi.rentme.activity.RewardListActivity
 import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.*
 import com.yimi.rentme.databinding.AcDiscoverDetailBinding
-import com.yimi.rentme.dialog.FunctionDF
-import com.yimi.rentme.dialog.GiftDF
-import com.yimi.rentme.dialog.GiftPayDF
-import com.yimi.rentme.dialog.GiveSuccessDF
+import com.yimi.rentme.dialog.*
 import com.yimi.rentme.roomdata.FollowInfo
 import com.yimi.rentme.roomdata.GoodInfo
 import com.yimi.rentme.roomdata.LikeTypeInfo
 import com.yimi.rentme.utils.imagebrowser.MyMNImage
 import com.yimi.rentme.utils.imagebrowser.OnDiscoverClickListener
+import com.yimi.rentme.views.GoodView
 import com.zb.baselibs.adapter.loadImage
 import com.zb.baselibs.adapter.viewSize
 import com.zb.baselibs.app.BaseApp
@@ -76,13 +75,6 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
         // 评论
         reviewAdapter = BaseAdapter(activity, R.layout.item_review, reviewList, this)
 
-        // 发送
-        binding.edContent.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
-                dynDoReview()
-            }
-            true
-        }
         dynDetail()
     }
 
@@ -96,10 +88,18 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
             attentionStatus()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onRefresh(refreshLayout: RefreshLayout) {
+        binding.refresh.setEnableLoadMore(true)
+        pageNo = 1
+        reviewList.clear()
+        reviewAdapter.notifyDataSetChanged()
+        seeReviews()
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
+        pageNo++
+        seeReviews()
     }
 
     /**
@@ -204,9 +204,28 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
     /**
      * 编辑评论
      */
-    fun editReview(view: View) {
-        binding.edContent.isFocusable = true
-        showKeyBoard(binding.edContent)
+    fun doReview(view: View?) {
+        DiscoverReviewDF(activity).setDiscoverInfo(discoverInfo).setContent(binding.content!!)
+            .setIsMine(binding.isMine).setIsLike(binding.discoverInfo!!.isLike)
+            .setHint(binding.edContent.hint.toString())
+            .setCallBack(object : DiscoverReviewDF.CallBack {
+                override fun dynDoReview(content: String) {
+                    binding.content = content
+                    dynDoReview()
+                }
+
+                override fun selectGift() {
+                    selectGift(null)
+                }
+
+                override fun dynLike() {
+                    dynLike(null)
+                }
+
+                override fun toReviewList() {
+                    toReviewList(null)
+                }
+            }).show(activity.supportFragmentManager)
     }
 
     /**
@@ -215,17 +234,34 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
     fun selectReview(review: Review) {
         reviewId = if (reviewId == review.reviewId) 0L else review.reviewId
         binding.edContent.hint = if (reviewId == 0L) "表白一句，成功率超高～" else "评论 ${review.nick}"
+        doReview(null)
     }
 
     /**
      * 点赞
      */
-    fun dynLike(view: View) {}
+    fun dynLike(view: View?) {
+        val goodView = view as GoodView
+        BaseApp.fixedThreadPool.execute {
+            val goodInfo = MineApp.goodDaoManager.getGood(friendDynId)
+            activity.runOnUiThread {
+                if (goodInfo == null) {
+                    goodView.playLike()
+                    dynDoLike()
+                } else  {
+                    goodView.playUnlike()
+                    dynCancelLike()
+                }
+            }
+        }
+    }
 
     /**
      * 评论列表
      */
-    fun toReviewList(view: View) {}
+    fun toReviewList(view: View?) {
+        binding.appbar.setExpanded(false)
+    }
 
     /**
      * 动态图片
@@ -272,6 +308,13 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
     }
 
     /**
+     * 访问动态
+     */
+    private fun dynVisit() {
+        mainDataSource.enqueue({ dynVisit(friendDynId) })
+    }
+
+    /**
      * 动态详情
      */
     private fun dynDetail() {
@@ -292,6 +335,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                         sourceImageList.add(image)
                     }
                 setBanner()
+                dynVisit()
                 otherInfo()
                 seeGiftRewards(1)
                 BaseApp.fixedThreadPool.execute {
@@ -430,6 +474,9 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 goodInfo.mainUserId = getLong("userId")
                 BaseApp.fixedThreadPool.execute {
                     MineApp.goodDaoManager.insert(goodInfo)
+                    discoverInfo.goodNum = discoverInfo.goodNum + 1
+                    discoverInfo.isLike = true
+                    binding.discoverInfo = discoverInfo
                     SystemClock.sleep(200)
                     EventBus.getDefault().post(friendDynId.toString(), "lobsterDoLike")
                 }
@@ -442,6 +489,8 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                     goodInfo.mainUserId = getLong("userId")
                     BaseApp.fixedThreadPool.execute {
                         MineApp.goodDaoManager.insert(goodInfo)
+                        discoverInfo.isLike = true
+                        binding.discoverInfo = discoverInfo
                         SystemClock.sleep(200)
                         EventBus.getDefault().post(friendDynId.toString(), "lobsterDoLike")
                     }
@@ -449,7 +498,33 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
             }
         }
     }
-
+    /**
+     * 取消点赞
+     */
+    private fun dynCancelLike() {
+        mainDataSource.enqueue({ dynCancelLike(friendDynId) }) {
+            onSuccess {
+                BaseApp.fixedThreadPool.execute {
+                    MineApp.goodDaoManager.deleteGood(friendDynId)
+                    discoverInfo.goodNum = discoverInfo.goodNum - 1
+                    discoverInfo.isLike = false
+                    binding.discoverInfo = discoverInfo
+                    SystemClock.sleep(200)
+                    EventBus.getDefault().post(friendDynId.toString(), "lobsterCancelLike")
+                }
+            }
+            onFailToast { false }
+            onFailed {
+                if (it.errorMessage == "已经取消过") {
+                    MineApp.goodDaoManager.deleteGood(friendDynId)
+                    discoverInfo.isLike = false
+                    binding.discoverInfo = discoverInfo
+                    SystemClock.sleep(200)
+                    EventBus.getDefault().post(friendDynId.toString(), "lobsterCancelLike")
+                }
+            }
+        }
+    }
     /**
      * 礼物打赏
      */

@@ -157,6 +157,18 @@ class MNImageBrowserViewModel : BaseViewModel() {
     }
 
     /**
+     * 取消点赞
+     */
+    fun cancelLike(friendDynId: Long) {
+        MyMNImage.imageBrowserConfig.discoverInfo!!.goodNum--
+        BaseApp.fixedThreadPool.execute {
+            MyMNImage.imageBrowserConfig.discoverInfo!!.isLike =
+                MineApp.goodDaoManager.getGood(friendDynId) != null
+            binding.discoverInfo = MyMNImage.imageBrowserConfig.discoverInfo
+        }
+    }
+
+    /**
      * 评论
      */
     fun toReview(view: View) {

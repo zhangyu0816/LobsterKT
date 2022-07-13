@@ -273,6 +273,15 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
     }
 
     /**
+     * 取消点赞数量
+     */
+    fun cancelLike(friendDynId: Long) {
+        discoverInfo.isLike = false
+        discoverInfo.goodNum--
+        adapter.notifyItemChanged(prePosition)
+    }
+
+    /**
      * 点赞
      */
     private fun dynDoLike() {

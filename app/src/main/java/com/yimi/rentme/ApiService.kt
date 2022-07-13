@@ -155,6 +155,11 @@ interface ApiService {
     @POST("api/Interactive_dynDetail")
     suspend fun dynDetail(@Field("friendDynId") friendDynId: Long): HttpWrapBean<DiscoverInfo>
 
+    // 动态访问
+    @FormUrlEncoded
+    @POST("api/Interactive_dynVisit")
+    suspend fun dynVisit(@Field("friendDynId") friendDynId: Long): HttpWrapBean<Any?>
+
     // 分享
     @GET("api/Share_memberInfoConf")
     suspend fun memberInfoConf(): HttpWrapBean<ShareInfo>
