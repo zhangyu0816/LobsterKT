@@ -15,10 +15,12 @@ import androidx.viewpager.widget.ViewPager
 import com.github.chrisbanes.photoview.PhotoView
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
+import com.yimi.rentme.activity.ReportActivity
 import com.yimi.rentme.databinding.AcMnimageBrowserBinding
 import com.yimi.rentme.dialog.FunctionDF
 import com.yimi.rentme.dialog.ReviewDF
 import com.yimi.rentme.utils.imagebrowser.MyMNImage
+import com.yimi.rentme.utils.imagebrowser.OnDeleteListener
 import com.yimi.rentme.utils.imagebrowser.OnDiscoverClickListener
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.views.imagebrowser.base.ImageBrowserConfig
@@ -26,6 +28,7 @@ import com.zb.baselibs.views.imagebrowser.listener.ImageEngine
 import com.zb.baselibs.views.imagebrowser.listener.OnClickListener
 import com.zb.baselibs.views.imagebrowser.listener.OnLongClickListener
 import com.zb.baselibs.views.imagebrowser.transforms.*
+import org.jetbrains.anko.startActivity
 
 class MNImageBrowserViewModel : BaseViewModel() {
     lateinit var binding: AcMnimageBrowserBinding
@@ -46,6 +49,7 @@ class MNImageBrowserViewModel : BaseViewModel() {
     private var onLongClickListener: OnLongClickListener? = null
     private var onClickListener: OnClickListener? = null
     private var onDiscoverClickListener: OnDiscoverClickListener? = null
+    private var onDeleteListener: OnDeleteListener? = null
     private lateinit var imageBrowserAdapter: MyAdapter
 
     @SuppressLint("StaticFieldLeak")
@@ -64,9 +68,11 @@ class MNImageBrowserViewModel : BaseViewModel() {
         onClickListener = MyMNImage.imageBrowserConfig.onClickListener
         onLongClickListener = MyMNImage.imageBrowserConfig.onLongClickListener
         onDiscoverClickListener = MyMNImage.imageBrowserConfig.onDiscoverClickListener
+        onDeleteListener = MyMNImage.imageBrowserConfig.onDeleteListener
         binding.numberIndicator.text = "${currentPosition + 1}/${imageUrlList.size}"
         binding.discoverInfo = MyMNImage.imageBrowserConfig.discoverInfo
         binding.isFollow = false
+        binding.showDelete = onDeleteListener != null
         if (binding.discoverInfo != null) {
             BaseApp.fixedThreadPool.execute {
                 binding.isFollow =
@@ -96,6 +102,8 @@ class MNImageBrowserViewModel : BaseViewModel() {
         if (imageUrlList.size == 0) {
             back(binding.ivBack)
         } else {
+            if (onDeleteListener != null)
+                onDeleteListener!!.delete(currentPosition)
             if (currentPosition > 0) {
                 currentPosition--
             }
@@ -208,6 +216,9 @@ class MNImageBrowserViewModel : BaseViewModel() {
                     .setIsDiscover(true).setIsList(false)
                     .setCallBack(object : FunctionDF.CallBack {
                         override fun report() {
+                            activity.startActivity<ReportActivity>(
+                                Pair("otherUserId", binding.discoverInfo!!.userId)
+                            )
                         }
 
                         override fun gift() {

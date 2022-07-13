@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.SystemClock
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
@@ -13,6 +11,7 @@ import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.activity.MNImageBrowserActivity
 import com.yimi.rentme.activity.MemberDetailActivity
+import com.yimi.rentme.activity.ReportActivity
 import com.yimi.rentme.activity.RewardListActivity
 import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.*
@@ -116,18 +115,19 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 val sharedUrl: String =
                     BaseApp.baseUrl + "mobile/Dyn_dynDetail?friendDynId=" + friendDynId
                 FunctionDF(activity).setUmImage(
-                    binding.discoverInfo!!.image.replace(
-                        "YM0000",
-                        "430X430"
-                    )
+                    discoverInfo.image.replace("YM0000", "430X430")
                 ).setSharedName(sharedName).setContent(content).setSharedUrl(sharedUrl)
-                    .setOtherUserId(binding.discoverInfo!!.userId).setIsVideo(false)
+                    .setOtherUserId(discoverInfo.userId).setIsVideo(false)
                     .setIsDiscover(true).setIsList(false)
                     .setCallBack(object : FunctionDF.CallBack {
                         override fun report() {
+                            activity.startActivity<ReportActivity>(
+                                Pair("otherUserId", discoverInfo.userId)
+                            )
                         }
 
                         override fun gift() {
+
                         }
 
                         override fun delete() {
@@ -248,7 +248,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 if (goodInfo == null) {
                     goodView.playLike()
                     dynDoLike()
-                } else  {
+                } else {
                     goodView.playUnlike()
                     dynCancelLike()
                 }
@@ -291,9 +291,6 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
 
                             override fun good() {
                                 dynDoLike()
-                            }
-
-                            override fun share() {
                             }
                         })
                         .setCallBack(object : ImageBrowserConfig.StartBack {
@@ -498,6 +495,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
             }
         }
     }
+
     /**
      * 取消点赞
      */
@@ -525,6 +523,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
             }
         }
     }
+
     /**
      * 礼物打赏
      */

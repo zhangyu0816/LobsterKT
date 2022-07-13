@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.ReportViewModel" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.Report" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="isSelect"
+            type="boolean" />
+    </data>
+
+    <TextView
+        android:onClick="@{v->viewModel.selectPosition(position)}"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:layout_marginTop="15dp"
+        android:text="@{item.typeName}"
+        android:textSize="14sp"
+        android:gravity="center_vertical"
+        android:paddingStart="15dp"
+        android:textColor="@{isSelect?@color/purple_7a4:@color/black_252}"
+        tools:text="而忘记问了文件微了为"
+        android:background="@{isSelect?@drawable/btn_bg_purple_7a4_white_radius60:@drawable/btn_bg_white_black_c3b_radius34}" />
+</layout>

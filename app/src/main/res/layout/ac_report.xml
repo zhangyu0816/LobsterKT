@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.ReportViewModel" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="right"
+            type="String" />
+
+        <variable
+            name="content"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/back_black_layout"
+            right="@{right}"
+            title="@{title}"
+            viewModel="@{viewModel}" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    adapter="@{viewModel.adapter}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/btn_bg_white_black_efe_radius5"
+                    android:gravity="top"
+                    android:hint="输入举报理由"
+                    android:lines="6"
+                    android:padding="15dp"
+                    android:text="@={content}"
+                    android:textColor="@color/black_252"
+                    android:textColorHint="@color/black_827"
+                    android:textCursorDrawable="@drawable/cursor_color_black_252" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="图片证据（必填）"
+                    android:textColor="@color/black_252"
+                    android:textSize="14sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    adapter="@{viewModel.imageAdapter}"
+                    gridNum="@{3}"
+                    recyclerType="@{2}"
+                    size="@{ObjectUtils.getViewSizeByWidth(0.04f)}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp" />
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+</layout>

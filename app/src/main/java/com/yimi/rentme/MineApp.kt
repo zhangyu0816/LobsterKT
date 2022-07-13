@@ -67,6 +67,7 @@ class MineApp : BaseApp() {
         var discoverInfoList = ArrayList<DiscoverInfo>()
         var giftInfoList = ArrayList<GiftInfo>()
         var rechargeInfoList = ArrayList<RechargeInfo>()
+        var reportList = ArrayList<Report>()
         var provinceId = 0L
         var cityId = 0L
         var districtId = 0L

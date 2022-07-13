@@ -66,6 +66,7 @@ class MainViewModel : BaseViewModel() {
         walletInfo()
         giftList()
         rechargeDiscountList()
+        comType()
     }
 
     /**
@@ -139,7 +140,7 @@ class MainViewModel : BaseViewModel() {
     /**
      * 钱包
      */
-     fun walletInfo() {
+    fun walletInfo() {
         mainDataSource.enqueue({ walletAndPop() }) {
             onSuccess {
                 MineApp.walletInfo = it
@@ -177,6 +178,15 @@ class MainViewModel : BaseViewModel() {
                     }
                     MineApp.rechargeInfoList.add(item)
                 }
+            }
+        }
+    }
+
+    private fun comType() {
+        mainDataSource.enqueue({ comType() }) {
+            onSuccess {
+                MineApp.reportList.clear()
+                MineApp.reportList.addAll(it)
             }
         }
     }

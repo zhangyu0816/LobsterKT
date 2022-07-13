@@ -210,6 +210,7 @@ class FunctionDF(activity: AppCompatActivity) : BaseDialogFragment(activity) {
                 .withMedia(web)
                 .setCallback(umShareListener)
                 .share()
+        dismiss()
     }
 
     fun cancel(view: View) {

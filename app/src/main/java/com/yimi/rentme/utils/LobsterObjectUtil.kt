@@ -56,4 +56,10 @@ object LobsterObjectUtil {
             else -> BaseApp.context.resources.getDrawable(R.drawable.gradient_reward_3_radius20)
         }
     }
+
+    // 是不是视频
+    @JvmStatic
+    fun isVideo(filePath: String): Boolean {
+        return filePath.contains(".mp4")
+    }
 }

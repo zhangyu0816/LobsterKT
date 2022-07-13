@@ -248,4 +248,17 @@ interface ApiService {
         @Field("giftNum") giftNum: Int
     ): HttpWrapBean<OrderNumber>
 
+    // 举报类型
+    @GET("api/Complain_comType")
+    suspend fun comType(): HttpWrapBean<ArrayList<Report>>
+
+    // 举报
+    @FormUrlEncoded
+    @POST("api/Complain_comsub")
+    suspend fun comsub(
+        @Field("complainTypeId") complainTypeId: Long,
+        @Field("comUserId") comUserId: Long,
+        @Field("comText") comText: String,
+        @Field("images") images: String
+    ): HttpWrapBean<Any?>
 }

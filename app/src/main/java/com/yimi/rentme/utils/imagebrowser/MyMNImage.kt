@@ -54,6 +54,11 @@ object MyMNImage {
         return this
     }
 
+    fun setDeleteListener(deleteListener: OnDeleteListener):MyMNImage{
+        imageBrowserConfig.onDeleteListener = deleteListener
+        return this
+    }
+
     fun setDiscoverInfo(discoverInfo: DiscoverInfo): MyMNImage {
         imageBrowserConfig.discoverInfo = discoverInfo
         return this
