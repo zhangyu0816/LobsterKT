@@ -25,4 +25,11 @@
     <string name="at_nick">\@%s</string>
     <string name="review_info"><Data><![CDATA[<font color="#9599A1">%s</font>  <font color="#2C2B31">%s</font>]]></Data></string>
     <string name="review_info_1"><Data><![CDATA[<font color="#2C2B31"><b>%s</b></font> <font color="#9596A1"><small>%s</small></font>]]></Data></string>
+    <string name="reward_num"><Data><![CDATA[<font color="#827F9A"><small><b>已有</b></small></font> <font color="#333333"><b>%s</b></font> <font color="#827F9A"><small><b>人送礼物</b></small></font>]]></Data></string>
+    <string name="reward_no">No.%d</string>
+    <string name="reward_num_0">快成为送礼第一人</string>
+    <string name="gift_price">%d虾菇币</string>
+    <string name="give_success">您已成功赠送%d个%s！</string>
+    <string name="discover_good">点赞</string>
+    <string name="discover_review">评论</string>
 </resources>

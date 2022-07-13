@@ -1,13 +1,25 @@
 package com.yimi.rentme.vm
 
+import android.annotation.SuppressLint
+import android.os.Handler
 import android.os.SystemClock
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.yimi.rentme.MineApp
+import com.yimi.rentme.R
 import com.yimi.rentme.activity.MNImageBrowserActivity
 import com.yimi.rentme.activity.MemberDetailActivity
-import com.yimi.rentme.bean.DiscoverInfo
-import com.yimi.rentme.bean.MemberInfo
+import com.yimi.rentme.activity.RewardListActivity
+import com.yimi.rentme.adapter.BaseAdapter
+import com.yimi.rentme.bean.*
 import com.yimi.rentme.databinding.AcDiscoverDetailBinding
+import com.yimi.rentme.dialog.FunctionDF
+import com.yimi.rentme.dialog.GiftDF
+import com.yimi.rentme.dialog.GiftPayDF
+import com.yimi.rentme.dialog.GiveSuccessDF
 import com.yimi.rentme.roomdata.FollowInfo
 import com.yimi.rentme.roomdata.GoodInfo
 import com.yimi.rentme.roomdata.LikeTypeInfo
@@ -17,6 +29,7 @@ import com.zb.baselibs.adapter.loadImage
 import com.zb.baselibs.adapter.viewSize
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.bean.Ads
+import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.utils.getLong
 import com.zb.baselibs.views.imagebrowser.base.ImageBrowserConfig
 import com.zb.baselibs.views.xbanner.ImageLoader
@@ -25,7 +38,7 @@ import com.zb.baselibs.views.xbanner.XUtils.showBanner
 import org.jetbrains.anko.startActivity
 import org.simple.eventbus.EventBus
 
-class DiscoverDetailViewModel : BaseViewModel() {
+class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
 
     lateinit var binding: AcDiscoverDetailBinding
     var friendDynId = 0L
@@ -34,6 +47,19 @@ class DiscoverDetailViewModel : BaseViewModel() {
     private val adList = ArrayList<Ads>()
     private val sourceImageList = ArrayList<String>()
 
+    lateinit var rewardAdapter: BaseAdapter<Reward>
+    private val rewardList = ArrayList<Reward>()
+    private lateinit var temp: CharArray
+    private var i = 0
+    private var info = ""
+    private var rewardInfo = ""
+    private val mHandler = Handler()
+
+    lateinit var reviewAdapter: BaseAdapter<Review>
+    private val reviewList = ArrayList<Review>()
+    private var pageNo = 1
+    private var reviewId = 0L
+
     override fun initViewModel() {
         binding.title = "动态详情"
         binding.discoverInfo = DiscoverInfo()
@@ -41,7 +67,22 @@ class DiscoverDetailViewModel : BaseViewModel() {
         binding.likeTypeInfo = LikeTypeInfo()
         binding.isMine = false
         binding.isFollow = false
+        binding.rewardNum = 0
+        binding.rewardInfo = ""
+        binding.content = ""
 
+        // 打赏
+        rewardAdapter = BaseAdapter(activity, R.layout.item_reward, rewardList, this)
+        // 评论
+        reviewAdapter = BaseAdapter(activity, R.layout.item_review, reviewList, this)
+
+        // 发送
+        binding.edContent.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                dynDoReview()
+            }
+            true
+        }
         dynDetail()
     }
 
@@ -53,6 +94,12 @@ class DiscoverDetailViewModel : BaseViewModel() {
     fun onResume() {
         if (discoverInfo.friendDynId != 0L)
             attentionStatus()
+    }
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+    }
+
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
     }
 
     /**
@@ -68,6 +115,28 @@ class DiscoverDetailViewModel : BaseViewModel() {
                 val content = discoverInfo.text.ifEmpty { discoverInfo.friendTitle }
                 val sharedUrl: String =
                     BaseApp.baseUrl + "mobile/Dyn_dynDetail?friendDynId=" + friendDynId
+                FunctionDF(activity).setUmImage(
+                    binding.discoverInfo!!.image.replace(
+                        "YM0000",
+                        "430X430"
+                    )
+                ).setSharedName(sharedName).setContent(content).setSharedUrl(sharedUrl)
+                    .setOtherUserId(binding.discoverInfo!!.userId).setIsVideo(false)
+                    .setIsDiscover(true).setIsList(false)
+                    .setCallBack(object : FunctionDF.CallBack {
+                        override fun report() {
+                        }
+
+                        override fun gift() {
+                        }
+
+                        override fun delete() {
+                        }
+
+                        override fun like() {
+                        }
+                    })
+                    .show(activity.supportFragmentManager)
             }
         }
     }
@@ -91,6 +160,72 @@ class DiscoverDetailViewModel : BaseViewModel() {
         else
             attentionOther()
     }
+
+    /**
+     * 选择礼物
+     */
+    fun selectGift(view: View?) {
+        if (discoverInfo.userId == getLong("userId"))
+            activity.startActivity<RewardListActivity>()
+        else
+            GiftDF(activity).setMainDataSource(mainDataSource)
+                .setCallBack(object : GiftDF.CallBack {
+                    override fun sure(giftInfo: GiftInfo) {
+                        GiftPayDF(activity).setGiftInfo(giftInfo).setFriendDynId(friendDynId)
+                            .setMainDataSource(mainDataSource)
+                            .setCallBack(object : GiftPayDF.CallBack {
+                                override fun sure(giftNum: Int) {
+                                    GiveSuccessDF(activity).setGiftInfo(giftInfo)
+                                        .setGiftNum(giftNum).show(activity.supportFragmentManager)
+                                    seeGiftRewards(1)
+                                }
+                            }).show(activity.supportFragmentManager)
+                    }
+                }).show(activity.supportFragmentManager)
+    }
+
+    /**
+     * 礼物打赏列表
+     */
+    fun toRewardList(view: View) {
+        activity.startActivity<RewardListActivity>()
+    }
+
+    /**
+     * 用户详情
+     */
+    fun toReviewMemberDetail(review: Review) {
+        if (review.userId != getLong("userId") && review.userId != 0L)
+            activity.startActivity<MemberDetailActivity>(
+                Pair("otherUserId", review.userId)
+            )
+    }
+
+    /**
+     * 编辑评论
+     */
+    fun editReview(view: View) {
+        binding.edContent.isFocusable = true
+        showKeyBoard(binding.edContent)
+    }
+
+    /**
+     * 选择评论用户
+     */
+    fun selectReview(review: Review) {
+        reviewId = if (reviewId == review.reviewId) 0L else review.reviewId
+        binding.edContent.hint = if (reviewId == 0L) "表白一句，成功率超高～" else "评论 ${review.nick}"
+    }
+
+    /**
+     * 点赞
+     */
+    fun dynLike(view: View) {}
+
+    /**
+     * 评论列表
+     */
+    fun toReviewList(view: View) {}
 
     /**
      * 动态图片
@@ -143,8 +278,11 @@ class DiscoverDetailViewModel : BaseViewModel() {
         mainDataSource.enqueueLoading({ dynDetail(friendDynId) }, "获取动态详情...") {
             onSuccess {
                 discoverInfo = it
-                binding.discoverInfo = it
                 binding.isMine = discoverInfo.userId == getLong("userId")
+                BaseApp.fixedThreadPool.execute {
+                    discoverInfo.isLike = MineApp.goodDaoManager.getGood(friendDynId) != null
+                    binding.discoverInfo = it
+                }
                 if (it.images.isEmpty()) {
                     adList.add(Ads(it.image))
                     sourceImageList.add(it.image)
@@ -155,6 +293,7 @@ class DiscoverDetailViewModel : BaseViewModel() {
                     }
                 setBanner()
                 otherInfo()
+                seeGiftRewards(1)
                 BaseApp.fixedThreadPool.execute {
                     binding.isFollow =
                         MineApp.followDaoManager.getFollowInfo(it.userId) != null // 关注
@@ -175,6 +314,7 @@ class DiscoverDetailViewModel : BaseViewModel() {
             onSuccess {
                 binding.memberInfo = it
                 attentionStatus()
+                seeReviews()
             }
         }
     }
@@ -309,4 +449,123 @@ class DiscoverDetailViewModel : BaseViewModel() {
             }
         }
     }
+
+    /**
+     * 礼物打赏
+     */
+    @SuppressLint("NotifyDataSetChanged")
+    private fun seeGiftRewards(pageNo: Int) {
+        if (pageNo == 1) {
+            binding.rewardNum = 0
+            binding.rewardInfo = ""
+            rewardList.clear()
+            rewardAdapter.notifyDataSetChanged()
+        }
+        mainDataSource.enqueue({ seeGiftRewards(friendDynId, 2, pageNo, 100) }) {
+            onSuccess {
+                binding.rewardNum = binding.rewardNum!! + it.size
+                if (rewardList.size == 0)
+                    for (i in 0 until 3.coerceAtMost(it.size)) {
+                        rewardList.add(it[i])
+                    }
+                seeGiftRewards(pageNo + 1)
+            }
+            onFailed {
+                if (it.isNoData) {
+                    if (binding.rewardNum == 0) {
+                        rewardInfo = "送朵玫瑰花，开始我们的邂逅"
+                    } else {
+                        rewardInfo = if (binding.rewardNum == 1) {
+                            "成为CP候选人"
+                        } else {
+                            "快来打榜"
+                        }
+                        rewardAdapter.notifyDataSetChanged()
+                    }
+                    temp = rewardInfo.toCharArray()
+                    info = ""
+                    i = 0
+                    binding.rewardInfo = info
+                    mHandler.postDelayed(object : Runnable {
+                        override fun run() {
+                            if (i < temp.size) {
+                                info += temp[i]
+                                binding.rewardInfo = info
+                                i++
+                                mHandler.postDelayed(this, 50)
+                            } else {
+                                mHandler.removeCallbacks(this)
+                            }
+                        }
+                    }, 50)
+                }
+            }
+        }
+    }
+
+    /**
+     * 动态评论
+     */
+    private fun seeReviews() {
+        mainDataSource.enqueue({ seeReviews(friendDynId, 1, pageNo, 10) }) {
+            onSuccess {
+                binding.refresh.finishRefresh()
+                binding.refresh.finishLoadMore()
+                var start = reviewList.size
+                if (start == 0) {
+                    val review = Review()
+                    review.image = MineApp.mineInfo.image
+                    review.text = "说句打动人心的表白，成功率高达99%"
+                    review.mainId = getLong("userId")
+                    reviewList.add(review)
+                }
+                for (item in it) {
+                    item.mainId = binding.memberInfo!!.userId
+                }
+                reviewList.addAll(it)
+                if (start > 0) start--
+                reviewAdapter.notifyItemRangeChanged(start, reviewList.size)
+            }
+            onFailed {
+                binding.refresh.setEnableLoadMore(false)
+                binding.refresh.finishRefresh()
+                binding.refresh.finishLoadMore()
+                if (reviewList.size == 0) {
+                    val review = Review()
+                    review.image = MineApp.mineInfo.image
+                    review.text = "说句打动人心的表白，成功率高达99%"
+                    review.mainId = getLong("userId")
+                    reviewList.add(review)
+                    reviewAdapter.notifyItemRangeChanged(0, reviewList.size)
+                }
+            }
+        }
+    }
+
+    /**
+     * 发送评论
+     */
+    private fun dynDoReview() {
+        if (binding.content!!.isEmpty()) {
+            SCToastUtil.showToast(activity, "请输入评论内容", 2)
+            return
+        }
+        val map = HashMap<String, String>()
+        if (reviewId > 0)
+            map["reviewId"] = reviewId.toString()
+        map["friendDynId"] = friendDynId.toString()
+        map["text"] = binding.content!!
+        mainDataSource.enqueueLoading({ dynDoReview(map) }, "提交评论...") {
+            onSuccess {
+                SCToastUtil.showToast(activity, "发布成功", 2)
+                binding.content = ""
+                discoverInfo.reviews += 1
+                binding.discoverInfo = discoverInfo
+                onRefresh(binding.refresh)
+                reviewId = 0
+                binding.edContent.hint = "表白一句，成功率超高～"
+            }
+        }
+    }
+
 }

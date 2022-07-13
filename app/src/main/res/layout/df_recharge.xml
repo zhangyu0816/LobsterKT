@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.RechargeDF" />
+
+        <variable
+            name="walletInfo"
+            type="com.yimi.rentme.bean.WalletInfo" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="虾菇币充值"
+            android:textColor="@color/black_252"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            onClickDelayed="@{dialog::cancel}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:padding="15dp"
+            app:srcCompat="@mipmap/close_grey_icon" />
+
+        <LinearLayout
+            android:id="@+id/wallet_linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="余额："
+                android:textColor="@color/black_827"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{String.format("%.2f ",walletInfo.wallet)}'
+                android:textColor="#FE4F71"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="虾菇币"
+                android:textColor="@color/black_827"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wallet_list"
+            adapter="@{dialog.adapter}"
+            gridNum="@{3}"
+            includeEdge="@{true}"
+            recyclerType="@{2}"
+            size="@{30}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.55f)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(1.0f)}"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/wallet_linear" />
+
+        <LinearLayout
+            android:id="@+id/rule_linear"
+            onClickDelayed="@{dialog::showRule}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/wallet_list"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="充值即默认同意"
+                android:textColor="@color/black_c3b"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="《用户充值协议》"
+                android:textColor="#FE4F71"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            onClickDelayed="@{dialog::recharge}"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@+id/rule_linear"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="15dp"
+            android:background="@drawable/gradient_purple_6d5_ae7"
+            android:gravity="center"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="确认充值"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</layout>

@@ -11,6 +11,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.yimi.rentme.R
 import com.zb.baselibs.app.BaseApp
+import com.zb.baselibs.base.EvenConfig
 import com.zb.baselibs.utils.SCToastUtil
 import org.simple.eventbus.EventBus
 
@@ -39,7 +40,7 @@ class WXPayEntryActivity : AppCompatActivity(), IWXAPIEventHandler {
             when (code) {
                 0 -> {
                     msg = "支付成功！"
-                    EventBus.getDefault().post(msg,"lobsterPaySuccess")
+                    EventBus.getDefault().post(msg, EvenConfig.payBack)
                 }
                 -2 -> msg = "您取消了支付！"
                 else -> msg = "支付失败！"

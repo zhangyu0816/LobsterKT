@@ -1,5 +1,7 @@
 package com.yimi.rentme.utils
 
+import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.zb.baselibs.app.BaseApp
@@ -43,5 +45,15 @@ object LobsterObjectUtil {
     @JvmStatic
     fun getTimeToToday(strDate: String): String {
         return DateUtil.getTimeToToday(strDate)
+    }
+
+    @JvmStatic
+    @SuppressLint("UseCompatLoadingForDrawables")
+    fun getReward(position: Int): Drawable {
+        return when (position) {
+            0 -> BaseApp.context.resources.getDrawable(R.drawable.gradient_reward_1_radius20)
+            1 -> BaseApp.context.resources.getDrawable(R.drawable.gradient_reward_2_radius20)
+            else -> BaseApp.context.resources.getDrawable(R.drawable.gradient_reward_3_radius20)
+        }
     }
 }

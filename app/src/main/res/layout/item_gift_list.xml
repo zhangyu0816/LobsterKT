@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.GiftDF" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.GiftInfo" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="isSelect"
+            type="boolean" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@{isSelect?@drawable/btn_bg_black_2e2_radius10:@drawable/empty_bg}"
+        android:gravity="center_horizontal"
+        android:onClick="@{v->dialog.selectIndex(position)}"
+        android:orientation="vertical">
+
+        <ImageView
+            cornerType="@{6}"
+            defaultRes="@{R.mipmap.empty_icon}"
+            imageUrl="@{item.giftImage}"
+            roundSize="@{10}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.2f)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.2f)}"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@{item.giftName}"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="@{isSelect?View.GONE:View.VISIBLE}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{String.format(@string/gift_price,(int)item.payMoney)}'
+            android:textColor="#99ffffff"
+            android:textSize="11sp"
+            android:visibility="@{isSelect?View.GONE:View.VISIBLE}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text='@{String.format(@string/gift_price,(int)item.payMoney)}'
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            android:visibility="@{isSelect?View.VISIBLE:View.GONE}" />
+
+        <TextView
+            onClickDelayed="@{v->dialog.payGift(item)}"
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:background="@drawable/btn_bg_red_fe4_radius_bottom10"
+            android:gravity="center"
+            android:text="赠送"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:visibility="@{isSelect?View.VISIBLE:View.GONE}" />
+
+    </LinearLayout>
+</layout>

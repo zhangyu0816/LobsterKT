@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="android.view.View" />
+
+        <import type="android.text.Html" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.DiscoverDetailViewModel" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.Review" />
+
+        <variable
+            name="isLast"
+            type="boolean" />
+
+        <variable
+            name="position"
+            type="Integer" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_logo"
+                defaultRes="@{R.mipmap.empty_icon}"
+                imageUrl="@{item.image}"
+                isCircle="@{true}"
+                onClickDelayed="@{v->viewModel.toReviewMemberDetail(item)}"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(110)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(110)}"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="15dp" />
+
+            <TextView
+                onClickDelayed="@{viewModel::editReview}"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@+id/iv_logo"
+                android:background="@drawable/btn_bg_black_f6f_radius60"
+                android:gravity="center_vertical"
+                android:paddingStart="15dp"
+                android:paddingEnd="1px"
+                android:text="说句打动人心的表白，成功率高达99%"
+                android:textColor="#9599A1"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="@{item.reviewId==0?View.VISIBLE:View.GONE}" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_toEndOf="@+id/iv_logo"
+                android:onClick="@{v->viewModel.selectReview(item)}"
+                android:orientation="vertical"
+                android:visibility="@{item.reviewId==0?View.GONE:View.VISIBLE}">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@{item==null?@drawable/default_bg:@drawable/empty_bg}"
+                        android:text="@{item.nick}"
+                        android:textColor="#2C2B31"
+                        android:textSize="12sp"
+                        android:visibility="@{item.nick.empty?View.GONE:View.VISIBLE}"
+                        tools:text="哈哈哈" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:background="@mipmap/icon_user"
+                        android:visibility="@{item.mainId==item.userId?View.VISIBLE:View.GONE}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text='@{Html.fromHtml(String.format(@string/review_info,(item.atUserId==0?"":"回复"),item.atUserNick))}'
+                        android:textSize="12sp"
+                        tools:text="非物理降温就额离开房间王府井误了飞机微积分我而乏味放了假法律文件发另外九分零五睫飞" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:text='@{Html.fromHtml(String.format(@string/review_info_1,item.text,(item.createTime.empty?"":LobsterObjectUtil.getTimeToToday(item.createTime))))}'
+                    android:textSize="14sp"
+                    tools:visibility="gone" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="15dp"
+            android:background="#EBEAF1"
+            android:visibility="@{(position==0||isLast)?View.GONE:View.VISIBLE}" />
+    </LinearLayout>
+</layout>

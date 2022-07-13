@@ -166,7 +166,6 @@ class ReviewDF(activity: AppCompatActivity) : BaseDialogFragment(activity), OnRe
         }
     }
 
-
     fun close(view: View) {
         dismiss()
     }

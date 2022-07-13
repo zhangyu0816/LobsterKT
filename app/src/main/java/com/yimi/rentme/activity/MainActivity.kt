@@ -4,6 +4,7 @@ import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcMainBinding
 import com.yimi.rentme.vm.MainViewModel
 import com.zb.baselibs.activity.BaseScreenActivity
+import org.simple.eventbus.Subscriber
 
 class MainActivity : BaseScreenActivity() {
 
@@ -19,5 +20,13 @@ class MainActivity : BaseScreenActivity() {
 
     override fun initView() {
         viewModel.initViewModel()
+    }
+
+    /**
+     * 更新钱包
+     */
+    @Subscriber(tag = "lobsterUpdateWallet")
+    private fun lobsterUpdateWallet(data: String) {
+        viewModel.walletInfo()
     }
 }

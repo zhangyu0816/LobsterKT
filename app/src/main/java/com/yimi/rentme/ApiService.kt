@@ -1,7 +1,9 @@
 package com.yimi.rentme
 
 import com.yimi.rentme.bean.*
+import com.zb.baselibs.bean.AliPay
 import com.zb.baselibs.bean.HttpWrapBean
+import com.zb.baselibs.bean.WXPay
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
@@ -96,6 +98,10 @@ interface ApiService {
     @POST("api/Login_regist")
     suspend fun register(@FieldMap map: Map<String, String>): HttpWrapBean<LoginInfo>
 
+    // 钱包和受欢迎信息
+    @GET("api/Member_walletAndPop")
+    suspend fun walletAndPop(): HttpWrapBean<WalletInfo>
+
     // 更新设备信息
     @FormUrlEncoded
     @POST("api/Login_modifyPushInfo")
@@ -180,4 +186,61 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/Interactive_dynDoReview")
     suspend fun dynDoReview(@FieldMap map: Map<String, String>): HttpWrapBean<Any?>
+
+    // 打赏列表
+    @FormUrlEncoded
+    @POST("api/Interactive_seeGiftRewards")
+    suspend fun seeGiftRewards(
+        @Field("friendDynId") friendDynId: Long, @Field("rewardSortType") rewardSortType: Int,
+        @Field("pageNo") pageNo: Int, @Field("row") row: Int
+    ): HttpWrapBean<ArrayList<Reward>>
+
+    // 礼物列表
+    @GET("api/Gift_giftList")
+    suspend fun giftList(): HttpWrapBean<ArrayList<GiftInfo>>
+
+    // 充值
+    @FormUrlEncoded
+    @POST("api/Tran_rechargeDiscountList")
+    suspend fun rechargeDiscountList(@Field("pageNo") pageNo: Int): HttpWrapBean<ArrayList<RechargeInfo>>
+
+    // 充钱到我的钱包
+    @FormUrlEncoded
+    @POST("api/Tran_rechargeWallet")
+    suspend fun rechargeWallet(
+        @Field("money") money: Double,
+        @Field("moneyDiscountId") moneyDiscountId: Long
+    ): HttpWrapBean<OrderTran>
+
+    // 用支付宝支付交易
+    @FormUrlEncoded
+    @POST("api/Pay_alipayFastPayTran")
+    suspend fun alipayFastPayTran(@Field("tranOrderId") tranOrderId: String): HttpWrapBean<AliPay>
+
+    // 用微信支付交易
+    @FormUrlEncoded
+    @POST("api/Pay_wxpayAppPayTran")
+    suspend fun wxpayAppPayTran(@Field("tranOrderId") tranOrderId: String): HttpWrapBean<WXPay>
+
+    // 用钱包支付交易
+    @FormUrlEncoded
+    @POST("api/Pay_walletPayTran")
+    suspend fun walletPayTran(@Field("tranOrderId") tranOrderId: String): HttpWrapBean<Any?>
+
+    // 创建订单
+    @FormUrlEncoded
+    @POST("api/Gift_submitOrder")
+    suspend fun submitOrder(
+        @Field("friendDynId") friendDynId: Long, @Field("giftId") giftId: Long,
+        @Field("giftNum") giftNum: Int
+    ): HttpWrapBean<OrderNumber>
+
+    // 创建订单
+    @FormUrlEncoded
+    @POST("api/Gift_submitUserOrder")
+    suspend fun submitUserOrder(
+        @Field("otherUserId") otherUserId: Long, @Field("giftId") giftId: Long,
+        @Field("giftNum") giftNum: Int
+    ): HttpWrapBean<OrderNumber>
+
 }

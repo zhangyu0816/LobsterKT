@@ -62,6 +62,10 @@ class MainViewModel : BaseViewModel() {
                     }).show(activity.supportFragmentManager)
             }
         }
+
+        walletInfo()
+        giftList()
+        rechargeDiscountList()
     }
 
     /**
@@ -116,6 +120,9 @@ class MainViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * 提交设备信息
+     */
     private fun modifyPushInfo() {
         mainDataSource.enqueue({
             modifyPushInfo(
@@ -126,6 +133,51 @@ class MainViewModel : BaseViewModel() {
             )
         }) {
             onFailToast { false }
+        }
+    }
+
+    /**
+     * 钱包
+     */
+     fun walletInfo() {
+        mainDataSource.enqueue({ walletAndPop() }) {
+            onSuccess {
+                MineApp.walletInfo = it
+            }
+        }
+    }
+
+    /**
+     * 礼物列表
+     */
+    private fun giftList() {
+        mainDataSource.enqueue({ giftList() }) {
+            onSuccess {
+                MineApp.giftInfoList.clear()
+                MineApp.giftInfoList.addAll(it)
+            }
+        }
+    }
+
+    /**
+     * 充值列表
+     */
+    private fun rechargeDiscountList() {
+        mainDataSource.enqueue({ rechargeDiscountList(1) }) {
+            onSuccess {
+                MineApp.rechargeInfoList.clear()
+                for (item in it) {
+                    if (item.moneyType == 0) {
+                        if (item.extraGiveMoney > 0.0)
+                            item.content = String.format("送%.1f虾菇币", item.extraGiveMoney)
+                    } else if (item.moneyType == 1) {
+                        item.content = "最受欢迎"
+                    } else {
+                        item.content = "优惠最大"
+                    }
+                    MineApp.rechargeInfoList.add(item)
+                }
+            }
         }
     }
 }

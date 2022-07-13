@@ -4,6 +4,8 @@ import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcDiscoverDetailBinding
 import com.yimi.rentme.vm.DiscoverDetailViewModel
 import com.zb.baselibs.activity.BaseScreenActivity
+import org.simple.eventbus.EventBus
+import org.simple.eventbus.Subscriber
 
 class DiscoverDetailActivity : BaseScreenActivity() {
 
@@ -28,5 +30,13 @@ class DiscoverDetailActivity : BaseScreenActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
+    }
+
+    /**
+     * 检测是否注册
+     */
+    @Subscriber(tag = "kotlin_pay_back")
+    private fun lobsterRecharge(data: String) {
+        EventBus.getDefault().post("", "lobsterUpdateWallet")
     }
 }

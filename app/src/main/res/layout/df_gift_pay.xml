@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.GiftPayDF" />
+
+        <variable
+            name="content"
+            type="String" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black_efe"
+        android:padding="15dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:background="@drawable/btn_bg_white_radius_10"
+            android:hint="输入赠送数量"
+            android:paddingStart="15dp"
+            android:paddingEnd="1px"
+            android:maxLength="4"
+            android:inputType="number"
+            android:text="@={content}"
+            android:textColor="@color/black_4d4"
+            android:textColorHint="#C3BDCD"
+            android:layout_toStartOf="@+id/tv_sure"
+            android:layout_marginEnd="15dp"
+            android:textCursorDrawable="@drawable/cursor_color_black_4d4"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_sure"
+            onClickDelayed="@{dialog::sure}"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:text="确定"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:background="@drawable/btn_bg_purple_976_radius10"/>
+    </RelativeLayout>
+</layout>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.RechargeDF" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.RechargeInfo" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="isSelect"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.25f)}"
+        viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.29f)}"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@{isSelect?@drawable/btn_bg_white_red_radius5:@drawable/btn_bg_black_efe_radius5}"
+        android:onClick="@{v->dialog.selectIndex(position)}">
+
+        <LinearLayout
+            android:id="@+id/count_linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:text='@{String.format("%.1f", (item.originalMoney + item.extraGiveMoney))}'
+                android:textColor="@color/black_252"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="10" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="虾菇币"
+                android:textColor="@color/black_827"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/count_linear"
+            android:layout_centerHorizontal="true"
+            android:text='@{String.format("¥%.1f",item.originalMoney)}'
+            android:textColor="@color/black_827"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="10" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:background="@drawable/btn_bg_red_fe4_radius_top5"
+            android:gravity="center"
+            android:text="@{item.content}"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:visibility="@{isSelect?View.VISIBLE:View.GONE}"
+            tools:text="最受欢迎" />
+    </RelativeLayout>
+</layout>

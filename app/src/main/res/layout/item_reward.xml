@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.Reward" />
+
+        <variable
+            name="position"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(120)}"
+        viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(120)}"
+        android:layout_width="40dp"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            defaultRes="@{R.mipmap.empty_icon}"
+            imageUrl="@{item.image}"
+            isCircle="@{true}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(120)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(120)}"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="4dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:background="@mipmap/icon_guanjun"
+            android:visibility="@{position==0?View.VISIBLE:View.GONE}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="13dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@{LobsterObjectUtil.getReward(position)}"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="@{String.format(@string/reward_no,position+1)}"
+            android:textColor="@color/white"
+            android:textSize="9dp"
+            tools:background="@drawable/gradient_reward_1_radius20" />
+    </RelativeLayout>
+</layout>
