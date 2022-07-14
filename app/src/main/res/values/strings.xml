@@ -33,4 +33,15 @@
     <string name="discover_good">点赞</string>
     <string name="discover_review">评论</string>
     <string name="gift_pay">%.1f虾菇币</string>
+    <string name="vip_month">买%d月送%d月</string>
+    <string name="vip_year">买1年送1年</string>
+    <string name="vip_price">%d</string>
+    <string name="vip_price_month">/%d月</string>
+    <string name="vip_price_year">/2年</string>
+    <string name="vip_original_price">  原价 ¥%d  </string>
+    <string name="price_moth">¥%.2f元/天</string>
+    <string name="price_more">首充翻倍</string>
+    <string name="price_save">省%.1f元</string>
+    <string name="open_btn_month">%d个月VIP ¥%.2f 立即获取特权</string>
+    <string name="open_btn">¥%.2f 获取VIP特权</string>
 </resources>

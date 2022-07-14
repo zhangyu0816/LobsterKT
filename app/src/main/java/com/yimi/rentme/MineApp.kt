@@ -8,6 +8,7 @@ import com.yimi.rentme.roomdata.GoodDaoManager
 import com.yimi.rentme.roomdata.LikeTypeDaoManager
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.bean.ThreeInfo
+import com.zb.baselibs.bean.VipInfo
 import com.zb.baselibs.utils.getIntegerByAllName
 
 class MineApp : BaseApp() {
@@ -68,12 +69,16 @@ class MineApp : BaseApp() {
         var giftInfoList = ArrayList<GiftInfo>()
         var rechargeInfoList = ArrayList<RechargeInfo>()
         var reportList = ArrayList<Report>()
+        var vipInfoList = ArrayList<VipInfo>()
         var provinceId = 0L
         var cityId = 0L
         var districtId = 0L
         var sex = 0
         var minAge = 0
         var maxAge = 100
+
+        @JvmField
+        var isFirstOpen = false
 
         @SuppressLint("StaticFieldLeak")
         lateinit var followDaoManager: FollowDaoManager

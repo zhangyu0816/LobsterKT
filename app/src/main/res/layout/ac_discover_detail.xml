@@ -30,10 +30,6 @@
             type="com.yimi.rentme.bean.MemberInfo" />
 
         <variable
-            name="likeTypeInfo"
-            type="com.yimi.rentme.roomdata.LikeTypeInfo" />
-
-        <variable
             name="isFollow"
             type="boolean" />
 
@@ -52,6 +48,14 @@
         <variable
             name="content"
             type="String" />
+
+        <variable
+            name="likeType"
+            type="Integer" />
+
+        <variable
+            name="isPlay"
+            type="boolean" />
     </data>
 
     <RelativeLayout
@@ -414,6 +418,54 @@
             </com.scwang.smartrefresh.layout.SmartRefreshLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+        <ImageView
+            android:id="@+id/iv_remind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bottom_layout"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="7dp"
+            android:layout_marginBottom="8dp"
+            android:background="@mipmap/icon_remind"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/like_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bottom_layout"
+            android:visibility="@{likeType==0?View.VISIBLE:View.GONE}">
+
+            <com.yimi.rentme.views.SuperLikeBigView
+                android:id="@+id/iv_super_like"
+                bigSuperLikeInterface="@{viewModel}"
+                isPlay="@{isPlay}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="15dp" />
+
+            <ImageView
+                android:id="@+id/iv_dislike"
+                onClickDelayed="@{viewModel::dislike}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="15dp"
+                app:srcCompat="@mipmap/dislike_icon" />
+
+            <ImageView
+                android:id="@+id/iv_like"
+                onClickDelayed="@{viewModel::like}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="15dp"
+                app:srcCompat="@mipmap/like_icon" />
+        </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/bottom_layout"
             android:layout_width="match_parent"
@@ -462,10 +514,10 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:hint="表白一句，成功率超高～"
+                        android:onClick="@{viewModel::doReview}"
                         android:paddingStart="15dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="15dp"
-                        android:onClick="@{viewModel::doReview}"
                         android:paddingBottom="8dp"
                         android:singleLine="true"
                         android:text="@{content}"

@@ -91,3 +91,9 @@ fun GoodView.likeStatus(isLike: Boolean, isGrey: Boolean, isLightGrey: Boolean) 
         this.findViewById<View>(R.id.iv_unLike).visibility = View.VISIBLE
     }
 }
+
+@BindingAdapter(value = ["bigSuperLikeInterface", "isPlay"], requireAll = false)
+fun SuperLikeBigView.superLike(superLikeInterface: SuperLikeInterface, isPlay: Boolean) {
+    this.setSuperLikeInterface(superLikeInterface)
+    if (isPlay) this.play() else this.stop()
+}

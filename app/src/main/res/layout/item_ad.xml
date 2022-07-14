@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.MineApp" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="content"
+            type="String" />
+
+        <variable
+            name="type"
+            type="Integer" />
+
+        <variable
+            name="otherHead"
+            type="String" />
+
+        <variable
+            name="myHead"
+            type="String" />
+
+        <variable
+            name="sex"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_big_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{(MineApp.isFirstOpen&amp;&amp;type==100)?View.VISIBLE:View.GONE}" />
+
+        <LinearLayout
+            viewHeightSize="@{ObjectUtils.getVipExposureHeight(1000)}"
+            viewWidthSize="@{ ObjectUtils.getViewSizeByWidthFromMax(1000)}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="@{(MineApp.isFirstOpen&amp;&amp;type==100)?View.GONE:View.VISIBLE}">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@{title}"
+                android:textColor="@color/black_252"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="超级曝光" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@{content}"
+                android:textColor="@color/black_252"
+                android:textSize="14sp"
+                tools:text="超级曝光" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:id="@+id/iv_vip_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@mipmap/vip_ad_5" />
+
+                <LinearLayout
+                    android:id="@+id/type_3_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:visibility="@{type==3?View.VISIBLE:View.GONE}">
+
+                    <RelativeLayout
+                        android:id="@+id/other_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="-30dp">
+
+                        <ImageView
+                            android:id="@+id/iv_other"
+                            imageUrl="@{otherHead}"
+                            isCircle="@{true}"
+                            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(305)}"
+                            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(305)}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true" />
+
+                        <ImageView
+                            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(360)}"
+                            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(360)}"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_centerInParent="true"
+                            android:background="@mipmap/vip_ad_white_logo_bg" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/mine_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="-30dp">
+
+                        <ImageView
+                            imageUrl="@{myHead}"
+                            isCircle="@{true}"
+                            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(305)}"
+                            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(305)}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true" />
+
+                        <ImageView
+                            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(360)}"
+                            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(360)}"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_centerInParent="true"
+                            android:background="@mipmap/vip_ad_white_logo_bg" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <ImageView
+                    viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(150)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(150)}"
+                    android:layout_width="63dp"
+                    android:layout_height="63dp"
+                    android:layout_above="@+id/type_3_layout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="-40dp"
+                    android:background="@mipmap/super_like_small_icon"
+                    android:visibility="@{type==3?View.VISIBLE:View.GONE}" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/iv_vip_bg"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="@{type==5?View.VISIBLE:View.GONE}">
+
+                    <ImageView
+                        imageUrl="@{myHead}"
+                        isCircle="@{true}"
+                        viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(220)}"
+                        viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(220)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+
+                    <ImageView
+                        viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(260)}"
+                        viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(260)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@mipmap/vip_ad_5_logo" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/vip_4_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="@{type==4?View.VISIBLE:View.GONE}">
+
+                    <ImageView
+                        imageUrl="@{myHead}"
+                        isCircle="@{true}"
+                        viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(246)}"
+                        viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(246)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+
+                    <ImageView
+                        viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(300)}"
+                        viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(300)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@mipmap/vip_ad_red_logo_bg" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/vip_8_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="@{type==8?View.VISIBLE:View.GONE}">
+
+                    <ImageView
+                        imageUrl="@{myHead}"
+                        isCircle="@{true}"
+                        viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(246)}"
+                        viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(246)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+
+                    <ImageView
+                        viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(300)}"
+                        viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(300)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@mipmap/vip_ad_yellow_logo_bg" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/vip_4_layout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="-25dp"
+                    android:background="@mipmap/vip_ad_4_star"
+                    android:visibility="@{type==4?View.VISIBLE:View.GONE}" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/vip_8_layout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="-35dp"
+                    android:background="@mipmap/vip_ad_8_logo"
+                    android:visibility="@{type==8?View.VISIBLE:View.GONE}" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="@{type==1?View.VISIBLE:View.GONE}">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="-60dp"
+                        android:layout_toStartOf="@+id/my_logo_layout"
+                        android:background="@{sex==0?@drawable/vip_ad_1_left:@drawable/vip_ad_1_male_left}" />
+
+                    <RelativeLayout
+                        android:id="@+id/my_logo_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true">
+
+                        <ImageView
+                            imageUrl="@{myHead}"
+                            isCircle="@{true}"
+                            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(300)}"
+                            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(300)}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true" />
+
+                        <ImageView
+                            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(380)}"
+                            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(380)}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@mipmap/vip_ad_yellow_logo_bg" />
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="-70dp"
+                        android:layout_toEndOf="@+id/my_logo_layout"
+                        android:background="@{sex==0?@drawable/vip_ad_1_right:@drawable/vip_ad_1_male_right}" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/my_logo_layout"
+                        android:layout_centerHorizontal="true"
+                        android:background="@mipmap/vip_ad_1" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="@{type==7?View.VISIBLE:View.GONE}">
+
+                    <ImageView
+                        android:id="@+id/iv_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@{sex==0?@drawable/vip_ad_7_male:@drawable/vip_ad_7}"
+                        tools:background="@drawable/vip_ad_7" />
+
+                    <RelativeLayout
+                        android:id="@+id/mine_7_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="-40dp"
+                        android:layout_toEndOf="@+id/iv_7">
+
+                        <ImageView
+                            imageUrl="@{myHead}"
+                            isCircle="@{true}"
+                            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(305)}"
+                            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(305)}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true" />
+
+                        <ImageView
+                            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(360)}"
+                            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(360)}"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_centerInParent="true"
+                            android:background="@mipmap/vip_ad_white_logo_bg" />
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toStartOf="@+id/mine_7_layout"
+                        android:background="@mipmap/flash_chat_icon" />
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

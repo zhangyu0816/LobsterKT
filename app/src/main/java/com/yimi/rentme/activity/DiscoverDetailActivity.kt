@@ -33,10 +33,11 @@ class DiscoverDetailActivity : BaseLightColorActivity(R.color.red_ece) {
     }
 
     /**
-     * 检测是否注册
+     * 支付成功
      */
     @Subscriber(tag = "kotlin_pay_back")
-    private fun lobsterRecharge(data: String) {
+    private fun payBack(data: String) {
         EventBus.getDefault().post("", "lobsterUpdateWallet")
+        EventBus.getDefault().post("", "lobsterUpdateMineInfo")
     }
 }

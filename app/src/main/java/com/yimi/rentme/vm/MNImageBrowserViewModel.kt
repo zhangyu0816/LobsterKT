@@ -24,7 +24,9 @@ import com.yimi.rentme.dialog.ReviewDF
 import com.yimi.rentme.utils.imagebrowser.MyMNImage
 import com.yimi.rentme.utils.imagebrowser.OnDeleteListener
 import com.yimi.rentme.utils.imagebrowser.OnDiscoverClickListener
+import com.yimi.rentme.utils.imagebrowser.OnFinishListener
 import com.zb.baselibs.app.BaseApp
+import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.views.imagebrowser.base.ImageBrowserConfig
 import com.zb.baselibs.views.imagebrowser.listener.ImageEngine
 import com.zb.baselibs.views.imagebrowser.listener.OnClickListener
@@ -52,6 +54,7 @@ class MNImageBrowserViewModel : BaseViewModel() {
     private var onClickListener: OnClickListener? = null
     private var onDiscoverClickListener: OnDiscoverClickListener? = null
     private var onDeleteListener: OnDeleteListener? = null
+    private var onFinishListener: OnFinishListener? = null
     private lateinit var imageBrowserAdapter: MyAdapter
 
     @SuppressLint("StaticFieldLeak")
@@ -71,6 +74,7 @@ class MNImageBrowserViewModel : BaseViewModel() {
         onLongClickListener = MyMNImage.imageBrowserConfig.onLongClickListener
         onDiscoverClickListener = MyMNImage.imageBrowserConfig.onDiscoverClickListener
         onDeleteListener = MyMNImage.imageBrowserConfig.onDeleteListener
+        onFinishListener = MyMNImage.imageBrowserConfig.onFinishListener
         binding.numberIndicator.text = "${currentPosition + 1}/${imageUrlList.size}"
         binding.isFollow = false
         binding.showDelete = onDeleteListener != null
@@ -233,6 +237,14 @@ class MNImageBrowserViewModel : BaseViewModel() {
                         }
 
                         override fun delete() {
+                            RemindDF(activity).setTitle("删除动态").setContent("删除后，动态不可找回！")
+                                .setSureName("删除").setCallBack(object : RemindDF.CallBack {
+                                    override fun sure() {
+                                        if (onFinishListener != null)
+                                            onFinishListener!!.onFinish()
+                                        activity.finish()
+                                    }
+                                }).show(activity.supportFragmentManager)
                         }
 
                         override fun like() {

@@ -67,6 +67,8 @@ class MainViewModel : BaseViewModel() {
         giftList()
         rechargeDiscountList()
         comType()
+        firstOpenMemberPage()
+        openedMemberPriceList()
     }
 
     /**
@@ -182,11 +184,64 @@ class MainViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * 举报类型
+     */
     private fun comType() {
         mainDataSource.enqueue({ comType() }) {
             onSuccess {
                 MineApp.reportList.clear()
                 MineApp.reportList.addAll(it)
+            }
+        }
+    }
+
+    /**
+     * 首充
+     */
+    private fun firstOpenMemberPage() {
+        mainDataSource.enqueue({ firstOpenMemberPage() }) {
+            onSuccess {
+                MineApp.isFirstOpen = it == 1
+//                if (PreferenceUtil.readIntValue(activity, "love_activity") === 0) {
+//                    PreferenceUtil.saveIntValue(activity, "love_activity", 1)
+//                    TextPW(
+//                        activity,
+//                        mBinding.getRoot(),
+//                        "新功能《爱情盲盒》",
+//                        "一,爱情盲盒玩法。\n1，把你的微信号存入盲盒中，等待异性用户来拆盲盒。\n2，你也可以取出一个异性盲盒，然后添加TA的微信。\n3，入口在“我的->爱情盲盒",
+//                        "去玩一玩",
+//                        true,
+//                        object : CallBack() {
+//                            fun sure() {
+//                                ActivityUtils.getLoveHome()
+//                            }
+//                        })
+//                }
+            }
+        }
+    }
+
+    /**
+     * 会员价格
+     */
+    private fun openedMemberPriceList() {
+        mainDataSource.enqueue({ openedMemberPriceList() }) {
+            onSuccess {
+                MineApp.vipInfoList.clear()
+                MineApp.vipInfoList.addAll(it)
+            }
+        }
+    }
+
+    /**
+     * 自己的信息
+     */
+    fun myInfo() {
+        mainDataSource.enqueue({ myInfo() }) {
+            onSuccess {
+                MineApp.mineInfo = it
+                MineApp.sex = it.sex
             }
         }
     }

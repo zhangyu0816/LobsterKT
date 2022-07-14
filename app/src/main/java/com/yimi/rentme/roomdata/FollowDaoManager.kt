@@ -71,6 +71,6 @@ class FollowDaoManager(private val context: Context) {
      * 删除关注
      */
     fun deleteFollowInfo(otherUserId: Long){
-        return dao.deleteFollowInfo(otherUserId, getLong("userId"))
+         dao.deleteFollowInfo(otherUserId, getLong("userId"))
     }
 }

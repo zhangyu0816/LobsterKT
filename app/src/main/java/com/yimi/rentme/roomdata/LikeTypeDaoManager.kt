@@ -8,7 +8,7 @@ import com.zb.baselibs.utils.getLong
 data class LikeTypeInfo(
     @PrimaryKey
     var otherUserId: Long = 0L,
-    var type: Int = 0, // 1：喜欢  2：超级喜欢
+    var likeType: Int = 0, // 1：喜欢  2：超级喜欢
     var mainUserId: Long = 0L // 拥有的
 ) {
     @Ignore
@@ -32,8 +32,14 @@ interface LikeTypeInfoDao {
     /**
      * 更新喜欢或超级喜欢
      */
-    @Query("update LikeTypeInfo set type=:type where otherUserId=:otherUserId and mainUserId=:mainUserId")
-    fun updateLikeTypeInfo(type: Int, otherUserId: Long, mainUserId: Long)
+    @Query("update LikeTypeInfo set likeType=:likeType where otherUserId=:otherUserId and mainUserId=:mainUserId")
+    fun updateLikeType(likeType: Int, otherUserId: Long, mainUserId: Long)
+
+    /**
+     * 删除喜欢
+     */
+    @Query("delete from LikeTypeInfo where otherUserId=:otherUserId and mainUserId=:mainUserId")
+    fun deleteLikeTypeInfo(otherUserId: Long, mainUserId: Long)
 }
 
 @Database(entities = [LikeTypeInfo::class], version = 1, exportSchema = false)
@@ -68,7 +74,14 @@ class LikeTypeDaoManager(private val context: Context) {
     /**
      * 更新喜欢或超级喜欢
      */
-    fun updateLikeTypeInfo(type: Int, otherUserId: Long) {
-        return dao.updateLikeTypeInfo(type, otherUserId, getLong("userId"))
+    fun updateLikeType(likeType: Int, otherUserId: Long) {
+        dao.updateLikeType(likeType, otherUserId, getLong("userId"))
+    }
+
+    /**
+     * 删除喜欢
+     */
+    fun deleteLikeTypeInfo(otherUserId: Long) {
+        dao.deleteLikeTypeInfo(otherUserId, getLong("userId"))
     }
 }

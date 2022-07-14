@@ -17,7 +17,7 @@ class PaymentDF(activity: AppCompatActivity) : BaseDialogFragment(activity) {
 
     private lateinit var binding: DfPaymentBinding
     private lateinit var orderTran: OrderTran
-    private var payType = 0 // // 1 开通VIP  2 充值
+    private var payType = 0 // 1 开通VIP  2 充值
     private lateinit var mainDataSource: MainDataSource<ApiService>
 
     override val layoutId: Int

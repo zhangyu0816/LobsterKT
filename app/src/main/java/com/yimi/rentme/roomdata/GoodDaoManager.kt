@@ -67,7 +67,7 @@ class GoodDaoManager(private val context: Context) {
     /**
      * 删除点赞
      */
-    fun deleteGood(friendDynId: Long){
-        return dao.deleteGood(friendDynId, getLong("userId"))
+    fun deleteGood(friendDynId: Long) {
+        dao.deleteGood(friendDynId, getLong("userId"))
     }
 }

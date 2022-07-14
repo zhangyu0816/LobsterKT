@@ -29,4 +29,12 @@ class MainActivity : BaseScreenActivity() {
     private fun lobsterUpdateWallet(data: String) {
         viewModel.walletInfo()
     }
+
+    /**
+     * 更新自己信息
+     */
+    @Subscriber(tag = "lobsterUpdateMineInfo")
+    private fun lobsterUpdateMineInfo(data: String) {
+        viewModel.myInfo()
+    }
 }

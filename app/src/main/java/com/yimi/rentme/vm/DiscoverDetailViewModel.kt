@@ -1,5 +1,7 @@
 package com.yimi.rentme.vm
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.SystemClock
@@ -22,12 +24,17 @@ import com.yimi.rentme.roomdata.GoodInfo
 import com.yimi.rentme.roomdata.LikeTypeInfo
 import com.yimi.rentme.utils.imagebrowser.MyMNImage
 import com.yimi.rentme.utils.imagebrowser.OnDiscoverClickListener
+import com.yimi.rentme.utils.imagebrowser.OnFinishListener
 import com.yimi.rentme.views.GoodView
+import com.yimi.rentme.views.SuperLikeInterface
 import com.zb.baselibs.adapter.loadImage
 import com.zb.baselibs.adapter.viewSize
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.bean.Ads
+import com.zb.baselibs.dialog.RemindDF
+import com.zb.baselibs.utils.DateUtil
 import com.zb.baselibs.utils.SCToastUtil
+import com.zb.baselibs.utils.getInteger
 import com.zb.baselibs.utils.getLong
 import com.zb.baselibs.views.imagebrowser.base.ImageBrowserConfig
 import com.zb.baselibs.views.xbanner.ImageLoader
@@ -36,7 +43,8 @@ import com.zb.baselibs.views.xbanner.XUtils.showBanner
 import org.jetbrains.anko.startActivity
 import org.simple.eventbus.EventBus
 
-class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
+class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener,
+    SuperLikeInterface {
 
     lateinit var binding: AcDiscoverDetailBinding
     var friendDynId = 0L
@@ -58,16 +66,20 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
     private var pageNo = 1
     private var reviewId = 0L
 
+    private var pvh: ObjectAnimator? = null
+    private var translateY: ObjectAnimator? = null
+
     override fun initViewModel() {
         binding.title = "动态详情"
         binding.discoverInfo = DiscoverInfo()
         binding.memberInfo = MemberInfo()
-        binding.likeTypeInfo = LikeTypeInfo()
         binding.isMine = false
         binding.isFollow = false
         binding.rewardNum = 0
         binding.rewardInfo = ""
         binding.content = ""
+        binding.likeType = 0
+        binding.isPlay = false
 
         // 打赏
         rewardAdapter = BaseAdapter(activity, R.layout.item_reward, rewardList, this)
@@ -133,9 +145,22 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                         }
 
                         override fun delete() {
+                            RemindDF(activity).setTitle("删除动态").setContent("删除后，动态不可找回！")
+                                .setSureName("删除").setCallBack(object : RemindDF.CallBack {
+                                    override fun sure() {
+                                        deleteDyn()
+                                    }
+                                }).show(activity.supportFragmentManager)
                         }
 
                         override fun like() {
+                            if (MineApp.mineInfo.memberType == 2) { // 会员
+                                makeEvaluate(2)
+                            } else {
+                                VipAdDF(activity).setType(3).setOtherImage(discoverInfo.image)
+                                    .setMainDataSource(mainDataSource)
+                                    .show(activity.supportFragmentManager)
+                            }
                         }
                     })
                     .show(activity.supportFragmentManager)
@@ -270,6 +295,31 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
     }
 
     /**
+     * 不喜欢
+     */
+    fun dislike(view: View) {
+        activity.finish()
+    }
+
+    /**
+     * 喜欢
+     */
+    fun like(view: View) {
+        if (binding.memberInfo == null) {
+            SCToastUtil.showToast(activity, "网络异常，请检查网络是否链接", 2)
+            return
+        }
+        isLike(binding.ivLike)
+        if (getInteger("toLikeCount_${getLong("userId")}_${DateUtil.getNow(DateUtil.yyyy_MM_dd)}") == 0 && MineApp.mineInfo.memberType == 1) {
+            VipAdDF(activity).setType(6).setMainDataSource(mainDataSource)
+                .show(activity.supportFragmentManager)
+            SCToastUtil.showToast(activity, "今日喜欢次数已用完", 2)
+            return
+        }
+        makeEvaluate(1)
+    }
+
+    /**
      * 动态图片
      */
     private fun setBanner() {
@@ -297,6 +347,11 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
 
                             override fun good() {
                                 dynDoLike()
+                            }
+                        })
+                        .setFinishListener(object : OnFinishListener {
+                            override fun onFinish() {
+                                deleteDyn()
                             }
                         })
                         .setCallBack(object : ImageBrowserConfig.StartBack {
@@ -341,13 +396,24 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 dynVisit()
                 otherInfo()
                 seeGiftRewards(1)
+                binding.isPlay = true
                 BaseApp.fixedThreadPool.execute {
                     binding.isFollow =
                         MineApp.followDaoManager.getFollowInfo(it.userId) != null // 关注
                     likeTypeInfo =
                         MineApp.likeTypeDaoManager.getLikeTypeInfo(it.userId) // 喜欢 or 超级喜欢
                     if (likeTypeInfo != null)
-                        binding.likeTypeInfo = likeTypeInfo
+                        binding.likeType = likeTypeInfo!!.likeType
+                }
+                if (discoverInfo.goodNum == 0 || discoverInfo.reviews == 0) {
+                    binding.ivRemind.visibility = View.VISIBLE
+                    BaseApp.fixedThreadPool.execute {
+                        SystemClock.sleep(500)
+                        if (binding.ivRemind.visibility == View.VISIBLE) {
+                            SystemClock.sleep(2500)
+                            activity.runOnUiThread { binding.ivRemind.visibility = View.GONE }
+                        }
+                    }
                 }
             }
         }
@@ -648,4 +714,158 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
         }
     }
 
+    /**
+     * 删除动态
+     */
+    private fun deleteDyn() {
+        mainDataSource.enqueueLoading({ deleteDyn(friendDynId) }) {
+            onSuccess {
+                EventBus.getDefault().post("删除动态", "lobsterDeleteDyn")
+                SCToastUtil.showToast(activity, "删除成功", 2)
+                activity.finish()
+            }
+        }
+    }
+
+    /**
+     * 喜欢/超级喜欢
+     */
+    private fun makeEvaluate(likeOtherStatus: Int) {
+        mainDataSource.enqueue({ makeEvaluate(discoverInfo.userId, likeOtherStatus) }) {
+            onSuccess {
+                val myHead: String = MineApp.mineInfo.image
+                val otherHead: String = binding.memberInfo!!.image
+                // 1喜欢成功 2匹配成功 3喜欢次数用尽
+                if (it == 1) {
+                    // 不喜欢成功  喜欢成功  超级喜欢成功
+                    when (likeOtherStatus) {
+                        0 -> activity.finish()
+                        1 -> {
+//                            LocalBroadcastManager.getInstance(MineApp.sContext)
+//                                .sendBroadcast(Intent("lobster_isLike"))
+//                            LocalBroadcastManager.getInstance(MineApp.sContext)
+//                                .sendBroadcast(Intent("lobster_updateFCL"))
+                            closeBtn(binding.likeLayout, 1)
+                            SCToastUtil.showToast(activity, "已喜欢成功", 2)
+                        }
+                        2 -> {
+                            closeBtn(binding.likeLayout, 2)
+//                            LocalBroadcastManager.getInstance(MineApp.sContext)
+//                                .sendBroadcast(Intent("lobster_updateFCL"))
+//                            SuperLikePW(
+//                                binding.getRoot(),
+//                                myHead,
+//                                otherHead,
+//                                MineApp.mineInfo.getSex(),
+//                                memberInfo.getSex()
+//                            )
+                        }
+                    }
+                } else if (it == 2) {
+                    // 匹配成功
+//                    SuperLikePW(
+//                        binding.getRoot(),
+//                        myHead,
+//                        otherHead,
+//                        MineApp.mineInfo.getSex(),
+//                        memberInfo.getSex(),
+//                        memberInfo.getNick()
+//                    ) { ActivityUtils.getChatActivity(discoverInfo.getUserId(), false) }
+//                    LocalBroadcastManager.getInstance(MineApp.sContext)
+//                        .sendBroadcast(Intent("lobster_pairList"))
+//                    LocalBroadcastManager.getInstance(MineApp.sContext)
+//                        .sendBroadcast(Intent("lobster_isLike"))
+//                    LocalBroadcastManager.getInstance(MineApp.sContext)
+//                        .sendBroadcast(Intent("lobster_updateFCL"))
+                    closeBtn(binding.likeLayout, 2)
+                } else if (it == 3) {
+                    // 喜欢次数用尽
+                    VipAdDF(activity).setType(6).setMainDataSource(mainDataSource)
+                        .show(activity.supportFragmentManager)
+                    SCToastUtil.showToast(activity, "今日喜欢次数已用完", 2)
+                } else if (it == 4) {
+                    // 超级喜欢时，非会员或超级喜欢次数用尽
+                    if (MineApp.mineInfo.memberType == 2) {
+                        SCToastUtil.showToast(activity, "今日超级喜欢次数已用完", 2)
+                    } else {
+                        VipAdDF(activity).setType(3).setOtherImage(otherHead)
+                            .setMainDataSource(mainDataSource)
+                            .show(activity.supportFragmentManager)
+                    }
+                } else {
+                    when (likeOtherStatus) {
+                        0 -> activity.finish()
+                        1 -> {
+                            closeBtn(binding.likeLayout, 1)
+                            SCToastUtil.showToast(activity, "已喜欢成功", 2)
+                        }
+                        2 -> {
+                            closeBtn(binding.likeLayout, 2)
+                            SCToastUtil.showToast(activity, "你已超级喜欢过对方", 2)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override fun superLike(view: View?, pairInfo: PairInfo?) {
+        if (MineApp.mineInfo.memberType == 2) {
+            makeEvaluate(2)
+        } else {
+            if (binding.memberInfo != null)
+                VipAdDF(activity).setType(3).setOtherImage(binding.memberInfo!!.image)
+                    .setMainDataSource(mainDataSource)
+                    .show(activity.supportFragmentManager)
+        }
+    }
+
+    /**
+     * 喜欢动画
+     */
+    private fun isLike(view: View) {
+        val pvhSY = PropertyValuesHolder.ofFloat("scaleY", 1f, 1.1f, 1f, 1.2f, 1f)
+        val pvhSX = PropertyValuesHolder.ofFloat("scaleX", 1f, 1.1f, 1f, 1.2f, 1f)
+        pvh = ObjectAnimator.ofPropertyValuesHolder(view, pvhSY, pvhSX).setDuration(500)
+        pvh!!.start()
+        BaseApp.fixedThreadPool.execute {
+            SystemClock.sleep(500)
+            activity.runOnUiThread {
+                if (pvh != null) pvh!!.cancel()
+                pvh = null
+            }
+        }
+    }
+
+    /**
+     * 关闭喜欢按钮
+     */
+    private fun closeBtn(view: View, likeType: Int) {
+        if (likeTypeInfo == null) {
+            likeTypeInfo = LikeTypeInfo()
+            likeTypeInfo!!.likeType = likeType
+            likeTypeInfo!!.otherUserId = discoverInfo.userId
+            likeTypeInfo!!.mainUserId = getLong("userId")
+            BaseApp.fixedThreadPool.execute {
+                MineApp.likeTypeDaoManager.insert(likeTypeInfo!!)
+            }
+        } else {
+            BaseApp.fixedThreadPool.execute {
+                MineApp.likeTypeDaoManager.updateLikeType(
+                    likeType,
+                    discoverInfo.userId
+                )
+            }
+        }
+        translateY = ObjectAnimator.ofFloat(view, "translationY", 0f, 1000f).setDuration(500)
+        translateY!!.start()
+        BaseApp.fixedThreadPool.execute {
+            SystemClock.sleep(500)
+            activity.runOnUiThread {
+                translateY!!.cancel()
+                translateY = null
+                binding.likeType = likeType
+            }
+        }
+    }
 }

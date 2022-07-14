@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.VipAdDF" />
+
+        <variable
+            name="item"
+            type="com.zb.baselibs.bean.VipInfo" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="isSelect"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        viewHeightSize="@{-2}"
+        viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(333)}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            onClickDelayed="@{v->dialog.selectIndex(position)}"
+            viewHeightSize="@{-2}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(300)}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="@{isSelect?@drawable/btn_bg_white_red_radius7_big:@drawable/btn_bg_white_black_efe_radius7_big}"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@{item.dayCount/30==12?@string/vip_year:String.format(@string/vip_month,item.dayCount/30,item.dayCount/30)}"
+                    android:textColor="@color/black_252"
+                    android:textSize="14sp"
+                    tools:text="买1月送1月" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¥"
+                        android:textColor="@color/black_252"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{String.format(@string/vip_price,(int)item.price)}"
+                        android:textColor="@color/black_252"
+                        android:textSize="36sp"
+                        android:textStyle="bold"
+                        tools:text="18" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{item.dayCount/30==12?@string/vip_price_year:String.format(@string/vip_price_month,item.dayCount/30*2)}"
+                        android:textColor="@color/black_252"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        tools:text="/2月" />
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="15dp">
+
+                    <TextView
+                        android:id="@+id/tv_original"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text='@{String.format(@string/vip_original_price, (int)item.originalPrice*2)}'
+                        android:textColor="@color/black_252"
+                        android:textSize="14sp"
+                        tools:text="原价 ¥16" />
+
+                    <View
+                        viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(4)}"
+                        viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(170)}"
+                        android:layout_width="100dp"
+                        android:layout_height="1dp"
+                        android:layout_centerVertical="true"
+                        android:background="@color/red_fe4" />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

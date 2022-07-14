@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.VipAdDF" />
+
+        <variable
+            name="vipInfo"
+            type="com.zb.baselibs.bean.VipInfo" />
+
+        <variable
+            name="isFirstOpen"
+            type="boolean" />
+
+        <variable
+            name="type"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            viewHeightSize="@{-2}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(1000)}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <com.zb.baselibs.views.xbanner.XBanner
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-1dp"
+                android:background="@{(isFirstOpen&amp;&amp;type==100)?@drawable/btn_bg_red_f3b_radius_bottom10:@drawable/btn_bg_white_radius_bottom10}">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list"
+                    adapter="@{dialog.adapter}"
+                    gridNum="@{3}"
+                    recyclerType="@{2}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginVertical="15dp" />
+
+                <TextView
+                    android:id="@+id/tv_btn"
+                    onClickDelayed="@{dialog::sure}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/list"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@mipmap/btn_bg_icon"
+                    android:gravity="center"
+                    android:paddingBottom="12dp"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:text="开通开通开通开通开通开通开通开通" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/tv_btn"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="-30dp"
+                    android:background="@mipmap/img_xianshitehui"
+                    android:visibility="@{isFirstOpen?View.VISIBLE:View.GONE}" />
+            </RelativeLayout>
+
+            <ImageView
+                onClickDelayed="@{dialog::cancel}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="15dp"
+                android:src="@mipmap/close_icon" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</layout>

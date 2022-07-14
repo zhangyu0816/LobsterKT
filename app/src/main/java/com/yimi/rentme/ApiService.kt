@@ -3,6 +3,7 @@ package com.yimi.rentme
 import com.yimi.rentme.bean.*
 import com.zb.baselibs.bean.AliPay
 import com.zb.baselibs.bean.HttpWrapBean
+import com.zb.baselibs.bean.VipInfo
 import com.zb.baselibs.bean.WXPay
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -269,4 +270,38 @@ interface ApiService {
         @Field("comText") comText: String,
         @Field("images") images: String
     ): HttpWrapBean<Any?>
+
+    // 删除动态
+    @FormUrlEncoded
+    @POST("api/Interactive_deleteDyn")
+    suspend fun deleteDyn(@Field("friendDynId") friendDynId: Long): HttpWrapBean<Any?>
+
+    // 评估
+    @FormUrlEncoded
+    @POST("api/Pair_makeEvaluate")
+    suspend fun makeEvaluate(
+        @Field("otherUserId") otherUserId: Long,
+        @Field("likeOtherStatus") likeOtherStatus: Int
+    ): HttpWrapBean<Int>
+
+    // 首充
+    @GET("api/MemberOrder_isFirstOpenMember")
+    suspend fun firstOpenMemberPage(): HttpWrapBean<Int>
+
+    // 会员价格
+    @GET("api/MemberOrder_openedMemberPriceList")
+    suspend fun openedMemberPriceList(): HttpWrapBean<ArrayList<VipInfo>>
+
+    // 提交VIP订单 - 需登录
+    @FormUrlEncoded
+    @POST("api/MemberOrder_submitOpenedMemberOrder")
+    suspend fun submitOpenedMemberOrder(
+        @Field("memberOfOpenedProductId") memberOfOpenedProductId: Long,
+        @Field("productCount") productCount: Int
+    ): HttpWrapBean<OrderNumber>
+
+    // 获取交易订单号
+    @FormUrlEncoded
+    @POST("api/MemberOrder_payOrderForTran")
+    suspend fun payOrderForTran(@Field("orderNumber") orderNumber: String): HttpWrapBean<OrderTran>
 }

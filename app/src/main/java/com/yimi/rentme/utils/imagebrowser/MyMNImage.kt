@@ -54,8 +54,13 @@ object MyMNImage {
         return this
     }
 
-    fun setDeleteListener(deleteListener: OnDeleteListener):MyMNImage{
+    fun setDeleteListener(deleteListener: OnDeleteListener): MyMNImage {
         imageBrowserConfig.onDeleteListener = deleteListener
+        return this
+    }
+
+    fun setFinishListener(finishListener: OnFinishListener): MyMNImage {
+        imageBrowserConfig.onFinishListener = finishListener
         return this
     }
 
@@ -71,8 +76,7 @@ object MyMNImage {
                 Glide.with(context).asBitmap().load(url).apply(cropOptions)
                     .into(object : SimpleTarget<Bitmap?>() {
                         override fun onResourceReady(
-                            resource: Bitmap,
-                            transition: Transition<in Bitmap?>?,
+                            resource: Bitmap, transition: Transition<in Bitmap?>?,
                         ) {
                             val width = resource.width
                             val height = resource.height
