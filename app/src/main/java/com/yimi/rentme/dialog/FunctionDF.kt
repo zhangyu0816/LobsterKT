@@ -195,7 +195,7 @@ class FunctionDF(activity: AppCompatActivity) : BaseDialogFragment(activity) {
                 media = SHARE_MEDIA.QZONE
             }
             "举报" -> if (callBack != null) callBack!!.report()
-            "查看礼物" -> if (callBack != null) callBack!!.gift()
+            "查看礼物" -> if (callBack != null) callBack!!.rewardList()
             "删除动态" -> if (callBack != null) callBack!!.delete()
             "超级喜欢" -> if (callBack != null) callBack!!.like()
             "保存至相册" -> if (callBack != null) callBack!!.download()
@@ -219,7 +219,7 @@ class FunctionDF(activity: AppCompatActivity) : BaseDialogFragment(activity) {
 
     interface CallBack {
         fun report() // 举报
-        fun gift() {} // 礼物
+        fun rewardList() {} // 礼物
         fun delete() {} // 删除动态
         fun like() {} // 喜欢
         fun download() {} // 下载

@@ -80,9 +80,8 @@ class SearchViewModel : BaseViewModel(), OnLoadMoreListener {
                 dismissLoading()
                 binding.refresh.setEnableLoadMore(false)
                 binding.refresh.finishLoadMore()
-                if (it.isNoData) {
+                if (it.isNoData)
                     binding.noData = memberInfoList.size == 0
-                }
             }
         }
     }

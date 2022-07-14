@@ -4,8 +4,9 @@ import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcRewardListBinding
 import com.yimi.rentme.vm.RewardListViewModel
 import com.zb.baselibs.activity.BaseScreenActivity
+import com.zb.baselibs.activity.BaseWhiteActivity
 
-class RewardListActivity : BaseScreenActivity() {
+class RewardListActivity : BaseWhiteActivity() {
 
     private val viewModel by getViewModel(RewardListViewModel::class.java) {
         binding = mBinding as AcRewardListBinding
@@ -19,8 +20,10 @@ class RewardListActivity : BaseScreenActivity() {
 
     override fun initView() {
         val extras = intent.extras
-        if (extras != null)
+        if (extras != null) {
             viewModel.otherUserId = extras.getLong("otherUserId")
+            viewModel.friendDynId = extras.getLong("friendDynId")
+        }
         viewModel.initViewModel()
     }
 }

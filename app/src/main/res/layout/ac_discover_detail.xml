@@ -71,8 +71,7 @@
             title="@{title}"
             viewModel="@{viewModel}"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp" />
+            android:layout_height="wrap_content" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinator"

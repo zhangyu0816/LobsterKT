@@ -3,11 +3,11 @@ package com.yimi.rentme.activity
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcDiscoverDetailBinding
 import com.yimi.rentme.vm.DiscoverDetailViewModel
-import com.zb.baselibs.activity.BaseScreenActivity
+import com.zb.baselibs.activity.BaseLightColorActivity
 import org.simple.eventbus.EventBus
 import org.simple.eventbus.Subscriber
 
-class DiscoverDetailActivity : BaseScreenActivity() {
+class DiscoverDetailActivity : BaseLightColorActivity(R.color.red_ece) {
 
     private val viewModel by getViewModel(DiscoverDetailViewModel::class.java) {
         binding = mBinding as AcDiscoverDetailBinding

@@ -200,6 +200,14 @@ interface ApiService {
         @Field("pageNo") pageNo: Int, @Field("row") row: Int
     ): HttpWrapBean<ArrayList<Reward>>
 
+    // 打赏列表
+    @FormUrlEncoded
+    @POST("api/Interactive_seeUserGiftRewards")
+    suspend fun seeUserGiftRewards(
+        @Field("otherUserId") otherUserId: Long, @Field("rewardSortType") rewardSortType: Int,
+        @Field("pageNo") pageNo: Int, @Field("row") row: Int
+    ): HttpWrapBean<ArrayList<Reward>>
+
     // 礼物列表
     @GET("api/Gift_giftList")
     suspend fun giftList(): HttpWrapBean<ArrayList<GiftInfo>>

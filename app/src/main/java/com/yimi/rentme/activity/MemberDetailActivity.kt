@@ -19,8 +19,10 @@ class MemberDetailActivity : BaseScreenActivity() {
 
     override fun initView() {
         val extras = intent.extras
-        if (extras != null)
+        if (extras != null) {
             viewModel.otherUserId = extras.getLong("otherUserId")
+            viewModel.showLike = extras.getBoolean("showLike")
+        }
         viewModel.initViewModel()
     }
 }

@@ -16,6 +16,7 @@ import com.github.chrisbanes.photoview.PhotoView
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.activity.ReportActivity
+import com.yimi.rentme.activity.RewardListActivity
 import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.databinding.AcMnimageBrowserBinding
 import com.yimi.rentme.dialog.FunctionDF
@@ -225,7 +226,10 @@ class MNImageBrowserViewModel : BaseViewModel() {
                             )
                         }
 
-                        override fun gift() {
+                        override fun rewardList() {
+                            activity.startActivity<RewardListActivity>(
+                                Pair("friendDynId", binding.discoverInfo!!.friendDynId)
+                            )
                         }
 
                         override fun delete() {

@@ -81,4 +81,14 @@ object LobsterObjectUtil {
     fun isVideo(filePath: String): Boolean {
         return filePath.contains(".mp4")
     }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @JvmStatic
+    fun getRanking(position: Int): Drawable? {
+        return when (position) {
+            0 -> BaseApp.context.resources.getDrawable(R.mipmap.reward_ranking_1)
+            1 -> BaseApp.context.resources.getDrawable(R.mipmap.reward_ranking_2)
+            else -> BaseApp.context.resources.getDrawable(R.mipmap.reward_ranking_3)
+        }
+    }
 }

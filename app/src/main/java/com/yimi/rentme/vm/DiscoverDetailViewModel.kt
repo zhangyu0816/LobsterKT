@@ -126,8 +126,10 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                             )
                         }
 
-                        override fun gift() {
-
+                        override fun rewardList() {
+                            activity.startActivity<RewardListActivity>(
+                                Pair("friendDynId", binding.discoverInfo!!.friendDynId)
+                            )
                         }
 
                         override fun delete() {
@@ -166,7 +168,9 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
      */
     fun selectGift(view: View?) {
         if (discoverInfo.userId == getLong("userId"))
-            activity.startActivity<RewardListActivity>()
+            activity.startActivity<RewardListActivity>(
+                Pair("friendDynId", binding.discoverInfo!!.friendDynId)
+            )
         else
             GiftDF(activity).setMainDataSource(mainDataSource)
                 .setCallBack(object : GiftDF.CallBack {
@@ -188,7 +192,9 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
      * 礼物打赏列表
      */
     fun toRewardList(view: View) {
-        activity.startActivity<RewardListActivity>()
+        activity.startActivity<RewardListActivity>(
+            Pair("friendDynId", binding.discoverInfo!!.friendDynId)
+        )
     }
 
     /**

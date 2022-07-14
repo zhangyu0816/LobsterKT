@@ -167,9 +167,8 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
                 binding.noWifi = it.isNoWIFI
-                if (it.isNoData) {
+                if (it.isNoData)
                     binding.noData = discoverInfoList.size == 0
-                }
             }
         }
     }

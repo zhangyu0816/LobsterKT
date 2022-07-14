@@ -152,9 +152,8 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
                 binding.noWifi = it.isNoWIFI
-                if (it.isNoData) {
+                if (it.isNoData)
                     binding.noData = discoverInfoList.size == 0
-                }
             }
         }
     }

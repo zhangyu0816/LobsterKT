@@ -116,9 +116,8 @@ class ReviewDF(activity: AppCompatActivity) : BaseDialogFragment(activity), OnRe
                 binding.refresh.setEnableLoadMore(false)
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
-                if (it.isNoData) {
+                if (it.isNoData)
                     binding.noData = reviewList.size == 0
-                }
             }
         }
     }

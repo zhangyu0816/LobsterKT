@@ -6,6 +6,7 @@ class MemberDetailViewModel : BaseViewModel() {
 
     lateinit var binding: AcMemberDetailBinding
     var otherUserId = 0L
+    var showLike = false
 
     override fun initViewModel() {
 
