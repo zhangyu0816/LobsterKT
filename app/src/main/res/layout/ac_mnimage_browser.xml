@@ -78,15 +78,15 @@
                 tools:text="1/10" />
 
             <ImageView
-                onClickDelayed="@{viewModel::delete}"
                 android:id="@+id/iv_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:onClick="@{viewModel::delete}"
                 android:padding="15dp"
                 android:src="@mipmap/iv_delete_image"
-                android:visibility="@{showDelete?View.VISIBLE:View.GONE}"/>
+                android:visibility="@{showDelete?View.VISIBLE:View.GONE}" />
         </RelativeLayout>
 
         <LinearLayout

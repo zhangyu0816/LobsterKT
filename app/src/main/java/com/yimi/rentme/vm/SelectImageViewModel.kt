@@ -1,6 +1,5 @@
 package com.yimi.rentme.vm
 
-import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcSelectImageBinding
 import com.yimi.rentme.fragment.CameraImageFrag
@@ -21,7 +20,6 @@ class SelectImageViewModel : BaseViewModel() {
     }
 
     fun finish() {
-        MineApp.selectImageList.clear()
         activity.finish()
     }
 
@@ -31,7 +29,7 @@ class SelectImageViewModel : BaseViewModel() {
     fun selectIndex(index: Int) {
         binding.index = index
         when (index) {
-            0 -> activity.replaceFragment(CameraImageFrag(), R.id.camera_content)
+            0 -> activity.replaceFragment(CameraImageFrag(isMore), R.id.camera_content)
             2 -> activity.replaceFragment(CameraTakeFrag(), R.id.camera_content)
         }
     }

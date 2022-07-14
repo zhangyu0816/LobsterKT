@@ -63,7 +63,7 @@ class MineApp : BaseApp() {
         var registerInfo = RegisterInfo()
         var threeInfo = ThreeInfo()
         var walletInfo = WalletInfo()
-        val selectImageList = ArrayList<String>()
+        val selectImageList = ArrayList<SelectImage>()
         var discoverInfoList = ArrayList<DiscoverInfo>()
         var giftInfoList = ArrayList<GiftInfo>()
         var rechargeInfoList = ArrayList<RechargeInfo>()

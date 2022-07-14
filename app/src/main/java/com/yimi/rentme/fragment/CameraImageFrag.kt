@@ -6,7 +6,7 @@ import com.yimi.rentme.databinding.FragCameraImageBinding
 import com.yimi.rentme.vm.fragment.CameraImageViewModel
 import com.zb.baselibs.activity.BaseFragment
 
-class CameraImageFrag : BaseFragment() {
+class CameraImageFrag(private val isMore: Boolean) : BaseFragment() {
 
     private val viewModel by getViewModel(CameraImageViewModel::class.java) {
         binding = mBinding as FragCameraImageBinding
@@ -19,6 +19,7 @@ class CameraImageFrag : BaseFragment() {
     }
 
     override fun initView() {
+        viewModel.isMore = isMore
         viewModel.initViewModel()
     }
 }

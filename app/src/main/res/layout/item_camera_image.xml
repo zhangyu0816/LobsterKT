@@ -3,11 +3,13 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <import type="com.yimi.rentme.R" />
 
         <import type="com.zb.baselibs.utils.ObjectUtils" />
 
-        <import type="com.yimi.rentme.utils.LobsterObjectUtil"/>
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
 
         <variable
             name="viewModel"
@@ -35,11 +37,23 @@
             android:layout_height="100dp"
             android:onClick="@{v->viewModel.selectImage(item,position)}" />
 
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"
+            android:background="@{LobsterObjectUtil.cameraImageSelect(item)?@drawable/image_select_circle:@drawable/image_unselect_circle}"
+            android:gravity="center"
+            android:text="@{LobsterObjectUtil.cameraImageSelectIndex(item)}"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:visibility="@{viewModel.isMore?View.VISIBLE:View.GONE}" />
+
         <ImageView
             viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.25f)}"
             viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.25f)}"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@{LobsterObjectUtil.cameraImageSelect(item)?@drawable/image_select:@drawable/image_unselect}" />
+            android:background="@{LobsterObjectUtil.cameraImageSelect(item)?(viewModel.isMore ? @drawable/image_select_more : @drawable/image_select):@drawable/image_unselect}" />
     </RelativeLayout>
 </layout>

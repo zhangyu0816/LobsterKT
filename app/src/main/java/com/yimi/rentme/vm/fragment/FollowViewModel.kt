@@ -20,7 +20,6 @@ import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.getLong
 import kotlinx.coroutines.Job
-import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.startActivity
 
 class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {

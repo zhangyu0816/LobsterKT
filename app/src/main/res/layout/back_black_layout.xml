@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{right}"
                 android:textColor="@color/black_827"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 tools:text="全部已读" />
         </LinearLayout>
     </RelativeLayout>

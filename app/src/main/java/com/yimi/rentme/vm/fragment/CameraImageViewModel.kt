@@ -9,9 +9,11 @@ import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.FileModel
+import com.yimi.rentme.bean.SelectImage
 import com.yimi.rentme.databinding.FragCameraImageBinding
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
+import com.zb.baselibs.utils.SCToastUtil
 import kotlinx.coroutines.Job
 import org.simple.eventbus.EventBus
 import java.io.File
@@ -19,6 +21,7 @@ import java.io.File
 class CameraImageViewModel : BaseViewModel() {
 
     lateinit var binding: FragCameraImageBinding
+    var isMore = false
     lateinit var adapter: BaseAdapter<String>
     private val imageList = ArrayList<String>()
     private val imageMap = HashMap<String, ArrayList<String>>()
@@ -39,6 +42,8 @@ class CameraImageViewModel : BaseViewModel() {
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null,
             null
         )!!
+        if (!isMore)
+            MineApp.selectImageList.clear()
         adapter = BaseAdapter(activity, R.layout.item_camera_image, imageList, this)
 
         fileAdapter = BaseAdapter(activity, R.layout.item_file_model, fileList, this)
@@ -66,19 +71,22 @@ class CameraImageViewModel : BaseViewModel() {
         binding.showFileModel = false
         binding.title = item.fileName
         imageList.clear()
-        MineApp.selectImageList.clear()
-        mPosition = -1
         adapter.notifyDataSetChanged()
         imageList.addAll(imageMap[item.fileName]!!)
         imageList.reverse()
         adapter.notifyItemRangeChanged(0, imageList.size)
+        if (!isMore) {
+            MineApp.selectImageList.clear()
+            mPosition = -1
+            adapter.notifyDataSetChanged()
+        }
     }
 
     /**
      * 选择图片
      */
     fun upload(view: View) {
-        EventBus.getDefault().post(MineApp.selectImageList,"lobsterUploadImageList")
+        EventBus.getDefault().post(MineApp.selectImageList, "lobsterUploadImageList")
         BaseApp.fixedThreadPool.execute {
             SystemClock.sleep(200)
             activity.runOnUiThread {
@@ -90,14 +98,56 @@ class CameraImageViewModel : BaseViewModel() {
     /**
      * 选择照片
      */
+    @SuppressLint("NotifyDataSetChanged")
     fun selectImage(image: String, position: Int) {
-        if (mPosition != -1) {
-            adapter.notifyItemChanged(mPosition)
+        if (isMore) {
+            var has = false
+            for (item in MineApp.selectImageList) {
+                if (item.imageUrl == image) {
+                    has = true
+                    break
+                }
+            }
+
+            if (has) {
+                val iterator = MineApp.selectImageList.iterator()
+                var index = 0
+                while (iterator.hasNext()) {
+                    val item = iterator.next()
+                    if (image == item.imageUrl) {
+                        iterator.remove()
+                        index = item.index
+                        break
+                    }
+                }
+                for (item in MineApp.selectImageList) {
+                    if (item.index > index) {
+                        item.index = item.index - 1
+                    }
+                }
+                adapter.notifyItemRangeChanged(0, imageList.size)
+            } else {
+                var index = MineApp.selectImageList.size
+                if (index == 9) {
+                    SCToastUtil.showToast(activity, "只能选择9张照片", 2)
+                    return
+                }
+                val selectImage = SelectImage()
+                selectImage.imageUrl = image
+                selectImage.index = index + 1
+                MineApp.selectImageList.add(selectImage)
+                adapter.notifyItemChanged(position)
+            }
+        } else {
+            adapter.notifyItemChanged(position)
+            if (mPosition != -1)
+                adapter.notifyItemChanged(mPosition)
+            MineApp.selectImageList.clear()
+            val selectImage = SelectImage()
+            selectImage.imageUrl = image
+            MineApp.selectImageList.add(selectImage)
+            mPosition = position
         }
-        MineApp.selectImageList.clear()
-        MineApp.selectImageList.add(image)
-        adapter.notifyItemChanged(position)
-        mPosition = position
     }
 
     /**

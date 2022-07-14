@@ -24,7 +24,26 @@ object LobsterObjectUtil {
 
     @JvmStatic
     fun cameraImageSelect(image: String): Boolean {
-        return MineApp.selectImageList.contains(image)
+        var has = false
+        for (item in MineApp.selectImageList) {
+            if (item.imageUrl == image) {
+                has = true
+                break
+            }
+        }
+        return has
+    }
+
+    @JvmStatic
+    fun cameraImageSelectIndex(image: String): String {
+        var index = ""
+        for (item in MineApp.selectImageList) {
+            if (item.imageUrl == image) {
+                index = item.index.toString()
+                break
+            }
+        }
+        return index
     }
 
     @JvmStatic

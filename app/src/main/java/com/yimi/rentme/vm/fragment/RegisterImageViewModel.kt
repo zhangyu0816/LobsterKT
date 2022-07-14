@@ -5,6 +5,7 @@ import android.view.View
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.activity.SelectImageActivity
+import com.yimi.rentme.bean.SelectImage
 import com.yimi.rentme.databinding.FragRegisterImageBinding
 import com.yimi.rentme.utils.luban.PhotoFile
 import com.yimi.rentme.utils.luban.PhotoManager
@@ -36,6 +37,7 @@ class RegisterImageViewModel : BaseViewModel() {
                     MineApp.registerInfo.moreImages = binding.imageUrl!!
                     binding.canNext = true
                     photoManager.deleteAllFile()
+                    MineApp.selectImageList.clear()
                     dismissLoading()
                 }
 
@@ -105,9 +107,9 @@ class RegisterImageViewModel : BaseViewModel() {
     /**
      * 上传图片
      */
-    fun uploadImageList(imageList: ArrayList<String>) {
+    fun uploadImageList(selectImageList: ArrayList<SelectImage>) {
         showLoading(Job(), "上传头像...")
-        photoManager.addFileUpload(0, File(imageList[0]))
+        photoManager.addFileUpload(0, File(selectImageList[0].imageUrl))
     }
 
     /**

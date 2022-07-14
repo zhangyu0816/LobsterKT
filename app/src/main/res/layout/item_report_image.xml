@@ -30,28 +30,36 @@
     </data>
 
     <RelativeLayout
+        viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.333f)}"
+        viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.333f)}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageView
-            defaultRes="@{R.mipmap.empty_icon}"
-            imageUrl="@{item}"
-            onClickDelayed="@{v->viewModel.previewImage(position)}"
-            roundSize="@{7}"
-            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.3f)}"
-            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.3f)}"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/iv_image"
+                defaultRes="@{R.mipmap.empty_icon}"
+                imageUrl="@{item}"
+                onClickDelayed="@{v->viewModel.previewImage(position)}"
+                roundSize="@{10}"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.31f)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.31f)}"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop" />
+        </RelativeLayout>
 
         <ImageView
-            android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
             android:visibility="@{(position==0&amp;&amp;!isLast&amp;&amp;!LobsterObjectUtil.isVideo(item))?View.VISIBLE:View.GONE}"
             app:srcCompat="@mipmap/face_icon" />
-
     </RelativeLayout>
 </layout>

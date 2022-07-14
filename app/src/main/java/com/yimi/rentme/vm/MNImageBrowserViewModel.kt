@@ -16,6 +16,7 @@ import com.github.chrisbanes.photoview.PhotoView
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.activity.ReportActivity
+import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.databinding.AcMnimageBrowserBinding
 import com.yimi.rentme.dialog.FunctionDF
 import com.yimi.rentme.dialog.ReviewDF
@@ -70,10 +71,13 @@ class MNImageBrowserViewModel : BaseViewModel() {
         onDiscoverClickListener = MyMNImage.imageBrowserConfig.onDiscoverClickListener
         onDeleteListener = MyMNImage.imageBrowserConfig.onDeleteListener
         binding.numberIndicator.text = "${currentPosition + 1}/${imageUrlList.size}"
-        binding.discoverInfo = MyMNImage.imageBrowserConfig.discoverInfo
         binding.isFollow = false
         binding.showDelete = onDeleteListener != null
-        if (binding.discoverInfo != null) {
+
+        if (MyMNImage.imageBrowserConfig.discoverInfo == null)
+            binding.discoverInfo = DiscoverInfo()
+        else {
+            binding.discoverInfo = MyMNImage.imageBrowserConfig.discoverInfo
             BaseApp.fixedThreadPool.execute {
                 binding.isFollow =
                     MineApp.followDaoManager.getFollowInfo(binding.discoverInfo!!.userId) != null
@@ -99,11 +103,11 @@ class MNImageBrowserViewModel : BaseViewModel() {
         )
         imageUrlList.removeAt(currentPosition)
         imageBrowserAdapter.notifyDataSetChanged()
+        if (onDeleteListener != null)
+            onDeleteListener!!.delete(currentPosition)
         if (imageUrlList.size == 0) {
             back(binding.ivBack)
         } else {
-            if (onDeleteListener != null)
-                onDeleteListener!!.delete(currentPosition)
             if (currentPosition > 0) {
                 currentPosition--
             }
