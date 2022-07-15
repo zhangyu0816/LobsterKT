@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.FCLViewModel" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="isVip"
+            type="boolean" />
+
+        <variable
+            name="noData"
+            type="boolean" />
+
+        <variable
+            name="dataSize"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_efe">
+
+        <include
+            android:id="@+id/layout"
+            layout="@layout/back_black_layout"
+            title="@{title}"
+            viewModel="@{viewModel}" />
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refresh"
+            onLoadMoreListener="@{viewModel}"
+            onRefreshListener="@{viewModel}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:layout_below="@+id/layout">
+
+            <androidx.recyclerview.widget.RecyclerView
+                adapter="@{viewModel.adapter}"
+                color="@{R.color.black_efe}"
+                recyclerType="@{0}"
+                size="@{1}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical"
+            android:visibility="@{(viewModel.index==3&amp;&amp;!isVip&amp;&amp;!noData&amp;&amp;dataSize>7)?View.VISIBLE:View.GONE}">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="1px"
+                    android:background="@color/black_827" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="非会员显示最新8位网友"
+                    android:textColor="@color/black_827"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="1px"
+                    android:background="@color/black_827" />
+            </LinearLayout>
+
+            <TextView
+                onClickDelayed="@{viewModel::openVip}"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="20dp"
+                android:background="@drawable/gradient_purple_6d5_ae7"
+                android:gravity="center"
+                android:text="查看所有看过我的人"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@{LobsterObjectUtil.getNoData(viewModel.index,viewModel.otherUserId)}"
+            android:visibility="@{noData?View.VISIBLE:View.GONE}" />
+    </RelativeLayout>
+</layout>

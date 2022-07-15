@@ -137,7 +137,6 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                 BaseApp.fixedThreadPool.execute {
                     val followInfo = FollowInfo()
                     followInfo.image = it.image
-                    followInfo.images = it.moreImages.ifEmpty { it.singleImage }
                     followInfo.nick = it.nick
                     followInfo.otherUserId = otherUserId
                     followInfo.mainUserId = getLong("userId")

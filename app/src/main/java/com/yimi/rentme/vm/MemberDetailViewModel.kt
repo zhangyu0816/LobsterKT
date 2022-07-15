@@ -238,7 +238,10 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
      * 关注/粉丝/喜欢/点赞
      */
     fun contactNumDetail(index: Int) {
-//        ActivityUtils.getMineFCL(position, otherUserId)
+        activity.startActivity<FCLActivity>(
+            Pair("index", index),
+            Pair("otherUserId", otherUserId)
+        )
     }
 
     /**
@@ -631,8 +634,6 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
                 BaseApp.fixedThreadPool.execute {
                     val followInfo = FollowInfo()
                     followInfo.image = binding.memberInfo!!.image
-                    followInfo.images =
-                        binding.memberInfo!!.moreImages.ifEmpty { binding.memberInfo!!.singleImage }
                     followInfo.nick = binding.memberInfo!!.nick
                     followInfo.otherUserId = otherUserId
                     followInfo.mainUserId = getLong("userId")
@@ -657,8 +658,6 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
                 BaseApp.fixedThreadPool.execute {
                     val followInfo = FollowInfo()
                     followInfo.image = binding.memberInfo!!.image
-                    followInfo.images =
-                        binding.memberInfo!!.moreImages.ifEmpty { binding.memberInfo!!.singleImage }
                     followInfo.nick = binding.memberInfo!!.nick
                     followInfo.otherUserId = otherUserId
                     followInfo.mainUserId = getLong("userId")
@@ -675,8 +674,6 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
                     BaseApp.fixedThreadPool.execute {
                         val followInfo = FollowInfo()
                         followInfo.image = binding.memberInfo!!.image
-                        followInfo.images =
-                            binding.memberInfo!!.moreImages.ifEmpty { binding.memberInfo!!.singleImage }
                         followInfo.nick = binding.memberInfo!!.nick
                         followInfo.otherUserId = otherUserId
                         followInfo.mainUserId = getLong("userId")

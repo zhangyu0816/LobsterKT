@@ -464,8 +464,6 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 BaseApp.fixedThreadPool.execute {
                     val followInfo = FollowInfo()
                     followInfo.image = binding.memberInfo!!.image
-                    followInfo.images =
-                        binding.memberInfo!!.moreImages.ifEmpty { binding.memberInfo!!.singleImage }
                     followInfo.nick = binding.memberInfo!!.nick
                     followInfo.otherUserId = discoverInfo.userId
                     followInfo.mainUserId = getLong("userId")
@@ -490,8 +488,6 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 BaseApp.fixedThreadPool.execute {
                     val followInfo = FollowInfo()
                     followInfo.image = binding.memberInfo!!.image
-                    followInfo.images =
-                        binding.memberInfo!!.moreImages.ifEmpty { binding.memberInfo!!.singleImage }
                     followInfo.nick = binding.memberInfo!!.nick
                     followInfo.otherUserId = discoverInfo.userId
                     followInfo.mainUserId = getLong("userId")
@@ -508,8 +504,6 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                     BaseApp.fixedThreadPool.execute {
                         val followInfo = FollowInfo()
                         followInfo.image = binding.memberInfo!!.image
-                        followInfo.images =
-                            binding.memberInfo!!.moreImages.ifEmpty { binding.memberInfo!!.singleImage }
                         followInfo.nick = binding.memberInfo!!.nick
                         followInfo.otherUserId = discoverInfo.userId
                         followInfo.mainUserId = getLong("userId")

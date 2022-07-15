@@ -40,4 +40,8 @@ class MemberInfo {
     var singleImage = ""
     var title = ""
     var content: Spanned? = null
+
+    var hasLike = false
+    var isFollow = false
+    var textName = ""
 }

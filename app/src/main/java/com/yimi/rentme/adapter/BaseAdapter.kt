@@ -2,10 +2,14 @@ package com.yimi.rentme.adapter
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
+import com.yimi.rentme.ApiService
 import com.yimi.rentme.BR
+import com.yimi.rentme.bean.MemberInfo
+import com.yimi.rentme.vm.FCLViewModel
 import com.zb.baselibs.adapter.BindingItemAdapter
 import com.zb.baselibs.adapter.RecyclerHolder
 import com.zb.baselibs.dialog.BaseDialogFragment
+import com.zb.baselibs.http.MainDataSource
 import com.zb.baselibs.views.touch.ItemTouchHelperAdapter
 import com.zb.baselibs.vm.BaseLibsViewModel
 import java.util.*
@@ -13,7 +17,9 @@ import java.util.*
 class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
     private var dialog: BaseDialogFragment? = null
     private var viewModel: BaseLibsViewModel? = null
+    private var mainDataSource: MainDataSource<ApiService>? = null
     private var selectPosition = -1
+    val userIdList = ArrayList<Long>()
 
     constructor(
         activity: AppCompatActivity?,
@@ -38,6 +44,17 @@ class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
         viewModel: BaseLibsViewModel?
     ) : super(activity, layoutId, list) {
         this.viewModel = viewModel
+    }
+
+    constructor(
+        activity: AppCompatActivity?,
+        layoutId: Int,
+        list: MutableList<T>?,
+        mainDataSource: MainDataSource<ApiService>?,
+        viewModel: BaseLibsViewModel?
+    ) : super(activity, layoutId, list) {
+        this.viewModel = viewModel
+        this.mainDataSource = mainDataSource
     }
 
     constructor(
@@ -70,6 +87,29 @@ class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
             }
             if (viewModel != null) {
                 holder.binding!!.setVariable(BR.viewModel, viewModel)
+            }
+
+            if (viewModel is FCLViewModel) {
+                if (!userIdList.contains((t as MemberInfo).userId)) {
+                    if ((viewModel as FCLViewModel).index == 2) {
+                        mainDataSource!!.enqueue({ otherInfo((t as MemberInfo).userId) }) {
+                            onSuccess {
+                                (t as MemberInfo).personalitySign = it.personalitySign
+                                userIdList.add((t as MemberInfo).userId)
+                                notifyItemChanged(position)
+                            }
+                        }
+                    } else {
+                        mainDataSource!!.enqueue({ contactNum((t as MemberInfo).userId) }) {
+                            onSuccess {
+                                (t as MemberInfo).beLikeQuantity = it.beLikeCount
+                                (t as MemberInfo).fansQuantity = it.fansCount
+                                userIdList.add((t as MemberInfo).userId)
+                                notifyItemChanged(position)
+                            }
+                        }
+                    }
+                }
             }
         }
     }

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.FCLViewModel" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.MemberInfo" />
+
+        <variable
+            name="position"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        onClickDelayed="@{v->viewModel.toMemberDetail(item,position)}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            defaultRes="@{R.mipmap.empty_icon}"
+            imageUrl="@{item.image}"
+            isCircle="@{true}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(100)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(100)}"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/tv_btn"
+            android:layout_toEndOf="@+id/iv_logo"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxEms="7"
+                    android:singleLine="true"
+                    android:text="@{item.nick}"
+                    android:textColor="@color/black_252"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="捡光就捡光就捡光就捡光就捡光就捡光就捡光就捡光就" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:background="@mipmap/icon_vip"
+                    android:visibility="@{item.memberType==2?View.VISIBLE:View.GONE}" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:background="@mipmap/icon_attest"
+                    android:visibility="@{item.faceAttest==1?View.VISIBLE:View.GONE}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal"
+                android:visibility="@{viewModel.index==2?View.GONE:View.VISIBLE}">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@{String.format(@string/be_like_count,item.beLikeQuantity)}"
+                    android:textColor="@color/black_4d4"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@{String.format(@string/fan_count,item.fansQuantity)}"
+                    android:textColor="@color/black_4d4"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:singleLine="true"
+                android:text="@{item.personalitySign}"
+                android:textColor="@color/black_4d4"
+                android:textSize="14sp"
+                android:visibility="@{viewModel.index==2?View.VISIBLE:View.GONE}" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_btn"
+            android:layout_width="80dp"
+            android:layout_height="26dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:background="@{viewModel.index==2?(item.hasLike?@drawable/btn_bg_black_efe_radius40: @drawable/btn_bg_purple_7a4_white_radius60):(item.isFollow?@drawable/btn_bg_black_efe_radius40: @drawable/btn_bg_purple_7a4_white_radius60)}"
+            android:gravity="center"
+            android:onClick="@{v->viewModel.clickMember(item,position)}"
+            android:text="@{LobsterObjectUtil.textName(item.hasLike, item.isFollow,viewModel.index,viewModel.otherUserId)}"
+            android:textColor="@{LobsterObjectUtil.textColor(item.hasLike, item.isFollow, viewModel.index)}"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</layout>

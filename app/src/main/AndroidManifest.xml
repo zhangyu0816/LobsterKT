@@ -130,6 +130,7 @@
         <activity android:name=".activity.MNImageBrowserActivity" />
         <activity android:name=".activity.RewardListActivity" />
         <activity android:name=".activity.ReportActivity" />
+        <activity android:name=".activity.FCLActivity" />
     </application>
 
 </manifest>

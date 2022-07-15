@@ -319,4 +319,35 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/Collect_contactNum")
     suspend fun contactNum(@Field("otherUserId") otherUserId: Long): HttpWrapBean<ContactNum>
+
+    // 我关注的
+    @FormUrlEncoded
+    @POST("api/Collect_myConcerns")
+    suspend fun myConcerns(@Field("pageNo") pageNo: Int): HttpWrapBean<ArrayList<MemberInfo>>
+
+    // 别人的关注
+    @FormUrlEncoded
+    @POST("api/Collect_otherConcerns")
+    suspend fun otherConcerns(
+        @Field("pageNo") pageNo: Int,
+        @Field("otherUserId") otherUserId: Long
+    ): HttpWrapBean<ArrayList<MemberInfo>>
+
+    // 我的粉丝
+    @FormUrlEncoded
+    @POST("api/Collect_myFans")
+    suspend fun myFans(@Field("pageNo") pageNo: Int): HttpWrapBean<ArrayList<MemberInfo>>
+
+    // 别人的粉丝
+    @FormUrlEncoded
+    @POST("api/Collect_otherFans")
+    suspend fun otherFans(
+        @Field("pageNo") pageNo: Int,
+        @Field("otherUserId") otherUserId: Long
+    ): HttpWrapBean<ArrayList<MemberInfo>>
+
+    // 喜欢我的人列表
+    @FormUrlEncoded
+    @POST("api/Pair_likeMeList")
+    suspend fun likeMeList(@FieldMap map: Map<String, String>): HttpWrapBean<ArrayList<LikeMe>>
 }

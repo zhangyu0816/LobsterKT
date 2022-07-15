@@ -46,6 +46,7 @@ class DiscoverDetailActivity : BaseLightColorActivity(R.color.red_ece) {
         super.onDestroy()
         viewModel.onDestroy()
     }
+
     /**
      * 支付成功
      */

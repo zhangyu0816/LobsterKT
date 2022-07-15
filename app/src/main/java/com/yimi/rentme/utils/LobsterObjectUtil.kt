@@ -97,4 +97,52 @@ object LobsterObjectUtil {
     fun getSuperLikeRes(isPair: Boolean): Int {
         return if (isPair) R.mipmap.like_tag_icon else R.mipmap.super_like_small_icon
     }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @JvmStatic
+    fun getNoData(position: Int, otherUserId: Long): Drawable {
+        return if (position == 0) {
+            if (otherUserId == 0L)
+                BaseApp.context.resources.getDrawable(R.mipmap.no_anth_data)
+            else
+                BaseApp.context.resources.getDrawable(R.mipmap.no_other_anth_data)
+        } else if (position == 1) {
+            if (otherUserId == 0L)
+                BaseApp.context.resources.getDrawable(R.mipmap.no_fan_data)
+            else
+                BaseApp.context.resources.getDrawable(R.mipmap.no_other_fan_data)
+        } else if (position == 2) {
+            BaseApp.context.resources.getDrawable(R.mipmap.no_belike_data)
+        } else {
+            BaseApp.context.resources.getDrawable(R.mipmap.no_visitor_data)
+        }
+    }
+
+    @JvmStatic
+    fun textName(hasLike: Boolean, isFollow: Boolean, index: Int, otherUserId: Long): String {
+        return if (index == 2) {
+            if (hasLike) "已喜欢" else "喜欢Ta"
+        } else if (index == 1) {
+            if (isFollow) "已关注" else if (otherUserId == 0L) "回粉" else "关注TA"
+        } else {
+            if (isFollow) "已关注" else "关注TA"
+        }
+    }
+
+    @JvmStatic
+    fun textColor(hasLike: Boolean, isFollow: Boolean, index: Int): Int {
+        return if (index == 2) {
+            if (hasLike) {
+                BaseApp.context.resources.getColor(R.color.black_827)
+            } else {
+                BaseApp.context.resources.getColor(R.color.purple_7a4)
+            }
+        } else {
+            if (isFollow) {
+                BaseApp.context.resources.getColor(R.color.black_827)
+            } else {
+                BaseApp.context.resources.getColor(R.color.purple_7a4)
+            }
+        }
+    }
 }

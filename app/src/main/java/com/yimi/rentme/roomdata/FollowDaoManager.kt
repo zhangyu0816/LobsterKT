@@ -10,7 +10,6 @@ data class FollowInfo(
     var otherUserId: Long = 0L,
     var nick: String = "", // 用户昵称
     var image: String = "", // 用户头像
-    var images: String = "", // 用户形象图
     var mainUserId: Long = 0L // 拥有的
 ) {
     @Ignore
