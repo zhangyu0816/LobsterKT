@@ -91,4 +91,10 @@ object LobsterObjectUtil {
             else -> BaseApp.context.resources.getDrawable(R.mipmap.reward_ranking_3)
         }
     }
+
+    // 超级喜欢
+    @JvmStatic
+    fun getSuperLikeRes(isPair: Boolean): Int {
+        return if (isPair) R.mipmap.like_tag_icon else R.mipmap.super_like_small_icon
+    }
 }

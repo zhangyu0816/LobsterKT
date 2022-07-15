@@ -46,7 +46,7 @@
                 defaultRes="@{R.mipmap.empty_icon}"
                 imageUrl='@{item.images.isEmpty()?item.image:item.images.split(",")[0]}'
                 onClickDelayed="@{v->viewModel.toDiscoverDetail(position)}"
-                roundSize="@{5}"
+                roundSize="@{5f}"
                 viewHeightSize="@{LobsterObjectUtil.getImageHeight(0.48f, item.width, item.height)}"
                 viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.48f)}"
                 android:layout_width="match_parent"

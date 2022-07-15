@@ -76,6 +76,7 @@ class MineApp : BaseApp() {
         var sex = 0
         var minAge = 0
         var maxAge = 100
+        var likeCount = 30
 
         @JvmField
         var isFirstOpen = false

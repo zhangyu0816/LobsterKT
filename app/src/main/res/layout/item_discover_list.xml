@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.MemberDetailViewModel" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.DiscoverInfo" />
+    </data>
+
+    <ImageView
+        defaultRes="@{R.mipmap.empty_icon}"
+        imageUrl='@{item.images.split(",")[0]}'
+        onClickDelayed="@{v->viewModel.toDiscoverDetail(item)}"
+        roundSize="@{5}"
+        viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(220)}"
+        viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(220)}"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="7dp" />
+</layout>

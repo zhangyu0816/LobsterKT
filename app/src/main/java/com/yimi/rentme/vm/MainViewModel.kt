@@ -69,6 +69,18 @@ class MainViewModel : BaseViewModel() {
         comType()
         firstOpenMemberPage()
         openedMemberPriceList()
+
+        if (getInteger(
+                "toLikeCount_${getLong("userId")}_${DateUtil.getNow(DateUtil.yyyy_MM_dd)}",
+                -1
+            ) == -1
+        )
+            MineApp.likeCount = MineApp.mineInfo.surplusToDaySuperLikeNumber
+        else
+            MineApp.likeCount = getInteger(
+                "toLikeCount_${getLong("userId")}_${DateUtil.getNow(DateUtil.yyyy_MM_dd)}",
+                -1
+            )
     }
 
     /**

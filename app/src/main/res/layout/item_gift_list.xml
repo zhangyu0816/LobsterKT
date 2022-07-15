@@ -38,7 +38,7 @@
             cornerType="@{6}"
             defaultRes="@{R.mipmap.empty_icon}"
             imageUrl="@{item.giftImage}"
-            roundSize="@{10}"
+            roundSize="@{10f}"
             viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.2f)}"
             viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.2f)}"
             android:layout_width="100dp"

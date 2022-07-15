@@ -1,5 +1,6 @@
 package com.yimi.rentme.activity
 
+import android.content.Intent
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcDiscoverDetailBinding
 import com.yimi.rentme.vm.DiscoverDetailViewModel
@@ -27,11 +28,24 @@ class DiscoverDetailActivity : BaseLightColorActivity(R.color.red_ece) {
         viewModel.initViewModel()
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        needEvenBus = true
+        val extras = intent!!.extras
+        if (extras != null)
+            viewModel.friendDynId = extras.getLong("friendDynId")
+        viewModel.initViewModel()
+    }
+
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.onDestroy()
+    }
     /**
      * 支付成功
      */

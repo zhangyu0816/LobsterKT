@@ -1,5 +1,6 @@
 package com.yimi.rentme.activity
 
+import android.content.Intent
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcMemberDetailBinding
 import com.yimi.rentme.vm.MemberDetailViewModel
@@ -24,5 +25,25 @@ class MemberDetailActivity : BaseScreenActivity() {
             viewModel.showLike = extras.getBoolean("showLike")
         }
         viewModel.initViewModel()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val extras = intent!!.extras
+        if (extras != null) {
+            viewModel.otherUserId = extras.getLong("otherUserId")
+            viewModel.showLike = extras.getBoolean("showLike")
+        }
+        viewModel.initViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.onDestroy()
     }
 }

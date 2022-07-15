@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.SuperLikeDF" />
+
+        <variable
+            name="myHead"
+            type="String" />
+
+        <variable
+            name="otherHead"
+            type="String" />
+
+        <variable
+            name="isPair"
+            type="boolean" />
+
+        <variable
+            name="mySex"
+            type="Integer" />
+
+        <variable
+            name="otherSex"
+            type="Integer" />
+
+        <variable
+            name="otherNick"
+            type="String" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/image_linear"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-100dp"
+            android:background="@mipmap/pair_success_title_icon"
+            android:visibility="@{isPair?View.VISIBLE:View.GONE}" />
+
+        <LinearLayout
+            android:id="@+id/image_linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="180dp"
+            android:background="@{isPair?@drawable/pair_success_icon:@drawable/pws_super_like}"
+            android:gravity="center"
+            android:orientation="horizontal"
+            tools:background="@drawable/pair_success_icon">
+
+            <RelativeLayout
+                android:id="@+id/other_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="-5dp">
+
+                <View
+                    viewHeightSize="@{ObjectUtils.getViewSizeByWidth(isPair?0.32f:0.25f)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidth(isPair?0.32f:0.25f)}"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@{otherSex==0?@drawable/circle_red:@drawable/circle_blue}" />
+
+                <ImageView
+                    imageUrl="@{otherHead}"
+                    isCircle="@{true}"
+                    viewHeightSize="@{ObjectUtils.getViewSizeByWidth(isPair?0.305f:0.235f)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidth(isPair?0.305f:0.235f)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/mine_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="-5dp">
+
+                <View
+                    viewHeightSize="@{ObjectUtils.getViewSizeByWidth(isPair?0.32f:0.25f)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidth(isPair?0.32f:0.25f)}"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@{mySex==0?@drawable/circle_red:@drawable/circle_blue}" />
+
+                <ImageView
+                    imageUrl="@{myHead}"
+                    isCircle="@{true}"
+                    viewHeightSize="@{ObjectUtils.getViewSizeByWidth(isPair?0.305f:0.235f)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidth(isPair?0.305f:0.235f)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image_linear"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="@{String.format(@string/we_like,otherNick)}"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="@{isPair?View.VISIBLE:View.GONE}"
+            tools:text="@string/we_like" />
+
+        <TextView
+            android:id="@+id/tv_send"
+            onClickDelayed="@{dialog::toChat}"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tv_like"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="68dp"
+            android:background="@drawable/gradient_purple_6d5_ae7"
+            android:gravity="center"
+            android:text="发送消息"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="@{isPair?View.VISIBLE:View.GONE}" />
+
+        <TextView
+            onClickDelayed="@{dialog::cancel}"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tv_send"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="68dp"
+            android:background="@drawable/btn_bg_white_radius40"
+            android:gravity="center"
+            android:text="继续探索"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="@{isPair?View.VISIBLE:View.GONE}" />
+
+        <ImageView
+            android:id="@+id/iv_super_like1"
+            imageRes="@{LobsterObjectUtil.getSuperLikeRes(isPair)}"
+            isCircle="@{true}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(150)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(150)}"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_alignTop="@+id/image_linear"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            tools:background="@mipmap/super_like_small_icon" />
+
+        <ImageView
+            android:id="@+id/iv_super_like2"
+            imageRes="@{LobsterObjectUtil.getSuperLikeRes(isPair)}"
+            isCircle="@{true}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(150)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(150)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/image_linear"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            tools:background="@mipmap/super_like_small_icon" />
+
+        <ImageView
+            android:id="@+id/iv_star1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_super_like1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/star_left_icon"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_star2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_super_like1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/star_right_icon"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_star3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_super_like1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/star_left_icon"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_star4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_super_like1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/star_right_icon"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_star5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_super_like1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/star_left_icon"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_star6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_super_like1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/star_right_icon"
+            android:visibility="gone" />
+    </RelativeLayout>
+</layout>

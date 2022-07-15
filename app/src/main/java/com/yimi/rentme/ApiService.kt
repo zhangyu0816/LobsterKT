@@ -304,4 +304,19 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/MemberOrder_payOrderForTran")
     suspend fun payOrderForTran(@Field("orderNumber") orderNumber: String): HttpWrapBean<OrderTran>
+
+    // 访问他人
+    @FormUrlEncoded
+    @POST("api/Interactive_otherUserInfoVisit")
+    suspend fun otherUserInfoVisit(@Field("otherUserId") otherUserId: Long): HttpWrapBean<Any?>
+
+    // 他人出租信息
+    @FormUrlEncoded
+    @POST("api/SimpleRent_otherInfo")
+    suspend fun otherRentInfo(@Field("otherUserId") otherUserId: Long): HttpWrapBean<RentInfo>
+
+    // 三合一接口 （返回关注数量、粉丝数量、喜欢数量、被喜欢数量）
+    @FormUrlEncoded
+    @POST("api/Collect_contactNum")
+    suspend fun contactNum(@Field("otherUserId") otherUserId: Long): HttpWrapBean<ContactNum>
 }

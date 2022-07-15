@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.SystemClock
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
@@ -32,12 +33,11 @@ import com.zb.baselibs.adapter.viewSize
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.bean.Ads
 import com.zb.baselibs.dialog.RemindDF
-import com.zb.baselibs.utils.DateUtil
 import com.zb.baselibs.utils.SCToastUtil
-import com.zb.baselibs.utils.getInteger
 import com.zb.baselibs.utils.getLong
 import com.zb.baselibs.views.imagebrowser.base.ImageBrowserConfig
 import com.zb.baselibs.views.xbanner.ImageLoader
+import com.zb.baselibs.views.xbanner.XBanner
 import com.zb.baselibs.views.xbanner.XUtils
 import com.zb.baselibs.views.xbanner.XUtils.showBanner
 import org.jetbrains.anko.startActivity
@@ -50,8 +50,12 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
     var friendDynId = 0L
     private var discoverInfo = DiscoverInfo()
     private var likeTypeInfo: LikeTypeInfo? = null
+
+    @SuppressLint("StaticFieldLeak")
+    private lateinit var xBanner: XBanner
     private val adList = ArrayList<Ads>()
     private val sourceImageList = ArrayList<String>()
+    private var bannerWidth = BaseApp.W
 
     lateinit var rewardAdapter: BaseAdapter<Reward>
     private val rewardList = ArrayList<Reward>()
@@ -70,6 +74,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
     private var translateY: ObjectAnimator? = null
 
     override fun initViewModel() {
+        adList.clear()
         binding.title = "动态详情"
         binding.discoverInfo = DiscoverInfo()
         binding.memberInfo = MemberInfo()
@@ -85,6 +90,15 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
         rewardAdapter = BaseAdapter(activity, R.layout.item_reward, rewardList, this)
         // 评论
         reviewAdapter = BaseAdapter(activity, R.layout.item_review, reviewList, this)
+        xBanner = XBanner(activity)
+
+        // 发送
+        binding.edContent.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                dynDoReview()
+            }
+            true
+        }
 
         dynDetail()
     }
@@ -97,6 +111,11 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
     fun onResume() {
         if (discoverInfo.friendDynId != 0L)
             attentionStatus()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        xBanner.releaseBanner()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -310,7 +329,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
             return
         }
         isLike(binding.ivLike)
-        if (getInteger("toLikeCount_${getLong("userId")}_${DateUtil.getNow(DateUtil.yyyy_MM_dd)}") == 0 && MineApp.mineInfo.memberType == 1) {
+        if (MineApp.likeCount == 0 && MineApp.mineInfo.memberType == 1) {
             VipAdDF(activity).setType(6).setMainDataSource(mainDataSource)
                 .show(activity.supportFragmentManager)
             SCToastUtil.showToast(activity, "今日喜欢次数已用完", 2)
@@ -323,21 +342,24 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
      * 动态图片
      */
     private fun setBanner() {
-        binding.xBanner.viewSize(BaseApp.W, BaseApp.W)
-        binding.xBanner.showBanner(
-            adList, 0,
-            ImageLoader { context, ads, image, position ->
+        binding.bannerLinear.removeAllViews()
+        binding.bannerLinear.addView(xBanner)
+        bannerWidth = binding.bannerLinear.width
+        val height = (bannerWidth * 1.2f).toInt()
+        binding.bannerLinear.viewSize(bannerWidth, height)
+        xBanner.viewSize(bannerWidth, height)
+        xBanner.showBanner(
+            adList, 1, ImageLoader { context, ads, image, position ->
                 run {
                     loadImage(
-                        image!!, ads!!.smallImage, 0, 0, BaseApp.W,
-                        BaseApp.W, false, 0f, false, 0, false, 0f
+                        image!!, ads!!.smallImage, 0, R.mipmap.empty_icon, bannerWidth,
+                        height, false, 10f, false, 0, false, 0f
                     )
                 }
             },
             object : XUtils.ClickCallBack {
                 override fun clickItem(position: Int, imageList: ArrayList<String>?) {
-                    if (discoverInfo.friendDynId == 0L) return
-                    MyMNImage.setIndex(0).setSourceImageList(sourceImageList)
+                    MyMNImage.setIndex(position).setSourceImageList(sourceImageList)
                         .setTransformType(ImageBrowserConfig.TransformType.TransformDepthPage)
                         .setDiscoverInfo(discoverInfo)
                         .setDiscoverClickListener(object : OnDiscoverClickListener {
@@ -733,50 +755,43 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
     private fun makeEvaluate(likeOtherStatus: Int) {
         mainDataSource.enqueue({ makeEvaluate(discoverInfo.userId, likeOtherStatus) }) {
             onSuccess {
-                val myHead: String = MineApp.mineInfo.image
-                val otherHead: String = binding.memberInfo!!.image
+                val myHead = MineApp.mineInfo.image
+                val otherHead = binding.memberInfo!!.image
                 // 1喜欢成功 2匹配成功 3喜欢次数用尽
                 if (it == 1) {
                     // 不喜欢成功  喜欢成功  超级喜欢成功
                     when (likeOtherStatus) {
                         0 -> activity.finish()
                         1 -> {
-//                            LocalBroadcastManager.getInstance(MineApp.sContext)
-//                                .sendBroadcast(Intent("lobster_isLike"))
-//                            LocalBroadcastManager.getInstance(MineApp.sContext)
-//                                .sendBroadcast(Intent("lobster_updateFCL"))
+                            EventBus.getDefault().post("更新喜欢次数", "lobsterUpdateLikeCount")
+                            EventBus.getDefault().post("更新关注/粉丝/喜欢", "lobsterUpdateFCL")
                             closeBtn(binding.likeLayout, 1)
                             SCToastUtil.showToast(activity, "已喜欢成功", 2)
                         }
                         2 -> {
+                            EventBus.getDefault().post("更新关注/粉丝/喜欢", "lobsterUpdateFCL")
                             closeBtn(binding.likeLayout, 2)
-//                            LocalBroadcastManager.getInstance(MineApp.sContext)
-//                                .sendBroadcast(Intent("lobster_updateFCL"))
-//                            SuperLikePW(
-//                                binding.getRoot(),
-//                                myHead,
-//                                otherHead,
-//                                MineApp.mineInfo.getSex(),
-//                                memberInfo.getSex()
-//                            )
+                            SuperLikeDF(activity).setMyHead(myHead).setOtherHead(otherHead)
+                                .setMySex(MineApp.mineInfo.sex)
+                                .setOtherSex(binding.memberInfo!!.sex)
+                                .show(activity.supportFragmentManager)
                         }
                     }
                 } else if (it == 2) {
                     // 匹配成功
-//                    SuperLikePW(
-//                        binding.getRoot(),
-//                        myHead,
-//                        otherHead,
-//                        MineApp.mineInfo.getSex(),
-//                        memberInfo.getSex(),
-//                        memberInfo.getNick()
-//                    ) { ActivityUtils.getChatActivity(discoverInfo.getUserId(), false) }
-//                    LocalBroadcastManager.getInstance(MineApp.sContext)
-//                        .sendBroadcast(Intent("lobster_pairList"))
-//                    LocalBroadcastManager.getInstance(MineApp.sContext)
-//                        .sendBroadcast(Intent("lobster_isLike"))
-//                    LocalBroadcastManager.getInstance(MineApp.sContext)
-//                        .sendBroadcast(Intent("lobster_updateFCL"))
+                    SuperLikeDF(activity).setMyHead(myHead).setOtherHead(otherHead)
+                        .setMySex(MineApp.mineInfo.sex)
+                        .setOtherSex(binding.memberInfo!!.sex)
+                        .setOtherNick(binding.memberInfo!!.nick)
+                        .setCallBack(object : SuperLikeDF.CallBack {
+                            override fun sure() {
+//                                ActivityUtils.getChatActivity(discoverInfo.getUserId(), false)
+                            }
+                        })
+                        .show(activity.supportFragmentManager)
+                    EventBus.getDefault().post("更新喜欢次数", "lobsterUpdateLikeCount")
+                    EventBus.getDefault().post("更新关注/粉丝/喜欢", "lobsterUpdateFCL")
+                    EventBus.getDefault().post("更新匹配列表", "lobsterUpdatePairList")
                     closeBtn(binding.likeLayout, 2)
                 } else if (it == 3) {
                     // 喜欢次数用尽
@@ -851,10 +866,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
             }
         } else {
             BaseApp.fixedThreadPool.execute {
-                MineApp.likeTypeDaoManager.updateLikeType(
-                    likeType,
-                    discoverInfo.userId
-                )
+                MineApp.likeTypeDaoManager.updateLikeType(likeType, discoverInfo.userId)
             }
         }
         translateY = ObjectAnimator.ofFloat(view, "translationY", 0f, 1000f).setDuration(500)
@@ -865,6 +877,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 translateY!!.cancel()
                 translateY = null
                 binding.likeType = likeType
+                binding.isPlay = false
             }
         }
     }

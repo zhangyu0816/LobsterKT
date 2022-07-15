@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.MemberDetailViewModel" />
+
+        <variable
+            name="item"
+            type="String" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="isSelect"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.16f)}"
+        viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.16f)}"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:onClick="@{v->viewModel.selectImage(position)}">
+
+        <ImageView
+            imageRes="@{R.mipmap.empty_icon}"
+            roundSize="@{4f}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.14f)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.14f)}"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true" />
+
+        <ImageView
+            defaultRes="@{R.mipmap.empty_icon}"
+            imageUrl="@{item}"
+            roundSize="@{4f}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.13f)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.13f)}"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true" />
+
+        <View
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.14f)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.14f)}"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:alpha="0.5"
+            android:background="@drawable/btn_bg_black_radius5"
+            android:visibility="@{isSelect?View.GONE:View.VISIBLE}" />
+    </RelativeLayout>
+</layout>

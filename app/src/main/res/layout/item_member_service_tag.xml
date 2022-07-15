@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <variable
+            name="item"
+            type="String" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@drawable/btn_bg_black_c3b_white_radius60"
+            android:gravity="center"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:textStyle="bold"
+            android:text="@{item}"
+            android:textColor="#333333"
+            android:textSize="14sp" />
+    </RelativeLayout>
+</layout>

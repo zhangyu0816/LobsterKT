@@ -44,4 +44,13 @@
     <string name="price_save">省%.1f元</string>
     <string name="open_btn_month">%d个月VIP ¥%.2f 立即获取特权</string>
     <string name="open_btn">¥%.2f 获取VIP特权</string>
+    <string name="we_like">你和%s已互相喜欢</string>
+    <string name="user_id_1">虾菇号 %d</string>
+    <string name="sign_content">无个性不签名！</string>
+    <string name="att_0">她的关注</string>
+    <string name="att_1">他的关注</string>
+    <string name="fans_0">她的粉丝</string>
+    <string name="fans_1">他的粉丝</string>
+    <string name="like_0">喜欢她</string>
+    <string name="like_1">喜欢他</string>
 </resources>

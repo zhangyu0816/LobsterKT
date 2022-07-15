@@ -87,7 +87,7 @@
 
             <ImageView
                 imageUrl="@{imageUrl}"
-                roundSize="@{10}"
+                roundSize="@{10f}"
                 viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.5f)}"
                 viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.5f)}"
                 android:layout_width="match_parent"

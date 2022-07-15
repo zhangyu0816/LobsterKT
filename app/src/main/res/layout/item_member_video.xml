@@ -44,7 +44,7 @@
                 android:id="@+id/roundImageView"
                 defaultRes="@{R.mipmap.empty_icon}"
                 imageUrl='@{item.images.empty?item.videoUrl:item.images.split(",")[0]}'
-                roundSize="@{5}"
+                roundSize="@{5f}"
                 viewHeightSize="@{LobsterObjectUtil.getLogoHeight(0.48f)}"
                 viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.48f)}"
                 android:layout_width="match_parent"
