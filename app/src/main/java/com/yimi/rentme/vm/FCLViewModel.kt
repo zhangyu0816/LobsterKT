@@ -11,13 +11,17 @@ import com.yimi.rentme.activity.MemberDetailActivity
 import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.MemberInfo
 import com.yimi.rentme.databinding.AcFclBinding
+import com.yimi.rentme.dialog.SuperLikeDF
 import com.yimi.rentme.dialog.VipAdDF
 import com.yimi.rentme.roomdata.FollowInfo
+import com.yimi.rentme.roomdata.LikeTypeInfo
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
+import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.utils.getLong
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.startActivity
+import org.simple.eventbus.EventBus
 
 class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
 
@@ -151,13 +155,15 @@ class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                         item.hasLike =
                             MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) != null
                         val start = memberInfoList.size
+                        memberInfoList.add(item)
+                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
+
                         val followInfo = FollowInfo()
                         followInfo.image = item.image
                         followInfo.nick = item.nick
                         followInfo.otherUserId = item.userId
                         followInfo.mainUserId = getLong("userId")
                         MineApp.followDaoManager.insert(followInfo)
-                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
                     }
                 }
             }
@@ -184,9 +190,23 @@ class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
                 binding.noData = false
-                val start = memberInfoList.size
-                memberInfoList.addAll(it)
-                adapter.notifyItemRangeChanged(start, memberInfoList.size)
+                for (item in it) {
+                    BaseApp.fixedThreadPool.execute {
+                        item.isFollow = true
+                        item.hasLike =
+                            MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) != null
+                        val start = memberInfoList.size
+                        memberInfoList.add(item)
+                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
+
+                        val followInfo = FollowInfo()
+                        followInfo.image = item.image
+                        followInfo.nick = item.nick
+                        followInfo.otherUserId = item.userId
+                        followInfo.mainUserId = getLong("userId")
+                        MineApp.followDaoManager.insert(followInfo)
+                    }
+                }
             }
             onFailed {
                 dismissLoading()
@@ -211,9 +231,23 @@ class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
                 binding.noData = false
-                val start = memberInfoList.size
-                memberInfoList.addAll(it)
-                adapter.notifyItemRangeChanged(start, memberInfoList.size)
+                for (item in it) {
+                    BaseApp.fixedThreadPool.execute {
+                        item.isFollow = true
+                        item.hasLike =
+                            MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) != null
+                        val start = memberInfoList.size
+                        memberInfoList.add(item)
+                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
+
+                        val followInfo = FollowInfo()
+                        followInfo.image = item.image
+                        followInfo.nick = item.nick
+                        followInfo.otherUserId = item.userId
+                        followInfo.mainUserId = getLong("userId")
+                        MineApp.followDaoManager.insert(followInfo)
+                    }
+                }
             }
             onFailed {
                 dismissLoading()
@@ -238,9 +272,24 @@ class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
                 binding.noData = false
-                val start = memberInfoList.size
-                memberInfoList.addAll(it)
-                adapter.notifyItemRangeChanged(start, memberInfoList.size)
+                for (item in it) {
+                    BaseApp.fixedThreadPool.execute {
+                        item.isFollow = true
+                        item.hasLike =
+                            MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) != null
+                        val start = memberInfoList.size
+                        memberInfoList.add(item)
+                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
+
+                        val followInfo = FollowInfo()
+                        followInfo.image = item.image
+                        followInfo.nick = item.nick
+                        followInfo.otherUserId = item.userId
+                        followInfo.mainUserId = getLong("userId")
+                        MineApp.followDaoManager.insert(followInfo)
+
+                    }
+                }
             }
             onFailed {
                 dismissLoading()
@@ -256,13 +305,276 @@ class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
     /**
      * 喜欢我的
      */
-    private fun likeMeList(){
+    private fun likeMeList() {
         if (pageNo == 1)
             showLoading(Job(), "喜欢我的...")
-        val map = HashMap<String,String>()
+        val map = HashMap<String, String>()
         map["pageNo"] = pageNo.toString()
-        mainDataSource.enqueue({likeMeList(map)}){
-            
+        mainDataSource.enqueue({ likeMeList(map) }) {
+            onSuccess {
+                dismissLoading()
+                binding.refresh.finishRefresh()
+                binding.refresh.finishLoadMore()
+                binding.noData = false
+                for (item in it) {
+                    BaseApp.fixedThreadPool.execute {
+                        val memberInfo = MemberInfo()
+                        memberInfo.isFollow = true
+                        memberInfo.hasLike =
+                            MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) != null
+                        memberInfo.userId = item.userId
+                        memberInfo.image = item.headImage
+                        memberInfo.nick = item.nick
+                        val start = memberInfoList.size
+                        memberInfoList.add(memberInfo)
+                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
+
+                        val followInfo = FollowInfo()
+                        followInfo.image = item.headImage
+                        followInfo.nick = item.nick
+                        followInfo.otherUserId = item.userId
+                        followInfo.mainUserId = getLong("userId")
+                        MineApp.followDaoManager.insert(followInfo)
+                    }
+                }
+            }
+            onFailed {
+                dismissLoading()
+                binding.refresh.setEnableLoadMore(false)
+                binding.refresh.finishRefresh()
+                binding.refresh.finishLoadMore()
+                if (it.isNoData)
+                    binding.noData = memberInfoList.size == 0
+            }
+        }
+    }
+
+    /**
+     * 看过我的
+     */
+    private fun visitorBySeeMeList() {
+        if (pageNo == 1)
+            showLoading(Job(), "看过我的...")
+        mainDataSource.enqueue({ visitorBySeeMeList(pageNo) }) {
+            onSuccess {
+                dismissLoading()
+                binding.refresh.finishRefresh()
+                binding.refresh.finishLoadMore()
+                binding.noData = false
+                for (item in it) {
+                    BaseApp.fixedThreadPool.execute {
+                        item.isFollow = true
+                        item.hasLike =
+                            MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) != null
+                        val start = memberInfoList.size
+                        memberInfoList.add(item)
+                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
+
+                        val followInfo = FollowInfo()
+                        followInfo.image = item.image
+                        followInfo.nick = item.nick
+                        followInfo.otherUserId = item.userId
+                        followInfo.mainUserId = getLong("userId")
+                        MineApp.followDaoManager.insert(followInfo)
+
+                    }
+                }
+            }
+            onFailed {
+                dismissLoading()
+                binding.refresh.setEnableLoadMore(false)
+                binding.refresh.finishRefresh()
+                binding.refresh.finishLoadMore()
+                if (it.isNoData)
+                    binding.noData = memberInfoList.size == 0
+            }
+        }
+    }
+
+    /**
+     * 喜欢
+     */
+    private fun makeEvaluate(otherUserId: Long) {
+        mainDataSource.enqueueLoading({ makeEvaluate(otherUserId, 1) }, "提交喜欢信息...") {
+            onSuccess {
+                // 1喜欢成功 2匹配成功 3喜欢次数用尽
+                val myHead = MineApp.mineInfo.image
+                val otherHead = memberInfoList[_selectIndex].image
+                when (it) {
+                    1 -> {
+                        BaseApp.fixedThreadPool.execute {
+                            if (MineApp.likeTypeDaoManager.getLikeTypeInfo(otherUserId) == null) {
+                                val likeTypeInfo = LikeTypeInfo()
+                                likeTypeInfo.likeType = 1
+                                likeTypeInfo.otherUserId = otherUserId
+                                likeTypeInfo.mainUserId = getLong("userId")
+                                MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                            } else {
+                                MineApp.likeTypeDaoManager.updateLikeType(1, otherUserId)
+                            }
+                            activity.runOnUiThread {
+                                memberInfoList[_selectIndex].hasLike = true
+                                adapter.notifyItemChanged(_selectIndex)
+                            }
+                        }
+                    }
+                    2 -> {
+                        SuperLikeDF(activity).setMyHead(myHead).setOtherHead(otherHead)
+                            .setMySex(MineApp.mineInfo.sex)
+                            .setOtherSex(memberInfoList[_selectIndex].sex)
+                            .setOtherNick(memberInfoList[_selectIndex].nick)
+                            .setCallBack(object : SuperLikeDF.CallBack {
+                                override fun sure() {
+//                                ActivityUtils.getChatActivity(discoverInfo.getUserId(), false)
+                                }
+                            })
+                            .show(activity.supportFragmentManager)
+                        BaseApp.fixedThreadPool.execute {
+                            if (MineApp.likeTypeDaoManager.getLikeTypeInfo(otherUserId) == null) {
+                                val likeTypeInfo = LikeTypeInfo()
+                                likeTypeInfo.likeType = 1
+                                likeTypeInfo.otherUserId = otherUserId
+                                likeTypeInfo.mainUserId = getLong("userId")
+                                MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                            } else {
+                                MineApp.likeTypeDaoManager.updateLikeType(1, otherUserId)
+                            }
+                            activity.runOnUiThread {
+                                memberInfoList[_selectIndex].hasLike = true
+                                adapter.notifyItemChanged(_selectIndex)
+                            }
+                        }
+                        EventBus.getDefault().post("更新喜欢次数", "lobsterUpdateLikeCount")
+                        EventBus.getDefault().post("更新匹配列表", "lobsterUpdatePairList")
+                    }
+                    3 -> {
+                        VipAdDF(activity).setType(6).setMainDataSource(mainDataSource)
+                            .show(activity.supportFragmentManager)
+                        SCToastUtil.showToast(activity, "今日喜欢次数已用完", 2)
+                    }
+                    5 -> {
+                        BaseApp.fixedThreadPool.execute {
+                            if (MineApp.likeTypeDaoManager.getLikeTypeInfo(otherUserId) == null) {
+                                val likeTypeInfo = LikeTypeInfo()
+                                likeTypeInfo.likeType = 1
+                                likeTypeInfo.otherUserId = otherUserId
+                                likeTypeInfo.mainUserId = getLong("userId")
+                                MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                            } else {
+                                MineApp.likeTypeDaoManager.updateLikeType(1, otherUserId)
+                            }
+                            activity.runOnUiThread {
+                                memberInfoList[_selectIndex].hasLike = true
+                                adapter.notifyItemChanged(_selectIndex)
+                            }
+                        }
+                        SCToastUtil.showToast(activity, "你已喜欢过对方", 2)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 解除匹配
+     */
+    private fun relievePair(otherUserId: Long) {
+        mainDataSource.enqueueLoading({ relievePair(otherUserId) }, "解除匹配...") {
+            onSuccess {
+                BaseApp.fixedThreadPool.execute {
+                    MineApp.likeTypeDaoManager.deleteLikeTypeInfo(otherUserId)
+                    activity.runOnUiThread {
+                        memberInfoList.removeAt(_selectIndex)
+                        adapter.notifyItemRemoved(_selectIndex)
+                        adapter.notifyItemRangeChanged(
+                            _selectIndex, memberInfoList.size - _selectIndex
+                        )
+                        EventBus.getDefault()
+                            .post("${otherUserId},true", "lobsterRelievePair") // 解除匹配
+                    }
+                }
+            }
+        }
+    }
+
+    private fun attentionOther(otherUserId: Long) {
+        mainDataSource.enqueue({ attentionOther(otherUserId) }) {
+            onSuccess {
+                BaseApp.fixedThreadPool.execute {
+                    val memberInfo = memberInfoList[_selectIndex]
+                    memberInfo.fansQuantity = memberInfo.fansQuantity + 1
+                    memberInfo.isFollow = true
+
+                    val followInfo = FollowInfo()
+                    followInfo.image = memberInfo.image
+                    followInfo.nick = memberInfo.nick
+                    followInfo.otherUserId = otherUserId
+                    followInfo.mainUserId = getLong("userId")
+                    MineApp.followDaoManager.insert(followInfo)
+
+                    activity.runOnUiThread {
+                        adapter.notifyItemChanged(_selectIndex)
+                    }
+                }
+                EventBus.getDefault().post(true, "lobsterUpdateFollow")
+            }
+            onFailToast { false }
+            onFailed {
+                if (it.errorMessage == "已经关注过") {
+                    BaseApp.fixedThreadPool.execute {
+                        val memberInfo = memberInfoList[_selectIndex]
+                        memberInfo.isFollow = true
+
+                        val followInfo = FollowInfo()
+                        followInfo.image = memberInfo.image
+                        followInfo.nick = memberInfo.nick
+                        followInfo.otherUserId = otherUserId
+                        followInfo.mainUserId = getLong("userId")
+                        MineApp.followDaoManager.insert(followInfo)
+
+                        activity.runOnUiThread {
+                            adapter.notifyItemChanged(_selectIndex)
+                        }
+                    }
+                    EventBus.getDefault().post(true, "lobsterUpdateFollow")
+                }
+            }
+        }
+    }
+
+    /**
+     * 取消关注
+     */
+    private fun cancelAttention(otherUserId: Long) {
+        mainDataSource.enqueue({ cancelAttention(otherUserId) }) {
+            onSuccess {
+                BaseApp.fixedThreadPool.execute {
+                    val memberInfo = memberInfoList[_selectIndex]
+                    memberInfo.isFollow = false
+                    memberInfo.fansQuantity = memberInfo.fansQuantity - 1
+
+                    MineApp.followDaoManager.deleteFollowInfo(otherUserId)
+                    activity.runOnUiThread {
+                        adapter.notifyItemChanged(_selectIndex)
+                    }
+                }
+                EventBus.getDefault().post(false, "lobsterUpdateFollow")
+            }
+            onFailToast { false }
+            onFailed {
+                if (it.errorMessage == "已经取消了") {
+                    BaseApp.fixedThreadPool.execute {
+                        val memberInfo = memberInfoList[_selectIndex]
+                        memberInfo.isFollow = false
+
+                        MineApp.followDaoManager.deleteFollowInfo(otherUserId)
+                        activity.runOnUiThread {
+                            adapter.notifyItemChanged(_selectIndex)
+                        }
+                    }
+                    EventBus.getDefault().post(false, "lobsterUpdateFollow")
+                }
+            }
         }
     }
 }

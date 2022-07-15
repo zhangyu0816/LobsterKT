@@ -350,4 +350,14 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/Pair_likeMeList")
     suspend fun likeMeList(@FieldMap map: Map<String, String>): HttpWrapBean<ArrayList<LikeMe>>
+
+    // 看过我的
+    @FormUrlEncoded
+    @POST("api/Interactive_visitorBySeeMeList")
+    suspend fun visitorBySeeMeList(@Field("pageNo") pageNo: Int): HttpWrapBean<ArrayList<MemberInfo>>
+
+    // 解除匹配
+    @FormUrlEncoded
+    @POST("api/Pair_relievePair")
+    suspend fun relievePair(@Field("otherUserId") otherUserId: Long): HttpWrapBean<Any?>
 }
