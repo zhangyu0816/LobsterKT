@@ -1,6 +1,7 @@
 package com.yimi.rentme.vm.fragment
 
 import android.annotation.SuppressLint
+import android.os.SystemClock
 import android.view.View
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
@@ -105,7 +106,12 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 updateDiscoverInfoList(it)
             }
             onFailed {
-                dismissLoading()
+                BaseApp.fixedThreadPool.execute {
+                    SystemClock.sleep(2000)
+                    activity.runOnUiThread {
+                        dismissLoading()
+                    }
+                }
                 binding.refresh.setEnableLoadMore(false)
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
@@ -147,7 +153,12 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 updateDiscoverInfoList(it)
             }
             onFailed {
-                dismissLoading()
+                BaseApp.fixedThreadPool.execute {
+                    SystemClock.sleep(2000)
+                    activity.runOnUiThread {
+                        dismissLoading()
+                    }
+                }
                 binding.refresh.setEnableLoadMore(false)
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
@@ -213,7 +224,12 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
             }
         }
 
-        dismissLoading()
+        BaseApp.fixedThreadPool.execute {
+            SystemClock.sleep(2000)
+            activity.runOnUiThread {
+                dismissLoading()
+            }
+        }
         binding.refresh.finishRefresh()
         binding.refresh.finishLoadMore()
     }

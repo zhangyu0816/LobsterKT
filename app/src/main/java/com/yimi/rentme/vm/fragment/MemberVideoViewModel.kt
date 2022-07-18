@@ -1,6 +1,7 @@
 package com.yimi.rentme.vm.fragment
 
 import android.annotation.SuppressLint
+import android.os.SystemClock
 import android.view.View
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
@@ -116,12 +117,22 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
                         }
                     }
                 }
-                dismissLoading()
+                BaseApp.fixedThreadPool.execute {
+                    SystemClock.sleep(2000)
+                    activity.runOnUiThread {
+                        dismissLoading()
+                    }
+                }
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
             }
             onFailed {
-                dismissLoading()
+                BaseApp.fixedThreadPool.execute {
+                    SystemClock.sleep(2000)
+                    activity.runOnUiThread {
+                        dismissLoading()
+                    }
+                }
                 binding.refresh.setEnableLoadMore(false)
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
@@ -157,12 +168,22 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
                         }
                     }
                 }
-                dismissLoading()
+                BaseApp.fixedThreadPool.execute {
+                    SystemClock.sleep(2000)
+                    activity.runOnUiThread {
+                        dismissLoading()
+                    }
+                }
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
             }
             onFailed {
-                dismissLoading()
+                BaseApp.fixedThreadPool.execute {
+                    SystemClock.sleep(2000)
+                    activity.runOnUiThread {
+                        dismissLoading()
+                    }
+                }
                 binding.refresh.setEnableLoadMore(false)
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()

@@ -39,8 +39,10 @@ class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
         binding.isVip = MineApp.mineInfo.memberType == 2
         binding.noData = true
         binding.dataSize = 0
-        adapter = BaseAdapter(activity, R.layout.item_fcl_member, memberInfoList, this)
+        adapter =
+            BaseAdapter(activity, R.layout.item_fcl_member, memberInfoList, mainDataSource, this)
         adapter.userIdList.clear()
+        getData()
     }
 
     override fun back(view: View) {
@@ -152,18 +154,28 @@ class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                 for (item in it) {
                     BaseApp.fixedThreadPool.execute {
                         item.isFollow = true
-                        item.hasLike =
-                            MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) != null
+                        item.hasLike = true
                         val start = memberInfoList.size
                         memberInfoList.add(item)
-                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
+                        activity.runOnUiThread {
+                            adapter.notifyItemRangeChanged(start, memberInfoList.size)
+                        }
 
-                        val followInfo = FollowInfo()
-                        followInfo.image = item.image
-                        followInfo.nick = item.nick
-                        followInfo.otherUserId = item.userId
-                        followInfo.mainUserId = getLong("userId")
-                        MineApp.followDaoManager.insert(followInfo)
+                        if (MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) == null) {
+                            val likeTypeInfo = LikeTypeInfo()
+                            likeTypeInfo.likeType = 1
+                            likeTypeInfo.otherUserId = item.userId
+                            likeTypeInfo.mainUserId = getLong("userId")
+                            MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                        }
+                        if (MineApp.followDaoManager.getFollowInfo(item.userId) == null) {
+                            val followInfo = FollowInfo()
+                            followInfo.image = item.image
+                            followInfo.nick = item.nick
+                            followInfo.otherUserId = item.userId
+                            followInfo.mainUserId = getLong("userId")
+                            MineApp.followDaoManager.insert(followInfo)
+                        }
                     }
                 }
             }
@@ -192,19 +204,14 @@ class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                 binding.noData = false
                 for (item in it) {
                     BaseApp.fixedThreadPool.execute {
-                        item.isFollow = true
+                        item.isFollow = MineApp.followDaoManager.getFollowInfo(item.userId) != null
                         item.hasLike =
                             MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) != null
                         val start = memberInfoList.size
                         memberInfoList.add(item)
-                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
-
-                        val followInfo = FollowInfo()
-                        followInfo.image = item.image
-                        followInfo.nick = item.nick
-                        followInfo.otherUserId = item.userId
-                        followInfo.mainUserId = getLong("userId")
-                        MineApp.followDaoManager.insert(followInfo)
+                        activity.runOnUiThread {
+                            adapter.notifyItemRangeChanged(start, memberInfoList.size)
+                        }
                     }
                 }
             }
@@ -234,18 +241,27 @@ class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                 for (item in it) {
                     BaseApp.fixedThreadPool.execute {
                         item.isFollow = true
-                        item.hasLike =
-                            MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) != null
+                        item.hasLike = true
                         val start = memberInfoList.size
                         memberInfoList.add(item)
-                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
-
-                        val followInfo = FollowInfo()
-                        followInfo.image = item.image
-                        followInfo.nick = item.nick
-                        followInfo.otherUserId = item.userId
-                        followInfo.mainUserId = getLong("userId")
-                        MineApp.followDaoManager.insert(followInfo)
+                        activity.runOnUiThread {
+                            adapter.notifyItemRangeChanged(start, memberInfoList.size)
+                        }
+                        if (MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) == null) {
+                            val likeTypeInfo = LikeTypeInfo()
+                            likeTypeInfo.likeType = 1
+                            likeTypeInfo.otherUserId = item.userId
+                            likeTypeInfo.mainUserId = getLong("userId")
+                            MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                        }
+                        if (MineApp.followDaoManager.getFollowInfo(item.userId) == null) {
+                            val followInfo = FollowInfo()
+                            followInfo.image = item.image
+                            followInfo.nick = item.nick
+                            followInfo.otherUserId = item.userId
+                            followInfo.mainUserId = getLong("userId")
+                            MineApp.followDaoManager.insert(followInfo)
+                        }
                     }
                 }
             }
@@ -274,20 +290,14 @@ class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                 binding.noData = false
                 for (item in it) {
                     BaseApp.fixedThreadPool.execute {
-                        item.isFollow = true
+                        item.isFollow = MineApp.followDaoManager.getFollowInfo(item.userId) != null
                         item.hasLike =
                             MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) != null
                         val start = memberInfoList.size
                         memberInfoList.add(item)
-                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
-
-                        val followInfo = FollowInfo()
-                        followInfo.image = item.image
-                        followInfo.nick = item.nick
-                        followInfo.otherUserId = item.userId
-                        followInfo.mainUserId = getLong("userId")
-                        MineApp.followDaoManager.insert(followInfo)
-
+                        activity.runOnUiThread {
+                            adapter.notifyItemRangeChanged(start, memberInfoList.size)
+                        }
                     }
                 }
             }
@@ -320,21 +330,31 @@ class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                     BaseApp.fixedThreadPool.execute {
                         val memberInfo = MemberInfo()
                         memberInfo.isFollow = true
-                        memberInfo.hasLike =
-                            MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) != null
+                        memberInfo.hasLike = true
                         memberInfo.userId = item.userId
                         memberInfo.image = item.headImage
                         memberInfo.nick = item.nick
                         val start = memberInfoList.size
                         memberInfoList.add(memberInfo)
-                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
+                        activity.runOnUiThread {
+                            adapter.notifyItemRangeChanged(start, memberInfoList.size)
+                        }
 
-                        val followInfo = FollowInfo()
-                        followInfo.image = item.headImage
-                        followInfo.nick = item.nick
-                        followInfo.otherUserId = item.userId
-                        followInfo.mainUserId = getLong("userId")
-                        MineApp.followDaoManager.insert(followInfo)
+                        if (MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) == null) {
+                            val likeTypeInfo = LikeTypeInfo()
+                            likeTypeInfo.likeType = 1
+                            likeTypeInfo.otherUserId = item.userId
+                            likeTypeInfo.mainUserId = getLong("userId")
+                            MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                        }
+                        if (MineApp.followDaoManager.getFollowInfo(item.userId) == null) {
+                            val followInfo = FollowInfo()
+                            followInfo.image = item.headImage
+                            followInfo.nick = item.nick
+                            followInfo.otherUserId = item.userId
+                            followInfo.mainUserId = getLong("userId")
+                            MineApp.followDaoManager.insert(followInfo)
+                        }
                     }
                 }
             }
@@ -364,19 +384,28 @@ class FCLViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                 for (item in it) {
                     BaseApp.fixedThreadPool.execute {
                         item.isFollow = true
-                        item.hasLike =
-                            MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) != null
+                        item.hasLike = true
                         val start = memberInfoList.size
                         memberInfoList.add(item)
-                        adapter.notifyItemRangeChanged(start, memberInfoList.size)
+                        activity.runOnUiThread {
+                            adapter.notifyItemRangeChanged(start, memberInfoList.size)
+                        }
 
-                        val followInfo = FollowInfo()
-                        followInfo.image = item.image
-                        followInfo.nick = item.nick
-                        followInfo.otherUserId = item.userId
-                        followInfo.mainUserId = getLong("userId")
-                        MineApp.followDaoManager.insert(followInfo)
-
+                        if (MineApp.likeTypeDaoManager.getLikeTypeInfo(item.userId) == null) {
+                            val likeTypeInfo = LikeTypeInfo()
+                            likeTypeInfo.likeType = 1
+                            likeTypeInfo.otherUserId = item.userId
+                            likeTypeInfo.mainUserId = getLong("userId")
+                            MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                        }
+                        if (MineApp.followDaoManager.getFollowInfo(item.userId) == null) {
+                            val followInfo = FollowInfo()
+                            followInfo.image = item.image
+                            followInfo.nick = item.nick
+                            followInfo.otherUserId = item.userId
+                            followInfo.mainUserId = getLong("userId")
+                            MineApp.followDaoManager.insert(followInfo)
+                        }
                     }
                 }
             }

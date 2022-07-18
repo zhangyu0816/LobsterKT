@@ -48,6 +48,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
 
     lateinit var binding: AcDiscoverDetailBinding
     var friendDynId = 0L
+    var isFollow = false
     private var discoverInfo = DiscoverInfo()
     private var likeTypeInfo: LikeTypeInfo? = null
 
@@ -414,10 +415,6 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                         adList.add(Ads(image))
                         sourceImageList.add(image)
                     }
-                setBanner()
-                dynVisit()
-                otherInfo()
-                seeGiftRewards(1)
                 binding.isPlay = true
                 BaseApp.fixedThreadPool.execute {
                     binding.isFollow =
@@ -437,6 +434,11 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                         }
                     }
                 }
+
+                setBanner()
+                dynVisit()
+                otherInfo()
+                seeGiftRewards(1)
             }
         }
     }
@@ -448,6 +450,19 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
         mainDataSource.enqueue({ otherInfo(discoverInfo.userId) }) {
             onSuccess {
                 binding.memberInfo = it
+                BaseApp.fixedThreadPool.execute {
+                    if (isFollow && !binding.isFollow) {
+                        val followInfo = FollowInfo()
+                        followInfo.image = it.image
+                        followInfo.nick = it.nick
+                        followInfo.otherUserId = discoverInfo.userId
+                        followInfo.mainUserId = getLong("userId")
+                        MineApp.followDaoManager.insert(followInfo)
+                        activity.runOnUiThread {
+                            EventBus.getDefault().post(discoverInfo.userId.toString(), "lobsterUpdateFollowFrag")
+                        }
+                    }
+                }
                 attentionStatus()
                 seeReviews()
             }

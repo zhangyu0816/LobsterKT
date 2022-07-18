@@ -37,6 +37,7 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
     lateinit var binding: AcMemberDetailBinding
     var otherUserId = 0L
     var showLike = false // true 卡片页显示动画
+    var isFollow = false
     lateinit var imageAdapter: BaseAdapter<String>
     private var mPosition = 0
 
@@ -336,6 +337,20 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
                         MineApp.likeTypeDaoManager.getLikeTypeInfo(it.userId) // 喜欢 or 超级喜欢
                     if (likeTypeInfo != null)
                         binding.likeType = likeTypeInfo!!.likeType
+
+                    if (isFollow && !binding.isFollow) {
+                        val followInfo = FollowInfo()
+                        followInfo.image = it.image
+                        followInfo.nick = it.nick
+                        followInfo.otherUserId = it.userId
+                        followInfo.mainUserId = getLong("userId")
+                        MineApp.followDaoManager.insert(followInfo)
+                        activity.runOnUiThread {
+                            EventBus.getDefault()
+                                .post(it.userId.toString(), "lobsterUpdateFollowFrag")
+                        }
+                    }
+
                     val cityName = BaseApp.cityDaoManager.getCityName(it.provinceId, it.cityId)
                     val district =
                         BaseApp.districtDaoManager.getDistrictName(it.cityId, it.districtId)
@@ -350,7 +365,6 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
                         else
                             "${cityName!!.replace("市", "")} $district"
                 }
-
                 if (it.serviceTags.isNotEmpty()) {
                     val tags = it.serviceTags.substring(1, it.serviceTags.length - 1)
                     tagList.addAll(listOf(*tags.split("#".toRegex()).toTypedArray()))

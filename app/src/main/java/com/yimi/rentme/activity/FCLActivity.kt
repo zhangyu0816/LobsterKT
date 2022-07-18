@@ -3,11 +3,11 @@ package com.yimi.rentme.activity
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcFclBinding
 import com.yimi.rentme.vm.FCLViewModel
-import com.zb.baselibs.activity.BaseWhiteActivity
+import com.zb.baselibs.activity.BaseLightColorActivity
 import org.simple.eventbus.EventBus
 import org.simple.eventbus.Subscriber
 
-class FCLActivity : BaseWhiteActivity() {
+class FCLActivity : BaseLightColorActivity(R.color.black_efe) {
 
     private val viewModel by getViewModel(FCLViewModel::class.java) {
         binding = mBinding as AcFclBinding

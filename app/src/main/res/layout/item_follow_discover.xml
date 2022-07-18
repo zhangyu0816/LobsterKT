@@ -44,7 +44,7 @@
             <ImageView
                 cornerType="@{6}"
                 defaultRes="@{R.mipmap.empty_icon}"
-                imageUrl='@{item.images.isEmpty()?item.image:item.images.split(",")[0]}'
+                imageUrl='@{item.images.empty?item.image:item.images.split(",")[0]}'
                 onClickDelayed="@{v->viewModel.toDiscoverDetail(position)}"
                 roundSize="@{5f}"
                 viewHeightSize="@{LobsterObjectUtil.getImageHeight(0.48f, item.width, item.height)}"

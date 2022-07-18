@@ -1,6 +1,7 @@
 package com.yimi.rentme.vm.fragment
 
 import android.annotation.SuppressLint
+import android.os.SystemClock
 import android.view.View
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
@@ -72,52 +73,55 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                 for (item in it) {
                     BaseApp.fixedThreadPool.execute {
                         followInfo = MineApp.followDaoManager.getFollowInfo(item.otherUserId)
+                        item.isLike = MineApp.goodDaoManager.getGood(item.friendDynId) != null
                         if (followInfo != null) {
                             item.nick = followInfo!!.nick
                             item.image = followInfo!!.image
                         }
-                        val url = item.videoUrl.ifEmpty {
-                            if (item.images.isEmpty())
-                                item.image
-                            else
-                                item.images.split(",")[0]
-                        }
-                        if (url.contains(".mp4")) {
-                            val start = discoverInfoList.size
-                            discoverInfoList.add(item)
-                            activity.runOnUiThread {
-                                adapter.notifyItemRangeChanged(start, discoverInfoList.size)
-                            }
-                        } else {
-                            PicSizeUtil.getPicSize(
-                                activity, url, object : PicSizeUtil.OnPicListener {
-                                    override fun onImageSize(width: Int, height: Int) {
-                                        val start = discoverInfoList.size
-                                        item.width = width
-                                        item.height = height
-                                        discoverInfoList.add(item)
-                                        if (followInfo != null) {
-                                            activity.runOnUiThread {
-                                                adapter.notifyItemRangeChanged(
-                                                    start, discoverInfoList.size
-                                                )
-                                            }
-                                        } else {
-                                            activity.runOnUiThread {
-                                                otherInfo(start, item.userId)
-                                            }
+                        val url = if (item.images.isEmpty())
+                            item.image
+                        else
+                            item.images.split(",")[0]
+
+                        PicSizeUtil.getPicSize(
+                            activity, url, object : PicSizeUtil.OnPicListener {
+                                override fun onImageSize(width: Int, height: Int) {
+                                    val start = discoverInfoList.size
+                                    item.width = width
+                                    item.height = height
+                                    discoverInfoList.add(item)
+                                    if (followInfo != null) {
+                                        activity.runOnUiThread {
+                                            adapter.notifyItemRangeChanged(
+                                                start, discoverInfoList.size
+                                            )
+                                        }
+                                    } else {
+                                        activity.runOnUiThread {
+                                            otherInfo(start, item.userId)
                                         }
                                     }
-                                })
-                        }
+                                }
+                            })
                     }
                 }
-                dismissLoading()
+                BaseApp.fixedThreadPool.execute {
+                    SystemClock.sleep(2000)
+                    activity.runOnUiThread {
+                        dismissLoading()
+                    }
+                }
+
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
             }
             onFailed {
-                dismissLoading()
+                BaseApp.fixedThreadPool.execute {
+                    SystemClock.sleep(2000)
+                    activity.runOnUiThread {
+                        dismissLoading()
+                    }
+                }
                 binding.refresh.setEnableLoadMore(false)
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
@@ -146,6 +150,11 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                     }
                 }
             }
+            onFailed {
+                if (it.isNoData) {
+                    adapter.notifyItemRangeChanged(start, discoverInfoList.size)
+                }
+            }
         }
     }
 
@@ -153,8 +162,12 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
      * 跳至动态详情
      */
     fun toDiscoverDetail(position: Int) {
+        prePosition = position
+        discoverInfo = discoverInfoList[position]
+        friendDynId = discoverInfo.friendDynId
         activity.startActivity<DiscoverDetailActivity>(
-            Pair("friendDynId", discoverInfoList[position].friendDynId)
+            Pair("friendDynId", discoverInfoList[position].friendDynId),
+            Pair("isFollow", true)
         )
     }
 
@@ -162,8 +175,12 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
      * 跳至用户详情
      */
     fun toMemberDetail(position: Int) {
+        prePosition = position
+        discoverInfo = discoverInfoList[position]
+        friendDynId = discoverInfo.friendDynId
         activity.startActivity<MemberDetailActivity>(
-            Pair("otherUserId", discoverInfoList[position].otherUserId)
+            Pair("otherUserId", discoverInfoList[position].otherUserId),
+            Pair("isFollow", true)
         )
     }
 
@@ -216,6 +233,62 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                         activity.runOnUiThread {
                             adapter.notifyItemChanged(prePosition)
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 点赞数量
+     */
+    fun doLike(friendDynId: Long) {
+        discoverInfo.isLike = true
+        discoverInfo.goodNum++
+        adapter.notifyItemChanged(prePosition)
+    }
+
+    /**
+     * 取消点赞数量
+     */
+    fun cancelLike(friendDynId: Long) {
+        discoverInfo.isLike = false
+        discoverInfo.goodNum--
+        adapter.notifyItemChanged(prePosition)
+    }
+
+    /**
+     * 取消关注
+     */
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateFollow(isFollow: Boolean) {
+        if (!isFollow) {
+            val iterator = discoverInfoList.iterator()
+            while (iterator.hasNext()) {
+                val item = iterator.next()
+                if (discoverInfo.otherUserId == item.otherUserId) {
+                    iterator.remove()
+                }
+            }
+            adapter.notifyDataSetChanged()
+            binding.noData = discoverInfoList.size == 0
+        }
+    }
+
+    /**
+     * 更新关注页
+     */
+    fun updateFollowFrag(otherUserId: Long) {
+        BaseApp.fixedThreadPool.execute {
+            followInfo = MineApp.followDaoManager.getFollowInfo(otherUserId)
+            for (i in 0 until discoverInfoList.size) {
+                if (otherUserId == discoverInfoList[i].otherUserId) {
+                    if (followInfo != null) {
+                        discoverInfoList[i].nick = followInfo!!.nick
+                        discoverInfoList[i].image = followInfo!!.image
+                    }
+                    activity.runOnUiThread {
+                        adapter.notifyItemChanged(i)
                     }
                 }
             }

@@ -23,8 +23,10 @@ class DiscoverDetailActivity : BaseLightColorActivity(R.color.red_ece) {
     override fun initView() {
         needEvenBus = true
         val extras = intent.extras
-        if (extras != null)
+        if (extras != null) {
             viewModel.friendDynId = extras.getLong("friendDynId")
+            viewModel.isFollow = extras.getBoolean("isFollow")
+        }
         viewModel.initViewModel()
     }
 
@@ -32,8 +34,10 @@ class DiscoverDetailActivity : BaseLightColorActivity(R.color.red_ece) {
         super.onNewIntent(intent)
         needEvenBus = true
         val extras = intent!!.extras
-        if (extras != null)
+        if (extras != null) {
             viewModel.friendDynId = extras.getLong("friendDynId")
+            viewModel.isFollow = extras.getBoolean("isFollow")
+        }
         viewModel.initViewModel()
     }
 

@@ -23,6 +23,7 @@ class MemberDetailActivity : BaseScreenActivity() {
         if (extras != null) {
             viewModel.otherUserId = extras.getLong("otherUserId")
             viewModel.showLike = extras.getBoolean("showLike")
+            viewModel.isFollow = extras.getBoolean("isFollow")
         }
         viewModel.initViewModel()
     }
@@ -33,6 +34,7 @@ class MemberDetailActivity : BaseScreenActivity() {
         if (extras != null) {
             viewModel.otherUserId = extras.getLong("otherUserId")
             viewModel.showLike = extras.getBoolean("showLike")
+            viewModel.isFollow = extras.getBoolean("isFollow")
         }
         viewModel.initViewModel()
     }
