@@ -50,6 +50,7 @@ class VideoPlayActivity : BaseActivity() {
             viewModel.videoType = extras.getInt("videoType")
             viewModel.isDelete = extras.getBoolean("isDelete")
             viewModel.isUpload = extras.getBoolean("isUpload")
+            viewModel.isPublish = extras.getBoolean("isPublish")
         }
         viewModel.initViewModel()
     }

@@ -141,7 +141,8 @@ class CameraImageViewModel : BaseViewModel() {
             activity.startActivity<VideoPlayActivity>(
                 Pair("videoUrl", image),
                 Pair("videoType", 2),
-                Pair("isUpload", true)
+                Pair("isUpload", true),
+                Pair("isPublish", isPublish)
             )
         } else if (isMore) {
             var has = false

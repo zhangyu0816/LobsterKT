@@ -17,6 +17,7 @@ class VideoPlayViewModel : BaseViewModel() {
     var videoType = 0 // 1：启动页视频  2：播放视频
     var isDelete = false
     var isUpload = false
+    var isPublish = false
 
     override fun initViewModel() {
         binding.videoUrl = videoUrl
@@ -38,7 +39,8 @@ class VideoPlayViewModel : BaseViewModel() {
     override fun right(view: View) {
         super.right(view)
         if (isUpload) {
-            activity.startActivity<PublishDiscoverActivity>()
+            if (isPublish)
+                activity.startActivity<PublishDiscoverActivity>()
             EventBus.getDefault().post("上传视频", "lobsterUploadVideo")
         }
         if (isDelete)
