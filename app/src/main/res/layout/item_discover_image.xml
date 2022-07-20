@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.PublishDiscoverViewModel" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.SelectImage" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="isLast"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.333f)}"
+        viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.333f)}"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/iv_image"
+                defaultRes="@{R.mipmap.empty_icon}"
+                imageUrl="@{item.imageUrl}"
+                bitmap="@{item.bitmap}"
+                onClickDelayed="@{v->viewModel.previewImage(position)}"
+                roundSize="@{10f}"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.31f)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.31f)}"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:visibility="@{(position==0&amp;&amp;!isLast&amp;&amp;item.videoUrl.empty)?View.VISIBLE:View.GONE}"
+            app:srcCompat="@mipmap/face_icon" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerInParent="true"
+            android:visibility='@{item.videoUrl.empty?View.GONE:View.VISIBLE}'
+            app:srcCompat="@mipmap/video_play_icon" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_alignParentBottom="true"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/progressbar"
+            android:visibility="gone" />
+    </RelativeLayout>
+</layout>

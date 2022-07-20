@@ -104,7 +104,13 @@ class LoadingViewModel : BaseViewModel() {
                     if (getInteger("isVideoPlay") == 1)
                         activity.startActivity<LoginActivity>()
                     else
-                        activity.startActivity<VideoPlayActivity>()
+                        activity.startActivity<VideoPlayActivity>(
+                            Pair(
+                                "videoUrl",
+                                "android.resource://" + BaseApp.context.packageName + "/" + R.raw.open
+                            ),
+                            Pair("videoType", 1)
+                        )
                     activity.finish()
                 } else if (it.isNoWIFI) {
                     SCToastUtil.showToast(activity, "服务器链接失败，请检测网络", 2)

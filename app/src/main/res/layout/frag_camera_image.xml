@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -19,6 +18,10 @@
 
         <variable
             name="showFileModel"
+            type="boolean" />
+
+        <variable
+            name="showVideo"
             type="boolean" />
     </data>
 
@@ -53,8 +56,18 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:drawableEndCompat="@mipmap/arrow_xia"
-                tools:visibility="gone" />
+                android:visibility="@{showVideo?View.GONE:View.VISIBLE}"
+                app:drawableEndCompat="@mipmap/arrow_xia" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@{title}"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="@{showVideo?View.VISIBLE:View.GONE}" />
 
             <TextView
                 onClickDelayed="@{viewModel::upload}"
@@ -67,7 +80,8 @@
                 android:gravity="center"
                 android:text="上传"
                 android:textColor="@android:color/white"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="@{showVideo?View.GONE:View.VISIBLE}"/>
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView

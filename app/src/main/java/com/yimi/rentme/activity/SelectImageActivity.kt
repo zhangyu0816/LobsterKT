@@ -23,17 +23,17 @@ class SelectImageActivity : BaseColorActivity(com.zb.baselibs.R.color.black_252)
         val extras = intent.extras
         if (extras != null) {
             viewModel.isMore = extras.getBoolean("isMore")
-            viewModel.showBottom = extras.getBoolean("showBottom")
             viewModel.showVideo = extras.getBoolean("showVideo")
+            viewModel.isPublish = extras.getBoolean("isPublish")
         }
         viewModel.initViewModel()
     }
 
     /**
-     * 关闭
+     * 上传视频
      */
-    @Subscriber(tag = "lobsterCameraFinish")
-    private fun lobsterCameraFinish(data: String) {
-        viewModel.finish()
+    @Subscriber(tag = "lobsterUploadVideo")
+    private fun lobsterUploadVideo(data: String) {
+        finish()
     }
 }

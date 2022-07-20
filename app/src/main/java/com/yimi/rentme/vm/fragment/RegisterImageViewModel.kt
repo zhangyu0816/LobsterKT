@@ -2,15 +2,14 @@ package com.yimi.rentme.vm.fragment
 
 import android.Manifest
 import android.view.View
+import android.widget.Toast
 import com.yimi.rentme.MineApp
-import com.yimi.rentme.R
 import com.yimi.rentme.activity.SelectImageActivity
 import com.yimi.rentme.bean.SelectImage
 import com.yimi.rentme.databinding.FragRegisterImageBinding
 import com.yimi.rentme.utils.luban.PhotoFile
 import com.yimi.rentme.utils.luban.PhotoManager
 import com.yimi.rentme.vm.BaseViewModel
-import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.utils.getInteger
@@ -58,9 +57,7 @@ class RegisterImageViewModel : BaseViewModel() {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
         ) {
-            activity.startActivity<SelectImageActivity>(
-                Pair("showBottom", true)
-            )
+            activity.startActivity<SelectImageActivity>()
         } else {
             if (getInteger("image_permission", 0) == 0) {
                 saveInteger("image_permission", 1)
@@ -79,11 +76,11 @@ class RegisterImageViewModel : BaseViewModel() {
                         }
                     }).show(activity.supportFragmentManager)
             } else {
-                SCToastUtil.showToast(
+                Toast.makeText(
                     activity,
-                    "可通过“手机设置--应用--${BaseApp.context.resources.getString(R.string.app_name)}--权限”，手动开启或关闭相机、存储权限。",
-                    2
-                )
+                    "可通过“手机设置--应用--虾菇--权限”或app内“我的--设置--权限管理--权限”，手动开启或关闭相机、存储权限。",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -98,9 +95,7 @@ class RegisterImageViewModel : BaseViewModel() {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = "为了更好的提供服务，需要获取相机权限和存储权限"
             )
-            activity.startActivity<SelectImageActivity>(
-                Pair("showBottom", true)
-            )
+            activity.startActivity<SelectImageActivity>()
         }
     }
 

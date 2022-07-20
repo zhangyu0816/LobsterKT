@@ -10,7 +10,11 @@
 
         <variable
             name="viewModel"
-            type="com.yimi.rentme.vm.fragment.CameraTakeViewModel" />
+            type="com.yimi.rentme.vm.fragment.CameraVideoViewModel" />
+
+        <variable
+            name="videoUrl"
+            type="String" />
 
         <variable
             name="sizeIndex"
@@ -21,11 +25,15 @@
             type="Integer" />
 
         <variable
+            name="isRecorder"
+            type="boolean" />
+
+        <variable
             name="isUpload"
             type="boolean" />
 
         <variable
-            name="imageUrl"
+            name="second"
             type="String" />
     </data>
 
@@ -42,17 +50,18 @@
             android:layout_centerInParent="true"
             android:background="@android:color/transparent" />
 
-        <ImageView
-            imageUrl="@{imageUrl}"
+        <com.yimi.rentme.views.FullScreenVideoView
+            android:id="@+id/video_view"
+            videoUrl="@{videoUrl}"
             viewHeightSize="@{ObjectUtils.getViewSizeByWidth(1f*(sizeIndex==0?(16f/9f):(4f/3f)))}"
             viewWidthSize="@{ObjectUtils.getViewSizeByWidth(1f)}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
+            android:background="@color/white"
             android:visibility="@{isUpload?View.VISIBLE:View.GONE}" />
 
         <RelativeLayout
-            android:id="@+id/top_layout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:visibility="@{isUpload?View.VISIBLE:View.GONE}">
@@ -81,8 +90,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="@{isUpload?View.GONE:View.VISIBLE}">
+            android:layout_height="60dp"
+            android:visibility="@{(isRecorder||isUpload)?View.GONE:View.VISIBLE}">
 
             <ImageView
                 android:id="@+id/iv_back"
@@ -97,42 +106,83 @@
                 android:id="@+id/camera_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/camera_id"
                 android:onClick="@{v->viewModel.changeSizeIndex(sizeIndex==0?1:0)}"
                 android:padding="15dp"
                 android:src="@{sizeIndex==0?@drawable/photo_size_9_16:@drawable/photo_size_3_4}" />
-
-            <ImageView
-                android:id="@+id/camera_light"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/camera_size"
-                android:onClick="@{v->viewModel.changeLightIndex(lightIndex==0?1:0)}"
-                android:padding="15dp"
-                android:src="@{lightIndex==0?@drawable/photo_light_close:@drawable/photo_light_open}" />
 
             <ImageView
                 android:id="@+id/camera_id"
                 onClickDelayed="@{viewModel::changeCameraId}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/camera_light"
                 android:padding="15dp"
                 app:srcCompat="@mipmap/photo_change" />
         </RelativeLayout>
 
-        <View
-            onClickDelayed="@{viewModel::createPhoto}"
-            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
-            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_relative"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/circle_btn"
-            android:visibility="@{isUpload?View.GONE:View.VISIBLE}" />
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/btn_bg_black_cc_radius10"
+            android:paddingStart="20dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="2dp"
+            android:text="@{second}"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:visibility="@{isRecorder?View.VISIBLE:View.GONE}" />
+
+        <RelativeLayout
+            android:id="@+id/btn_relative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="40dp"
+            android:visibility="@{isUpload?View.GONE:View.VISIBLE}">
+
+            <View
+                onClickDelayed="@{viewModel::createRecorder}"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/circle_btn"
+                android:visibility="@{isRecorder?View.GONE:View.VISIBLE}" />
+
+            <RelativeLayout
+                onClickDelayed="@{viewModel::stopRecorder}"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:visibility="@{isRecorder?View.VISIBLE:View.GONE}">
+
+                <View
+                    viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/circle_white" />
+
+                <View
+                    viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.06f)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.06f)}"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/btn_bg_red_fe4" />
+            </RelativeLayout>
+        </RelativeLayout>
     </RelativeLayout>
 </layout>

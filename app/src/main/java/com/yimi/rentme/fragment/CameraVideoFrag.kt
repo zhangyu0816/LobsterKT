@@ -2,14 +2,15 @@ package com.yimi.rentme.fragment
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import com.yimi.rentme.R
-import com.yimi.rentme.databinding.FragCameraTakeBinding
-import com.yimi.rentme.vm.fragment.CameraTakeViewModel
+import com.yimi.rentme.databinding.FragCameraVideoBinding
+import com.yimi.rentme.vm.fragment.CameraVideoViewModel
 import com.zb.baselibs.activity.BaseFragment
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.SCToastUtil
@@ -19,8 +20,9 @@ import org.simple.eventbus.Subscriber
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.Executors
 
-class CameraTakeFrag(private val isMore: Boolean, private val isPublish: Boolean) : BaseFragment() {
+class CameraVideoFrag(private val isPublish: Boolean) : BaseFragment() {
 
     private lateinit var cameraProvider: ProcessCameraProvider // 相机信息
     private lateinit var preview: Preview // 预览对象
@@ -28,30 +30,33 @@ class CameraTakeFrag(private val isMore: Boolean, private val isPublish: Boolean
     private var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA //当前相机 -- 后置
     private lateinit var imageCamera: ImageCapture // 拍照
     private lateinit var videoCapture: VideoCapture // 录像
-    private var cameraControl: CameraControl? = null
-    private val lensFacing = CameraSelector.LENS_FACING_BACK
     private lateinit var outputDirectory: File
 
     @AspectRatio.Ratio
     var aspectRatio = AspectRatio.RATIO_16_9
 
-    private val viewModel by getViewModel(CameraTakeViewModel::class.java) {
-        binding = mBinding as FragCameraTakeBinding
-        activity = this@CameraTakeFrag.activity as AppCompatActivity
+    private val viewModel by getViewModel(CameraVideoViewModel::class.java) {
+        binding = mBinding as FragCameraVideoBinding
+        activity = this@CameraVideoFrag.activity as AppCompatActivity
         binding.viewModel = this
     }
 
     override fun getRes(): Int {
-        return R.layout.frag_camera_take
+        return R.layout.frag_camera_video
     }
 
     override fun initView() {
         needEvenBus = true
-        viewModel.isMore = isMore
         viewModel.isPublish = isPublish
         viewModel.initViewModel()
         outputDirectory = getOutputDirectory()
         initCamera()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.mHandler!!.removeCallbacks(viewModel.runnable)
+        viewModel.mHandler = null
     }
 
     /**
@@ -78,51 +83,45 @@ class CameraTakeFrag(private val isMore: Boolean, private val isPublish: Boolean
     }
 
     /**
-     * 打开闪光灯
+     * 开始录像
      */
-    @Subscriber(tag = "lobsterChangeLight")
-    private fun lobsterChangeLight(data: String) {
-        if (camera != null) {
-            if (cameraControl == null)
-                cameraControl = camera!!.cameraControl
+    @Subscriber(tag = "lobsterCreateRecorder")
+    @SuppressLint("MissingPermission", "RestrictedApi")
+    private fun lobsterCreateRecorder(data: String) {
+        val photoFile =
+            createFile(outputDirectory, "yyyy-MM-dd HH.mm.ss", ".mp4")
+        val outputOptions =
+            VideoCapture.OutputFileOptions.Builder(photoFile).build()
+        viewModel.time = 0L
+        viewModel.mHandler!!.postDelayed(viewModel.runnable, 100)
+        //开始录像
+        videoCapture.startRecording(
+            outputOptions, Executors.newSingleThreadExecutor(),
+            object : VideoCapture.OnVideoSavedCallback {
+                override fun onVideoSaved(outputFileResults: VideoCapture.OutputFileResults) {
+                    val savedUri = outputFileResults.savedUri ?: Uri.fromFile(photoFile)
+                    BaseApp.context.uploadFile(savedUri.toFile().absolutePath)
+                    viewModel.binding.videoUrl = savedUri.toFile().absolutePath
+                    viewModel.binding.isUpload = true
+                    viewModel.binding.isRecorder = false
+                }
 
-            if (viewModel.binding.lightIndex == 0)
-                cameraControl!!.enableTorch(false)
-            else
-                cameraControl!!.enableTorch(true)
-        }
-
+                override fun onError(videoCaptureError: Int, message: String, cause: Throwable?) {
+                    Log.e("onError", " 录像失败 $message")
+                    SCToastUtil.showToast(
+                        this@CameraVideoFrag.activity as AppCompatActivity, " 录像失败 $message", 2
+                    )
+                }
+            })
     }
 
     /**
-     * 拍照
+     * 关闭录制
      */
-    @Subscriber(tag = "lobsterTakePhoto")
-    private fun lobsterTakePhoto(data: String) {
-        val photoFile =
-            createFile(outputDirectory, "yyyy-MM-dd HH.mm.ss", ".jpg")
-        val metadata = ImageCapture.Metadata().apply {
-            isReversedHorizontal = lensFacing == CameraSelector.LENS_FACING_FRONT
-        }
-        val outputOptions =
-            ImageCapture.OutputFileOptions.Builder(photoFile).setMetadata(metadata).build()
-        imageCamera.takePicture(outputOptions, ContextCompat.getMainExecutor(BaseApp.context),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onError(exc: ImageCaptureException) {
-                    SCToastUtil.showToast(
-                        this@CameraTakeFrag.activity as AppCompatActivity,
-                        " 拍照失败 ${exc.message}",
-                        2
-                    )
-                }
-
-                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
-                    BaseApp.context.uploadFile(savedUri.toFile().absolutePath)
-                    viewModel.binding.imageUrl = savedUri.toFile().absolutePath
-                    viewModel.binding.isUpload = true
-                }
-            })
+    @SuppressLint("RestrictedApi")
+    @Subscriber(tag = "lobsterStopRecorder")
+    private fun lobsterStopRecorder(data: String) {
+        videoCapture.stopRecording()//停止录制
     }
 
     /**

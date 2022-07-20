@@ -14,10 +14,6 @@
             type="boolean" />
 
         <variable
-            name="showBottom"
-            type="boolean" />
-
-        <variable
             name="index"
             type="Integer" />
     </data>
@@ -25,7 +21,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
+        android:background="@color/black_252"
         android:fitsSystemWindows="true">
 
         <FrameLayout
@@ -41,8 +37,7 @@
             android:layout_alignParentBottom="true"
             android:background="@color/black_252"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="@{showBottom?View.VISIBLE:View.GONE}">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
@@ -50,10 +45,10 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:onClick="@{v->viewModel.selectIndex(0)}"
-                android:text="相册"
+                android:text="@{showVideo?@string/video_name:@string/camera_name}"
                 android:textColor="@{index==0?@color/white:@color/white_cc}"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -74,7 +69,8 @@
                 android:onClick="@{v->viewModel.selectIndex(2)}"
                 android:text="拍照"
                 android:textColor="@{index==2?@color/white:@color/white_cc}"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="@{showVideo?View.GONE:View.VISIBLE}"/>
         </LinearLayout>
     </RelativeLayout>
 </layout>

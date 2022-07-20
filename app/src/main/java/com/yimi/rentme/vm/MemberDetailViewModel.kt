@@ -396,7 +396,7 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
                 run {
                     loadImage(
                         image!!, ads!!.smallImage, 0, R.mipmap.empty_icon, bannerWidth,
-                        height, false, 10f, false, 0, false, 0f
+                        height, false, 10f, null, false, 0, false, 0f
                     )
                 }
             },

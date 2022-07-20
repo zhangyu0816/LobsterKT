@@ -9,10 +9,13 @@ import androidx.databinding.BindingAdapter
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.views.*
+import com.zb.baselibs.adapter.viewSize
+import com.zb.baselibs.app.BaseApp
+import com.zb.baselibs.utils.ObjectUtils
 import com.zb.baselibs.utils.SCToastUtil
 
-@BindingAdapter("videoUrl")
-fun FullScreenVideoView.setVideoUrl(videoUrl: String) {
+@BindingAdapter(value = ["videoUrl", "showSize"], requireAll = false)
+fun FullScreenVideoView.setVideoUrl(videoUrl: String, showSize: Boolean) {
     this.setOnPreparedListener { mp -> }
     //异常回调
     this.setOnErrorListener { mp, what, extra ->
@@ -36,6 +39,19 @@ fun FullScreenVideoView.setVideoUrl(videoUrl: String) {
                 return@setOnInfoListener true
             }
             MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START -> {
+                if (showSize) {
+                    val width: Int = mp.videoWidth
+                    val height: Int = mp.videoHeight
+
+                    if (ObjectUtils.getViewSizeByHeight(1.0f) * width / height > BaseApp.W) {
+                        this.viewSize(BaseApp.W, BaseApp.W * height / width)
+                    } else {
+                        this.viewSize(
+                            ObjectUtils.getViewSizeByHeight(1.0f) * width / height,
+                            ObjectUtils.getViewSizeByHeight(1.0f)
+                        )
+                    }
+                }
                 this.setBackgroundColor(Color.TRANSPARENT)
             }
         }

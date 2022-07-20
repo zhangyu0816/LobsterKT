@@ -55,4 +55,6 @@
     <string name="like_1">喜欢他</string>
     <string name="be_like_count">喜欢数 %d</string>
     <string name="fan_count">粉丝数 %d</string>
+    <string name="camera_name">相册</string>
+    <string name="video_name">视频</string>
 </resources>

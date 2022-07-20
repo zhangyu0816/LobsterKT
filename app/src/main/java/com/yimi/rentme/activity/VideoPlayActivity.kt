@@ -14,6 +14,7 @@ import com.zb.baselibs.utils.RomUtils
 import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.utils.StatusBarUtil
 import com.zb.baselibs.utils.saveInteger
+import kotlinx.android.synthetic.main.ac_login.*
 import kotlin.system.exitProcess
 
 class VideoPlayActivity : BaseActivity() {
@@ -40,22 +41,34 @@ class VideoPlayActivity : BaseActivity() {
     }
 
     override fun initView() {
+        needEvenBus = true
         MineApp.videoPlayActivity = this
         saveInteger("isVideoPlay", 1)
+        val extras = intent.extras
+        if (extras != null) {
+            viewModel.videoUrl = extras.getString("videoUrl").toString()
+            viewModel.videoType = extras.getInt("videoType")
+            viewModel.isDelete = extras.getBoolean("isDelete")
+            viewModel.isUpload = extras.getBoolean("isUpload")
+        }
         viewModel.initViewModel()
     }
 
     // 监听程序退出
-    private var exitTime: Long = 0
+    private var exitTime = 0L
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (event.keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_DOWN) {
-            if (System.currentTimeMillis() - exitTime > 2000) {
-                SCToastUtil.showToast(activity, "再按一次退出程序", 2)
-                exitTime = System.currentTimeMillis()
+            if (viewModel.videoType == 2) {
+                viewModel.back(iv_back)
             } else {
-                BaseApp.exit()
-                exitProcess(0)
+                if (System.currentTimeMillis() - exitTime > 2000L) {
+                    SCToastUtil.showToast(activity, "再按一次退出程序", 2)
+                    exitTime = System.currentTimeMillis()
+                } else {
+                    BaseApp.exit()
+                    exitProcess(0)
+                }
             }
             return true
         }

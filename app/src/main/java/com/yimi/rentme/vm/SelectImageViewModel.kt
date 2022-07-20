@@ -4,23 +4,19 @@ import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcSelectImageBinding
 import com.yimi.rentme.fragment.CameraImageFrag
 import com.yimi.rentme.fragment.CameraTakeFrag
+import com.yimi.rentme.fragment.CameraVideoFrag
 import com.zb.baselibs.views.replaceFragment
 
 class SelectImageViewModel : BaseViewModel() {
 
     lateinit var binding: AcSelectImageBinding
     var isMore = false
-    var showBottom = false
     var showVideo = false
+    var isPublish = false
 
     override fun initViewModel() {
         binding.showVideo = showVideo
-        binding.showBottom = showBottom
         selectIndex(0)
-    }
-
-    fun finish() {
-        activity.finish()
     }
 
     /**
@@ -29,8 +25,12 @@ class SelectImageViewModel : BaseViewModel() {
     fun selectIndex(index: Int) {
         binding.index = index
         when (index) {
-            0 -> activity.replaceFragment(CameraImageFrag(isMore), R.id.camera_content)
-            2 -> activity.replaceFragment(CameraTakeFrag(), R.id.camera_content)
+            0 -> activity.replaceFragment(
+                CameraImageFrag(isMore, showVideo, isPublish),
+                R.id.camera_content
+            )
+            1 -> activity.replaceFragment(CameraVideoFrag(isPublish), R.id.camera_content)
+            2 -> activity.replaceFragment(CameraTakeFrag(isMore, isPublish), R.id.camera_content)
         }
     }
 }

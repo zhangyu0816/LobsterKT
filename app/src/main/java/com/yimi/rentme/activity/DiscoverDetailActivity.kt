@@ -1,6 +1,7 @@
 package com.yimi.rentme.activity
 
 import android.content.Intent
+import com.umeng.socialize.UMShareAPI
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcDiscoverDetailBinding
 import com.yimi.rentme.vm.DiscoverDetailViewModel
@@ -49,6 +50,15 @@ class DiscoverDetailActivity : BaseLightColorActivity(R.color.red_ece) {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.onDestroy()
+    }
+
+    /**
+     * 分享重写
+     */
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data)
     }
 
     /**

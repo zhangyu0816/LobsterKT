@@ -1,10 +1,12 @@
 package com.yimi.rentme.activity
 
 import android.content.Intent
+import com.umeng.socialize.UMShareAPI
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcMemberDetailBinding
 import com.yimi.rentme.vm.MemberDetailViewModel
 import com.zb.baselibs.activity.BaseScreenActivity
+
 
 class MemberDetailActivity : BaseScreenActivity() {
 
@@ -47,5 +49,14 @@ class MemberDetailActivity : BaseScreenActivity() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.onDestroy()
+    }
+
+    /**
+     * 分享重写
+     */
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data)
     }
 }

@@ -1,4 +1,4 @@
-package com.yimi.rentme.activity
+package com.yimi.rentme.activity.bottle
 
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcBottleBinding

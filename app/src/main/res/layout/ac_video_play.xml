@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
@@ -10,14 +14,28 @@
         <variable
             name="videoUrl"
             type="String" />
+
+        <variable
+            name="videoType"
+            type="Integer" />
+
+        <variable
+            name="isDelete"
+            type="boolean" />
+
+        <variable
+            name="isUpload"
+            type="boolean" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/black_252">
 
         <com.yimi.rentme.views.FullScreenVideoView
             android:id="@+id/video_view"
+            showSize="@{videoType==2}"
             videoUrl="@{videoUrl}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -31,6 +49,48 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="25dp"
-            android:background="@mipmap/open_app_icon" />
+            android:background="@mipmap/open_app_icon"
+            android:visibility="@{videoType==1?View.VISIBLE:View.GONE}"
+            tools:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:visibility="@{videoType==2?View.VISIBLE:View.GONE}">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                onClickDelayed="@{viewModel::back}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                app:srcCompat="@mipmap/back_white_icon" />
+
+            <ImageView
+                android:id="@+id/iv_delete"
+                onClickDelayed="@{viewModel::right}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="15dp"
+                android:src="@mipmap/iv_delete_image"
+                android:visibility="@{isDelete?View.VISIBLE:View.GONE}" />
+
+            <TextView
+                onClickDelayed="@{viewModel::right}"
+                android:layout_width="60dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/btn_bg_purple_7a4_radius60"
+                android:gravity="center"
+                android:text="上传"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:visibility="@{isUpload?View.VISIBLE:View.GONE}" />
+        </RelativeLayout>
     </RelativeLayout>
 </layout>

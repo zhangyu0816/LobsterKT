@@ -64,7 +64,6 @@ class MineApp : BaseApp() {
         var registerInfo = RegisterInfo()
         var threeInfo = ThreeInfo()
         var walletInfo = WalletInfo()
-        val selectImageList = ArrayList<SelectImage>()
         var discoverInfoList = ArrayList<DiscoverInfo>()
         var giftInfoList = ArrayList<GiftInfo>()
         var rechargeInfoList = ArrayList<RechargeInfo>()
@@ -77,6 +76,9 @@ class MineApp : BaseApp() {
         var minAge = 0
         var maxAge = 100
         var likeCount = 30
+
+        @JvmField
+        val selectImageList = ArrayList<SelectImage>()
 
         @JvmField
         var isFirstOpen = false

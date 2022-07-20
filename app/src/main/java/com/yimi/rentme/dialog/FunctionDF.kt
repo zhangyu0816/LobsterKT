@@ -1,13 +1,11 @@
 package com.yimi.rentme.dialog
 
 import android.graphics.Bitmap
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentManager
 import com.umeng.socialize.ShareAction
-import com.umeng.socialize.UMShareListener
 import com.umeng.socialize.bean.SHARE_MEDIA
 import com.umeng.socialize.media.UMImage
 import com.umeng.socialize.media.UMWeb
@@ -17,6 +15,7 @@ import com.yimi.rentme.databinding.DfFunctionBinding
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.bean.ShareItem
 import com.zb.baselibs.dialog.BaseDialogFragment
+import com.zb.baselibs.listener.UMListener
 import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.utils.clipboard
 import com.zb.baselibs.utils.getLong
@@ -208,7 +207,7 @@ class FunctionDF(activity: AppCompatActivity) : BaseDialogFragment(activity) {
         if (item.shareName == "微信" || item.shareName == "朋友圈" || item.shareName == "QQ" || item.shareName == "QQ空间")
             ShareAction(activity).setPlatform(media)
                 .withMedia(web)
-                .setCallback(umShareListener)
+                .setCallback(UMListener(activity))
                 .share()
         dismiss()
     }
@@ -223,24 +222,5 @@ class FunctionDF(activity: AppCompatActivity) : BaseDialogFragment(activity) {
         fun delete() {} // 删除动态
         fun like() {} // 喜欢
         fun download() {} // 下载
-    }
-
-    private val umShareListener: UMShareListener = object : UMShareListener {
-        override fun onStart(platform: SHARE_MEDIA) {
-            SCToastUtil.showToast(activity, "开始分享", 2)
-        }
-
-        override fun onResult(platform: SHARE_MEDIA) {
-            SCToastUtil.showToast(activity, "分享成功啦", 2)
-        }
-
-        override fun onError(platform: SHARE_MEDIA, t: Throwable) {
-            SCToastUtil.showToast(activity, "分享失败啦", 2)
-            Log.d("throw", "throw:" + t.message)
-        }
-
-        override fun onCancel(platform: SHARE_MEDIA) {
-            SCToastUtil.showToast(activity, "分享取消了", 2)
-        }
     }
 }

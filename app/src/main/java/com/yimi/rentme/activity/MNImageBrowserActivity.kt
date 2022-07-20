@@ -1,6 +1,8 @@
 package com.yimi.rentme.activity
 
+import android.content.Intent
 import android.view.KeyEvent
+import com.umeng.socialize.UMShareAPI
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcMnimageBrowserBinding
 import com.yimi.rentme.vm.MNImageBrowserViewModel
@@ -28,6 +30,15 @@ class MNImageBrowserActivity : BaseScreenActivity() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.onDestroy()
+    }
+
+    /**
+     * 分享重写
+     */
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data)
     }
 
     /**

@@ -90,29 +90,30 @@ class PhotoManager(
         }
         val srcFilePath = file.absolutePath
         compressCount++
-        Luban.compress(context, file).putGear(Luban.THIRD_GEAR).launch(object : OnCompressListener {
-            override fun onStart() {
-                isCompress = true
-            }
-
-            override fun onSuccess(file: File) {
-                val photoFile = PhotoFile(srcFilePath, file)
-                if (index >= 0) {
-                    photos.add(index, photoFile)
-                } else {
-                    photos.add(photoFile)
+        Luban.compress(context, file).putGear(Luban.THIRD_GEAR).setMaxSize(10 * 1024)
+            .launch(object : OnCompressListener {
+                override fun onStart() {
+                    isCompress = true
                 }
-                if (instantUpload) {
-                    uploadImage(photoFile)
-                }
-                compressCount--
-                isCompress = false
-            }
 
-            override fun onError(e: Throwable) {
-                SCToastUtil.showToast(context, "压缩失败", 2)
-            }
-        })
+                override fun onSuccess(file: File) {
+                    val photoFile = PhotoFile(srcFilePath, file)
+                    if (index >= 0) {
+                        photos.add(index, photoFile)
+                    } else {
+                        photos.add(photoFile)
+                    }
+                    if (instantUpload) {
+                        uploadImage(photoFile)
+                    }
+                    compressCount--
+                    isCompress = false
+                }
+
+                override fun onError(e: Throwable) {
+                    SCToastUtil.showToast(context, "压缩失败", 2)
+                }
+            })
     }
 
     /**

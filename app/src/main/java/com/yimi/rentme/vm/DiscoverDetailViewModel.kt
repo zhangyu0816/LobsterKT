@@ -354,7 +354,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 run {
                     loadImage(
                         image!!, ads!!.smallImage, 0, R.mipmap.empty_icon, bannerWidth,
-                        height, false, 10f, false, 0, false, 0f
+                        height, false, 10f, null, false, 0, false, 0f
                     )
                 }
             },
@@ -459,7 +459,8 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                         followInfo.mainUserId = getLong("userId")
                         MineApp.followDaoManager.insert(followInfo)
                         activity.runOnUiThread {
-                            EventBus.getDefault().post(discoverInfo.userId.toString(), "lobsterUpdateFollowFrag")
+                            EventBus.getDefault()
+                                .post(discoverInfo.userId.toString(), "lobsterUpdateFollowFrag")
                         }
                     }
                 }
