@@ -15,6 +15,7 @@ import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.bean.MemberInfo
 import com.yimi.rentme.databinding.FragMemberDiscoverBinding
 import com.yimi.rentme.roomdata.GoodInfo
+import com.yimi.rentme.roomdata.ImageSize
 import com.yimi.rentme.utils.PicSizeUtil
 import com.yimi.rentme.views.GoodView
 import com.yimi.rentme.vm.BaseViewModel
@@ -186,52 +187,58 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 }
             }
         }
-        if (updateTop) {
-            it.reverse()
-            for (item in it) {
-                val url = if (item.images.isEmpty()) item.image else item.images.split(",")[0]
-                PicSizeUtil.getPicSize(activity, url, object : PicSizeUtil.OnPicListener {
-                    override fun onImageSize(width: Int, height: Int) {
-                        item.width = width
-                        item.height = height
-                        discoverInfoList.add(0, item)
-                        BaseApp.fixedThreadPool.execute {
-                            item.isLike = MineApp.goodDaoManager.getGood(item.friendDynId) != null
-                            activity.runOnUiThread {
-                                adapter.notifyItemRangeChanged(0, discoverInfoList.size)
-                            }
-                        }
-                    }
-                })
-            }
-        } else {
-            for (item in it) {
-                val url = if (item.images.isEmpty()) item.image else item.images.split(",")[0]
-                PicSizeUtil.getPicSize(activity, url, object : PicSizeUtil.OnPicListener {
-                    override fun onImageSize(width: Int, height: Int) {
-                        val start = discoverInfoList.size
-                        item.width = width
-                        item.height = height
-                        discoverInfoList.add(item)
-                        BaseApp.fixedThreadPool.execute {
-                            item.isLike = MineApp.goodDaoManager.getGood(item.friendDynId) != null
-                            activity.runOnUiThread {
-                                adapter.notifyItemRangeChanged(start, discoverInfoList.size)
-                            }
-                        }
-                    }
-                })
-            }
-        }
+        if (updateTop) it.reverse()
 
         BaseApp.fixedThreadPool.execute {
+            for (item in it) {
+                item.isLike = MineApp.goodDaoManager.getGood(item.friendDynId) != null
+                val url = if (item.images.isEmpty()) item.image else item.images.split(",")[0]
+                var imageSize = MineApp.imageSizeDaoManager.getImageSize(url)
+                if (imageSize == null) {
+                    PicSizeUtil.getPicSize(activity, url, object : PicSizeUtil.OnPicListener {
+                        override fun onImageSize(width: Int, height: Int) {
+                            imageSize = ImageSize()
+                            imageSize!!.imageUrl = url
+                            imageSize!!.width = width
+                            imageSize!!.height = height
+                            BaseApp.fixedThreadPool.execute {
+                                MineApp.imageSizeDaoManager.insert(imageSize!!)
+                            }
+                            setImageSize(imageSize!!, item)
+                        }
+                    })
+                } else
+                    activity.runOnUiThread {
+                        setImageSize(imageSize!!, item)
+                    }
+            }
+
             SystemClock.sleep(2000)
             activity.runOnUiThread {
                 dismissLoading()
             }
         }
+
         binding.refresh.finishRefresh()
         binding.refresh.finishLoadMore()
+    }
+
+    /**
+     * 设置图片
+     */
+    private fun setImageSize(imageSize: ImageSize, item: DiscoverInfo) {
+        if (updateTop) {
+            item.width = imageSize.width
+            item.height = imageSize.height
+            discoverInfoList.add(0, item)
+            adapter.notifyItemRangeChanged(0, discoverInfoList.size)
+        } else {
+            val start = discoverInfoList.size
+            item.width = imageSize.width
+            item.height = imageSize.height
+            discoverInfoList.add(item)
+            adapter.notifyItemRangeChanged(start, discoverInfoList.size)
+        }
     }
 
     /**

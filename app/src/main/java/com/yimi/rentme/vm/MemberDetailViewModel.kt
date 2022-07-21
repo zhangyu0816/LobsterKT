@@ -249,7 +249,10 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
      * 动态列表
      */
     fun toDiscoverList(view: View) {
-//        ActivityUtils.getCardDiscoverList(otherUserId, mBinding.getIsAttention(), memberInfo)
+        activity.startActivity<DiscoverListActivity>(
+            Pair("otherUserId", otherUserId),
+            Pair("memberInfo", binding.memberInfo!!)
+        )
     }
 
     /**

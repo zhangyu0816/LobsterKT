@@ -1,8 +1,9 @@
 package com.yimi.rentme.bean
 
 import android.text.Spanned
+import java.io.Serializable
 
-class MemberInfo {
+class MemberInfo : Serializable {
     var userId = 0L//userId
     var nick = "" //昵称
     var image = "" //头像

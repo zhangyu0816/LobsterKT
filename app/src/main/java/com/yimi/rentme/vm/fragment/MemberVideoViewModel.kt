@@ -206,7 +206,7 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
         } else {
             // 视频详情
             activity.startActivity<VideoDetailActivity>(
-                Pair("friendDynId", discoverInfo.friendDynId)
+                Pair("friendDynId", discoverInfoList[position].friendDynId)
             )
         }
     }

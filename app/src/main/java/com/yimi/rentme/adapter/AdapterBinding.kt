@@ -2,17 +2,19 @@ package com.yimi.rentme.adapter
 
 import android.graphics.Color
 import android.media.MediaPlayer
-import android.net.Uri
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
+import com.yimi.rentme.bean.VideoInfo
 import com.yimi.rentme.views.*
 import com.zb.baselibs.adapter.viewSize
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.ObjectUtils
 import com.zb.baselibs.utils.SCToastUtil
+import com.zb.baselibs.views.FullScreenVideoView
+import org.simple.eventbus.EventBus
 
 @BindingAdapter(value = ["videoUrl", "showSize"], requireAll = false)
 fun FullScreenVideoView.setVideoUrl(videoUrl: String, showSize: Boolean) {
@@ -40,24 +42,29 @@ fun FullScreenVideoView.setVideoUrl(videoUrl: String, showSize: Boolean) {
             }
             MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START -> {
                 if (showSize) {
+                    val videoInfo = VideoInfo()
+                    videoInfo.duration = mp.duration
+
                     val width: Int = mp.videoWidth
                     val height: Int = mp.videoHeight
-
                     if (ObjectUtils.getViewSizeByHeight(1.0f) * width / height > BaseApp.W) {
-                        this.viewSize(BaseApp.W, BaseApp.W * height / width)
+                        videoInfo.width = BaseApp.W
+                        videoInfo.height = BaseApp.W * height / width
                     } else {
-                        this.viewSize(
-                            ObjectUtils.getViewSizeByHeight(1.0f) * width / height,
-                            ObjectUtils.getViewSizeByHeight(1.0f)
-                        )
+                        videoInfo.width = ObjectUtils.getViewSizeByHeight(1.0f) * width / height
+                        videoInfo.height = ObjectUtils.getViewSizeByHeight(1.0f)
                     }
+                    this.viewSize(videoInfo.width,  videoInfo.height)
+
+
+                    EventBus.getDefault().post(videoInfo, "lobsterVideoPlay")
                 }
                 this.setBackgroundColor(Color.TRANSPARENT)
             }
         }
         false //如果方法处理了信息，则为true；如果没有，则为false。返回false或根本没有OnInfoListener，将导致丢弃该信息。
     }
-    this.setVideoURI(Uri.parse(videoUrl))
+    this.setVideoPath(videoUrl)
     this.start()
 }
 

@@ -38,6 +38,7 @@
             android:visibility="@{(noWifi||noData)?View.GONE:View.VISIBLE}">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/discover_list"
                 adapter="@{viewModel.adapter}"
                 recyclerType="@{3}"
                 android:layout_width="match_parent"

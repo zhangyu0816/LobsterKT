@@ -3,14 +3,89 @@
 
     <data>
 
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.yimi.rentme.vm.VideoDetailViewModel" />
+
+        <variable
+            name="videoPath"
+            type="String" />
+
+        <variable
+            name="imageUrl"
+            type="String" />
+
+        <variable
+            name="width"
+            type="Integer" />
+
+        <variable
+            name="height"
+            type="Integer" />
+
+        <variable
+            name="discoverInfo"
+            type="com.yimi.rentme.bean.DiscoverInfo" />
+
+        <variable
+            name="memberInfo"
+            type="com.yimi.rentme.bean.MemberInfo" />
+
+        <variable
+            name="isProgress"
+            type="boolean" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:fitsSystemWindows="true">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.zb.baselibs.views.FullScreenVideoView
+            android:id="@+id/video_view"
+            showSize="@{true}"
+            videoUrl="@{videoPath}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true" />
+
+        <ImageView
+            android:id="@+id/iv_image"
+            imageUrl="@{imageUrl}"
+            viewHeightSize="@{height}"
+            viewWidthSize="@{width}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:alpha="0.0"
+            android:scaleType="fitXY" />
+
+        <View
+            viewHeightSize="@{ObjectUtils.getViewSizeByHeightFromMax(180)}"
+            viewWidthSize="@{-1}"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="@drawable/gradient_black_00_80" />
+
+        <View
+            viewHeightSize="@{ObjectUtils.getViewSizeByHeightFromMax(360)}"
+            viewWidthSize="@{-1}"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/gradient_black_80_00" />
+
+        <ImageView
+            android:id="@+id/iv_progress"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:background="@mipmap/loading_icon"
+            android:visibility="@{isProgress?View.VISIBLE:View.GONE}" />
+    </RelativeLayout>
 </layout>

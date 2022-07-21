@@ -15,6 +15,7 @@ import com.yimi.rentme.fragment.MainHomeFrag
 import com.yimi.rentme.fragment.MainMineFrag
 import com.yimi.rentme.roomdata.FollowDaoManager
 import com.yimi.rentme.roomdata.GoodDaoManager
+import com.yimi.rentme.roomdata.ImageSizeDaoManager
 import com.yimi.rentme.roomdata.LikeTypeDaoManager
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
@@ -31,6 +32,7 @@ class MainViewModel : BaseViewModel() {
         MineApp.followDaoManager = FollowDaoManager(BaseApp.context)
         MineApp.goodDaoManager = GoodDaoManager(BaseApp.context)
         MineApp.likeTypeDaoManager = LikeTypeDaoManager(BaseApp.context)
+        MineApp.imageSizeDaoManager = ImageSizeDaoManager(BaseApp.context)
         // 设备信息
         if (checkPermissionGranted(Manifest.permission.READ_PHONE_STATE)) {
             setDeviceCode()
