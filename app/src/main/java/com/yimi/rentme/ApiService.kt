@@ -22,6 +22,14 @@ interface ApiService {
         @Part file: MultipartBody.Part
     ): HttpWrapBean<ResourceUrl>
 
+    // 上传视频
+    @Multipart
+    @POST("YmUpload_videoFile")
+    suspend fun uploadVideo(
+        @Part("fileFileName") fileName: RequestBody,
+        @Part file: MultipartBody.Part
+    ): HttpWrapBean<ResourceUrl>
+
     // 功能开关
     @GET("api/AppCommon_functionSwitch")
     suspend fun functionSwitch(): HttpWrapBean<CommonSwitch>
@@ -360,4 +368,20 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/Pair_relievePair")
     suspend fun relievePair(@Field("otherUserId") otherUserId: Long): HttpWrapBean<Any?>
+
+    // 更新(提交当前位置)
+    @FormUrlEncoded
+    @POST("api/Pair_updatePairPool")
+    suspend fun updatePairPool(@FieldMap map: HashMap<String, String>): HttpWrapBean<Any?>
+
+    // 发布动态
+    @FormUrlEncoded
+    @POST("api/Interactive_publishDyn")
+    suspend fun publishDyn(
+        @Field("text") text: String, @Field("images") images: String,
+        @Field("videoUrl") videoUrl: String, @Field("resTime") resTime: Int,
+        @Field("isSyncPiazza") isSyncPiazza: Int, @Field("isPrivate") isPrivate: Int,
+        @Field("isAppearance") isAppearance: Int, @Field("addressInfo") addressInfo: String,
+        @Field("friendTitle") friendTitle: String
+    ): HttpWrapBean<Any?>
 }

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.SelectLocationViewModel" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="right"
+            type="String" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <ImageView
+                onClickDelayed="@{viewModel::back}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:src="@mipmap/back_black_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@{title}"
+                android:textColor="@color/black_252"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                onClickDelayed="@{viewModel::right}"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/gradient_purple_6d5_ae7"
+                android:gravity="center"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@{right}"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:visibility="@{(right==null||right.empty)?View.GONE:View.VISIBLE}"
+                tools:text="确定" />
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/ed_key"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_below="@+id/top_layout"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="15dp"
+            android:background="@drawable/btn_bg_black_efe_radius10"
+            android:hint="搜索地址"
+            android:imeOptions="actionSearch"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:singleLine="true"
+            android:textColorHint="@color/black_c3b"
+            android:textCursorDrawable="@drawable/cursor_color_black_252"
+            android:textSize="14sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/address_list"
+            android:layout_below="@+id/ed_key">
+
+            <com.amap.api.maps2d.MapView
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@mipmap/ic_mark" />
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/address_list"
+            adapter="@{viewModel.adapter}"
+            color="@{R.color.black_efe}"
+            size="@{1}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByHeight(0.4f)}"
+            viewWidthSize="@{-1}"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white" />
+    </RelativeLayout>
+</layout>

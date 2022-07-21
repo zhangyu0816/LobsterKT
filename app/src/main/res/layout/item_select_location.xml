@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.SelectLocationViewModel" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.LocationInfo" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="isSelect"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{v->viewModel.selectPosition(position)}"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{item.title}"
+            android:textColor="@color/black_252"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="小时料理" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginTop="15dp"
+            android:text="@{item.address}"
+            android:textColor="@color/black_827"
+            android:textSize="12sp"
+            tools:text="小时料理" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/select_address_icon"
+            android:visibility="@{isSelect?View.VISIBLE:View.GONE}" />
+    </RelativeLayout>
+</layout>

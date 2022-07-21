@@ -25,6 +25,10 @@ android {
                 qqappid    : "tencent101928546",
                 GETUI_APPID: "HHWzdCtaSz5j94MO2tqcT3"
         ]
+        ndk {
+            //目前已支持 "armeabi-v7a","arm64-v8a","x86","x86_64" 平台架构
+            abiFilters "armeabi-v7a","arm64-v8a","x86","x86_64"
+        }
     }
 
     externalNativeBuild {
@@ -79,4 +83,6 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(path: ':KotlinCommon:baseLibs')
     kapt "androidx.room:room-compiler:2.3.0"
+    //极速版 (预计占用 4M 左右空间)，主要移除了一些不常用的编解码器
+    implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
 }

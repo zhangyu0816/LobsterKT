@@ -42,9 +42,9 @@
 
             <ImageView
                 android:id="@+id/iv_image"
+                bitmap="@{item.bitmap}"
                 defaultRes="@{R.mipmap.empty_icon}"
                 imageUrl="@{item.imageUrl}"
-                bitmap="@{item.bitmap}"
                 onClickDelayed="@{v->viewModel.previewImage(position)}"
                 roundSize="@{10f}"
                 viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.31f)}"
@@ -52,6 +52,19 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop" />
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/progress"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                viewHeightSize="@{ObjectUtils.getViewSizeByHeightFromMax(6)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.31f)}"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_centerHorizontal="true"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/progressbar"
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <ImageView
@@ -70,16 +83,5 @@
             android:layout_centerInParent="true"
             android:visibility='@{item.videoUrl.empty?View.GONE:View.VISIBLE}'
             app:srcCompat="@mipmap/video_play_icon" />
-
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/progress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_alignParentBottom="true"
-            android:max="100"
-            android:progress="0"
-            android:progressDrawable="@drawable/progressbar"
-            android:visibility="gone" />
     </RelativeLayout>
 </layout>

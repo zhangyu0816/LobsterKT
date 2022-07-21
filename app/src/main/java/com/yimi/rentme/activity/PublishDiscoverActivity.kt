@@ -51,6 +51,14 @@ class PublishDiscoverActivity : BaseWhiteActivity() {
         viewModel.uploadImageList(MineApp.selectImageList)
     }
 
+    /**
+     * 选择城市
+     */
+    @Subscriber(tag = "lobsterCityName")
+    private fun lobsterCityName(data: String) {
+        viewModel.binding.cityName = data
+    }
+
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (event.keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_DOWN) {
             viewModel.back(iv_back)

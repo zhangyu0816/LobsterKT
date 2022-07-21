@@ -55,6 +55,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
+        <!-- 高德 start-->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="c8965ef31985bf9b79dfe75d1e081832" />
+
         <!-- 个推 start-->
         <meta-data
             android:name="GETUI_APPID"
@@ -133,6 +138,7 @@
         <activity android:name=".activity.RewardListActivity" />
         <activity android:name=".activity.ReportActivity" />
         <activity android:name=".activity.FCLActivity" />
+        <activity android:name=".activity.SelectLocationActivity" />
     </application>
 
 </manifest>
