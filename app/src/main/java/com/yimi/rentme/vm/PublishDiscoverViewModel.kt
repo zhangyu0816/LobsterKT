@@ -363,6 +363,9 @@ class PublishDiscoverViewModel : BaseViewModel() {
                 }
                 photoManager.addFileUpload(0, file)
             }
+            onFailed {
+                dismissLoading()
+            }
         }
     }
 

@@ -1,6 +1,8 @@
 package com.yimi.rentme.activity
 
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcSelectLocationBinding
 import com.yimi.rentme.vm.SelectLocationViewModel
@@ -15,6 +17,15 @@ class SelectLocationActivity : BaseWhiteActivity() {
         binding.viewModel = this
     }
 
+    private var savedInstanceState: Bundle? = null
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        this.savedInstanceState = savedInstanceState
+    }
+
+
     override fun getRes(): Int {
         return R.layout.ac_select_location
     }
@@ -23,6 +34,7 @@ class SelectLocationActivity : BaseWhiteActivity() {
         val extras = intent.extras
         if (extras != null)
             viewModel.isPublish = extras.getBoolean("isPublish")
+        map_view.onCreate(savedInstanceState)
         viewModel.initViewModel()
     }
 

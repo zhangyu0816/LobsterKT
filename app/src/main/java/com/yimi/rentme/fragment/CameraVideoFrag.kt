@@ -146,7 +146,6 @@ class CameraVideoFrag(private val isPublish: Boolean) : BaseFragment() {
             videoCapture = VideoCapture.Builder()//录像用例配置
                 .setTargetAspectRatio(aspectRatio) //设置高宽比
                 .setTargetRotation(view_finder.display!!.rotation)//设置旋转角度
-//                .setAudioRecordSource(MediaRecorder.AudioSource.MIC)//设置音频源麦克风
                 .build()
             try {
                 cameraProvider.unbindAll()//先解绑所有用例
