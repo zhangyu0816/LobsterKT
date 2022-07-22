@@ -14,12 +14,12 @@ import com.yimi.rentme.ApiService
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.adapter.BaseAdapter
+import com.yimi.rentme.bean.VipInfo
 import com.yimi.rentme.databinding.DfVipAdBinding
 import com.yimi.rentme.databinding.ItemAdBinding
 import com.zb.baselibs.adapter.viewSize
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.bean.Ads
-import com.zb.baselibs.bean.VipInfo
 import com.zb.baselibs.dialog.BaseDialogFragment
 import com.zb.baselibs.http.MainDataSource
 import com.zb.baselibs.utils.ObjectUtils

@@ -3,7 +3,6 @@ package com.yimi.rentme
 import com.yimi.rentme.bean.*
 import com.zb.baselibs.bean.AliPay
 import com.zb.baselibs.bean.HttpWrapBean
-import com.zb.baselibs.bean.VipInfo
 import com.zb.baselibs.bean.WXPay
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

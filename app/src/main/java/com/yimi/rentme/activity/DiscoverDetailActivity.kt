@@ -66,7 +66,7 @@ class DiscoverDetailActivity : BaseLightColorActivity(R.color.red_ece) {
      */
     @Subscriber(tag = "kotlin_pay_back")
     private fun payBack(data: String) {
-        EventBus.getDefault().post("", "lobsterUpdateWallet")
-        EventBus.getDefault().post("", "lobsterUpdateMineInfo")
+        EventBus.getDefault().post("更新钱包", "lobsterUpdateWallet")
+        EventBus.getDefault().post("更新我的信息", "lobsterUpdateMineInfo")
     }
 }

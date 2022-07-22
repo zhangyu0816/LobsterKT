@@ -1,9 +1,12 @@
 package com.yimi.rentme.vm
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityCompat
 import com.yimi.rentme.ApiService
@@ -15,6 +18,11 @@ import com.zb.baselibs.vm.BaseLibsViewModel
 abstract class BaseViewModel : BaseLibsViewModel() {
 
     lateinit var imm: InputMethodManager
+    private var pvhSY: PropertyValuesHolder? = null
+    private var pvhSX: PropertyValuesHolder? = null
+    private var pvhA: PropertyValuesHolder? = null
+    private var pvhR: PropertyValuesHolder? = null
+    private var pvh: ObjectAnimator? = null
 
     abstract fun initViewModel()
 
@@ -90,5 +98,18 @@ abstract class BaseViewModel : BaseLibsViewModel() {
         activity.window.addFlags(View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
         activity.window.navigationBarColor = Color.TRANSPARENT
         activity.window.statusBarColor = Color.TRANSPARENT
+    }
+
+    open fun goAnimator(view: View?, min: Float, max: Float, time: Long) {
+        pvhSY = PropertyValuesHolder.ofFloat("scaleY", min, max, min)
+        pvhSX = PropertyValuesHolder.ofFloat("scaleX", min, max, min)
+        pvh = ObjectAnimator.ofPropertyValuesHolder(view, pvhSY, pvhSX).setDuration(time)
+        pvh!!.repeatCount = Animation.INFINITE
+        pvh!!.start()
+    }
+
+    open fun stopGo() {
+        if (pvh != null) pvh!!.cancel()
+        pvh = null
     }
 }

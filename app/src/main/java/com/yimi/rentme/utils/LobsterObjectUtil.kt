@@ -145,4 +145,14 @@ object LobsterObjectUtil {
             }
         }
     }
+
+    @JvmStatic
+    fun getVipIntroBgHeight(scale: Float): Int {
+        return (ObjectUtils.getViewSizeByWidth(scale) * 458f / 1035f).toInt()
+    }
+
+    @JvmStatic
+    fun getVipIntroHeight(): Int {
+        return (BaseApp.W * 3737f / 1125f).toInt()
+    }
 }

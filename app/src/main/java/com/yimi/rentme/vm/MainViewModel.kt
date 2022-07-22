@@ -22,6 +22,7 @@ import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.utils.*
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import com.zb.baselibs.views.replaceFragment
+import org.simple.eventbus.EventBus
 
 class MainViewModel : BaseViewModel() {
 
@@ -217,6 +218,7 @@ class MainViewModel : BaseViewModel() {
         mainDataSource.enqueue({ firstOpenMemberPage() }) {
             onSuccess {
                 MineApp.isFirstOpen = it == 1
+                EventBus.getDefault().post("更新开通按钮", "lobsterUpdateBtn")
 //                if (PreferenceUtil.readIntValue(activity, "love_activity") === 0) {
 //                    PreferenceUtil.saveIntValue(activity, "love_activity", 1)
 //                    TextPW(
@@ -256,6 +258,7 @@ class MainViewModel : BaseViewModel() {
             onSuccess {
                 MineApp.mineInfo = it
                 MineApp.sex = it.sex
+                firstOpenMemberPage()
             }
         }
     }

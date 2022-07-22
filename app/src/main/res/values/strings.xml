@@ -57,4 +57,7 @@
     <string name="fan_count">粉丝数 %d</string>
     <string name="camera_name">相册</string>
     <string name="video_name">视频</string>
+    <string name="tv_open">立即开通</string>
+    <string name="tv_renew">会员续费</string>
+    <string name="vip_intro">暂未开通会员</string>
 </resources>

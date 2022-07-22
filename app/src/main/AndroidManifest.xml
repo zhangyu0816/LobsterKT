@@ -145,6 +145,7 @@
         <activity android:name=".activity.FCLActivity" />
         <activity android:name=".activity.SelectLocationActivity" />
         <activity android:name=".activity.DiscoverListActivity" />
+        <activity android:name=".activity.OpenVipActivity" />
     </application>
 
 </manifest>

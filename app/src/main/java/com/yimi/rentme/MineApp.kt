@@ -9,7 +9,6 @@ import com.yimi.rentme.roomdata.ImageSizeDaoManager
 import com.yimi.rentme.roomdata.LikeTypeDaoManager
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.bean.ThreeInfo
-import com.zb.baselibs.bean.VipInfo
 import com.zb.baselibs.utils.getIntegerByAllName
 
 class MineApp : BaseApp() {

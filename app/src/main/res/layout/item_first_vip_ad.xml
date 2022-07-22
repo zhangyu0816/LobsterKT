@@ -14,7 +14,7 @@
 
         <variable
             name="item"
-            type="com.zb.baselibs.bean.VipInfo" />
+            type="com.yimi.rentme.bean.VipInfo" />
 
         <variable
             name="position"

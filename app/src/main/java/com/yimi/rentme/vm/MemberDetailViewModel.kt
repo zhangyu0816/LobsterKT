@@ -188,7 +188,7 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
      * 开通VIP
      */
     fun openVip(view: View) {
-//        ActivityUtils.getMineOpenVip(true)
+        activity.startActivity<OpenVipActivity>()
     }
 
     /**

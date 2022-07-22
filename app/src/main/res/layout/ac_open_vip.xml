@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.OpenVipViewModel" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="mineInfo"
+            type="com.yimi.rentme.bean.MineInfo" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f5f5f5"
+        android:fitsSystemWindows="true">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@drawable/gradient_red_f5f5f5" />
+
+        <include
+            android:id="@+id/top_layout"
+            layout="@layout/back_black_layout"
+            title="@{title}"
+            viewModel="@{viewModel}" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:layout_below="@+id/top_layout"
+            android:layout_centerHorizontal="true"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    viewHeightSize="@{LobsterObjectUtil.getVipIntroBgHeight(0.95f)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.95f)}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@mipmap/vip_intro_bg_icon">
+
+                    <TextView
+                        android:id="@+id/tv_vip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="40dp"
+                        android:text="四大权益，六大特权"
+                        android:textColor="#b0ffffff"
+                        android:textSize="13sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:background="@drawable/shape_dotted_line"
+                            android:layerType="software" />
+
+                        <RelativeLayout
+                            android:id="@+id/vip_relative"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <RelativeLayout
+                                android:id="@+id/image_relative"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="15dp">
+
+                                <View
+                                    viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(124)}"
+                                    viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(124)}"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
+                                    android:layout_centerInParent="true"
+                                    android:background="@drawable/circle_white" />
+
+                                <ImageView
+                                    defaultRes="@{R.mipmap.empty_icon}"
+                                    imageUrl="@{mineInfo.image}"
+                                    isCircle="@{true}"
+                                    viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(119)}"
+                                    viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(119)}"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true" />
+                            </RelativeLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toStartOf="@+id/tv_open"
+                                android:layout_toEndOf="@+id/image_relative"
+                                android:text='@{mineInfo.memberType==2?(mineInfo.memberExpireTime.empty ?"" : String.format(@string/member_expire_time, mineInfo.memberExpireTime.substring(0,10))):@string/vip_intro}'
+                                android:textColor="#b0ffffff"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tv_open"
+                                onClickDelayed="@{viewModel::getVip}"
+                                tools:text="@string/tv_renew"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="15dp"
+                                android:background="@mipmap/open_bg"
+                                android:gravity="center"
+                                android:text="@{mineInfo.memberType==2?@string/tv_renew:@string/tv_open}"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                <ImageView
+                    viewHeightSize="@{LobsterObjectUtil.getVipIntroHeight()}"
+                    viewWidthSize="@{-1}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/vip_intro_icon"
+                    android:scrollbars="vertical" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <RelativeLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="-10dp"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/tv_btn"
+                onClickDelayed="@{viewModel::getVip}"
+                tools:text="开通"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@mipmap/btn_bg_icon"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</layout>

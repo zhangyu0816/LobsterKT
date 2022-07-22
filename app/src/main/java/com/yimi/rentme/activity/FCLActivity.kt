@@ -41,7 +41,7 @@ class FCLActivity : BaseLightColorActivity(R.color.black_efe) {
      */
     @Subscriber(tag = "kotlin_pay_back")
     private fun payBack(data: String) {
-        EventBus.getDefault().post("", "lobsterUpdateMineInfo")
+        EventBus.getDefault().post("更新我的信息", "lobsterUpdateMineInfo")
         viewModel.binding.isVip = true
     }
 }
