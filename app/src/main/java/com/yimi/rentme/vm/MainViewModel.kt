@@ -22,6 +22,7 @@ import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.utils.*
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import com.zb.baselibs.views.replaceFragment
+import org.jetbrains.anko.runOnUiThread
 import org.simple.eventbus.EventBus
 
 class MainViewModel : BaseViewModel() {
@@ -84,6 +85,22 @@ class MainViewModel : BaseViewModel() {
                 "toLikeCount_${getLong("userId")}_${DateUtil.getNow(DateUtil.yyyy_MM_dd)}",
                 -1
             )
+        BaseApp.fixedThreadPool.execute {
+            SystemClock.sleep(500)
+            activity.runOnUiThread {
+                if (getInteger("love_activity") == 0) {
+                    saveInteger("love_activity", 1)
+                    RemindDF(activity).setTitle("《爱情盲盒》")
+                        .setContent("一,爱情盲盒玩法。\n1，把你的微信号存入盲盒中，等待异性用户来拆盲盒。\n2，你也可以取出一个异性盲盒，然后添加TA的微信。\n3，入口在“我的->爱情盲盒")
+                        .setSureName("去玩一玩").setCallBack(object : RemindDF.CallBack {
+                            override fun sure() {
+//                                ActivityUtils.getLoveHome()
+                            }
+                        })
+                        .show(activity.supportFragmentManager)
+                }
+            }
+        }
     }
 
     /**
@@ -219,21 +236,6 @@ class MainViewModel : BaseViewModel() {
             onSuccess {
                 MineApp.isFirstOpen = it == 1
                 EventBus.getDefault().post("更新开通按钮", "lobsterUpdateBtn")
-//                if (PreferenceUtil.readIntValue(activity, "love_activity") === 0) {
-//                    PreferenceUtil.saveIntValue(activity, "love_activity", 1)
-//                    TextPW(
-//                        activity,
-//                        mBinding.getRoot(),
-//                        "新功能《爱情盲盒》",
-//                        "一,爱情盲盒玩法。\n1，把你的微信号存入盲盒中，等待异性用户来拆盲盒。\n2，你也可以取出一个异性盲盒，然后添加TA的微信。\n3，入口在“我的->爱情盲盒",
-//                        "去玩一玩",
-//                        true,
-//                        object : CallBack() {
-//                            fun sure() {
-//                                ActivityUtils.getLoveHome()
-//                            }
-//                        })
-//                }
             }
         }
     }

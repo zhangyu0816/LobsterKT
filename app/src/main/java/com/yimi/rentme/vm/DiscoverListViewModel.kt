@@ -9,10 +9,12 @@ import com.yimi.rentme.bean.ContactNum
 import com.yimi.rentme.bean.MemberInfo
 import com.yimi.rentme.databinding.AcDiscoverListBinding
 import com.yimi.rentme.dialog.FunctionDF
+import com.yimi.rentme.dialog.SuperLikeDF
 import com.yimi.rentme.dialog.VipAdDF
 import com.yimi.rentme.fragment.MemberDiscoverFrag
 import com.yimi.rentme.fragment.MemberVideoFrag
 import com.yimi.rentme.roomdata.FollowInfo
+import com.yimi.rentme.roomdata.LikeTypeInfo
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.utils.getLong
@@ -80,7 +82,7 @@ class DiscoverListViewModel : BaseViewModel() {
 
                         override fun like() {
                             if (MineApp.mineInfo.memberType == 2) { // 会员
-//                                makeEvaluate(2)
+                                makeEvaluate()
                             } else {
                                 VipAdDF(activity).setType(3)
                                     .setOtherImage(binding.memberInfo!!.image)
@@ -221,6 +223,60 @@ class DiscoverListViewModel : BaseViewModel() {
                         }
                     }
                     EventBus.getDefault().post(false, "lobsterUpdateFollow")
+                }
+            }
+        }
+    }
+
+    /**
+     * 喜欢/超级喜欢
+     */
+    private fun makeEvaluate() {
+        mainDataSource.enqueue({ makeEvaluate(otherUserId, 2) }) {
+            onSuccess {
+                val myHead = MineApp.mineInfo.image
+                val otherHead = binding.memberInfo!!.image
+                // 1喜欢成功 2匹配成功 3喜欢次数用尽
+                if (it == 1) {
+                    SuperLikeDF(activity).setMyHead(myHead).setOtherHead(otherHead)
+                        .setMySex(MineApp.mineInfo.sex)
+                        .setOtherSex(binding.memberInfo!!.sex)
+                        .show(activity.supportFragmentManager)
+                    EventBus.getDefault().post("更新关注/粉丝/喜欢", "lobsterUpdateFCL")
+                    BaseApp.fixedThreadPool.execute {
+                        if (MineApp.likeTypeDaoManager.getLikeTypeInfo(otherUserId) == null) {
+                            val likeTypeInfo = LikeTypeInfo()
+                            likeTypeInfo.likeType = 2
+                            likeTypeInfo.otherUserId = otherUserId
+                            likeTypeInfo.mainUserId = getLong("userId")
+                            MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                        } else {
+                            MineApp.likeTypeDaoManager.updateLikeType(1, otherUserId)
+                        }
+                    }
+                } else if (it == 4) {
+                    // 超级喜欢时，非会员或超级喜欢次数用尽
+                    if (MineApp.mineInfo.memberType == 2) {
+                        SCToastUtil.showToast(activity, "今日超级喜欢次数已用完", 2)
+                    } else {
+                        VipAdDF(activity).setType(3)
+                            .setOtherImage(binding.memberInfo!!.image)
+                            .setMainDataSource(mainDataSource)
+                            .show(activity.supportFragmentManager)
+                    }
+                } else {
+                    BaseApp.fixedThreadPool.execute {
+                        if (MineApp.likeTypeDaoManager.getLikeTypeInfo(otherUserId) == null) {
+                            val likeTypeInfo = LikeTypeInfo()
+                            likeTypeInfo.likeType = 2
+                            likeTypeInfo.otherUserId = otherUserId
+                            likeTypeInfo.mainUserId = getLong("userId")
+                            MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                        } else {
+                            MineApp.likeTypeDaoManager.updateLikeType(1, otherUserId)
+                        }
+                    }
+                    SCToastUtil.showToast(activity, "你已超级喜欢过对方", 2)
                 }
             }
         }

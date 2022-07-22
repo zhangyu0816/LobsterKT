@@ -226,10 +226,10 @@ class LoginNameViewModel : BaseViewModel() {
      */
     fun next(view: View) {
         if (binding.phone!!.length < 11) return
-//        if (!binding.phone!!.matches(BaseApp.phoneRegex)) {
-//            SCToastUtil.showToast(activity, "请输入正确手机号", 2)
-//            return
-//        }
+        if (!binding.phone!!.matches(BaseApp.phoneRegex)) {
+            SCToastUtil.showToast(activity, "请输入正确手机号", 2)
+            return
+        }
         if (!binding.clickSelect) {
             SCToastUtil.showToast(activity, "请仔细阅读底部协议，并勾选", 2)
             return
