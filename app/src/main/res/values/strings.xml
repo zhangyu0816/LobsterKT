@@ -60,4 +60,7 @@
     <string name="tv_open">立即开通</string>
     <string name="tv_renew">会员续费</string>
     <string name="vip_intro">暂未开通会员</string>
+    <string name="member_expire_time">有效期至%s</string>
+    <string name="dyn_image">动态</string>
+    <string name="dyn_video">小视频</string>
 </resources>

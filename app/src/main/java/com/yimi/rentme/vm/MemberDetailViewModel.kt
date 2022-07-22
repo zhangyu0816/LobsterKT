@@ -236,7 +236,7 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
     }
 
     /**
-     * 关注/粉丝/喜欢/点赞
+     * 关注/粉丝
      */
     fun contactNumDetail(index: Int) {
         activity.startActivity<FCLActivity>(
@@ -251,7 +251,8 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
     fun toDiscoverList(view: View) {
         activity.startActivity<DiscoverListActivity>(
             Pair("otherUserId", otherUserId),
-            Pair("memberInfo", binding.memberInfo!!)
+            Pair("memberInfo", binding.memberInfo!!),
+            Pair("contactNum", binding.contactNum!!)
         )
     }
 
@@ -309,7 +310,7 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
      * 用户信息
      */
     private fun otherInfo() {
-        mainDataSource.enqueueLoading({ otherInfo(otherUserId) }, "获取用户信息") {
+        mainDataSource.enqueueLoading({ otherInfo(otherUserId) }, "获取用户信息...") {
             onSuccess {
                 binding.memberInfo = it
                 binding.isPlay = true

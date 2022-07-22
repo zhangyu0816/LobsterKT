@@ -1,6 +1,8 @@
 package com.yimi.rentme.bean
 
-class ContactNum {
+import java.io.Serializable
+
+class ContactNum : Serializable {
     var userId = 0L//
     var fansCount = 0//粉丝数量
     var concernCount = 0//关注数量

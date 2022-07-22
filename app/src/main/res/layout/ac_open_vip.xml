@@ -28,8 +28,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#f5f5f5"
-        android:fitsSystemWindows="true">
+        android:background="#f5f5f5">
 
         <View
             android:layout_width="match_parent"
@@ -40,10 +39,13 @@
             android:id="@+id/top_layout"
             layout="@layout/back_black_layout"
             title="@{title}"
-            viewModel="@{viewModel}" />
+            viewModel="@{viewModel}"
+            android:layout_marginTop="34dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <androidx.core.widget.NestedScrollView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_layout"
             android:layout_below="@+id/top_layout"
@@ -137,7 +139,6 @@
                             <TextView
                                 android:id="@+id/tv_open"
                                 onClickDelayed="@{viewModel::getVip}"
-                                tools:text="@string/tv_renew"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
@@ -148,7 +149,8 @@
                                 android:text="@{mineInfo.memberType==2?@string/tv_renew:@string/tv_open}"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                tools:text="@string/tv_renew" />
                         </RelativeLayout>
                     </LinearLayout>
 
@@ -176,7 +178,6 @@
             <TextView
                 android:id="@+id/tv_btn"
                 onClickDelayed="@{viewModel::getVip}"
-                tools:text="开通"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -186,7 +187,8 @@
                 android:paddingBottom="10dp"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="开通" />
         </RelativeLayout>
 
     </RelativeLayout>

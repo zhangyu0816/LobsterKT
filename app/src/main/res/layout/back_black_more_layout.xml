@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="android.view.View" />
 
         <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
 
         <variable
             name="viewModel"
@@ -15,6 +18,10 @@
         <variable
             name="title"
             type="String" />
+
+        <variable
+            name="showVip"
+            type="boolean" />
     </data>
 
     <RelativeLayout
@@ -29,13 +36,27 @@
             android:src="@mipmap/back_black_icon" />
 
         <TextView
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@{title}"
             android:textColor="@color/black_252"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="哈哈哈"/>
+
+        <ImageView
+            viewHeightSize="@{ObjectUtils.getViewSizeByHeightFromMax(105)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(183)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="3dp"
+            android:layout_toEndOf="@+id/tv_title"
+            android:background="@mipmap/vip_icon"
+            android:visibility="@{showVip?View.VISIBLE:View.GONE}" />
+
 
         <ImageView
             android:id="@+id/iv_more"

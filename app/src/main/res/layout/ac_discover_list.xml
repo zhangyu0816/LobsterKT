@@ -1,16 +1,310 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
             type="com.yimi.rentme.vm.DiscoverListViewModel" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="showVip"
+            type="boolean" />
+
+        <variable
+            name="memberInfo"
+            type="com.yimi.rentme.bean.MemberInfo" />
+
+        <variable
+            name="contactNum"
+            type="com.yimi.rentme.bean.ContactNum" />
+
+        <variable
+            name="isFollow"
+            type="boolean" />
+
+        <variable
+            name="isMine"
+            type="boolean" />
+
+        <variable
+            name="index"
+            type="Integer" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            android:id="@+id/top_relative"
+            layout="@layout/back_black_more_layout"
+            showVip="@{showVip}"
+            title="@{title}"
+            viewModel="@{viewModel}" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/top_relative"
+            android:splitMotionEvents="false">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:elevation="0dp">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    app:contentInsetStart="0dp"
+                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:paddingStart="15dp"
+                        android:paddingEnd="15dp">
+
+                        <RelativeLayout
+                            android:id="@+id/image_layout"
+                            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(240)}"
+                            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(240)}"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:id="@+id/iv_image"
+                                defaultRes="@{R.mipmap.empty_icon}"
+                                imageUrl="@{memberInfo.image}"
+                                isCircle="@{true}"
+                                viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(220)}"
+                                viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(220)}"
+                                android:layout_width="76dp"
+                                android:layout_height="76dp"
+                                android:layout_centerHorizontal="true" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:background="@mipmap/real_icon"
+                                android:visibility="@{memberInfo.faceAttest==1?View.VISIBLE:View.GONE}" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/num_linear"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="50dp"
+                            android:layout_toEndOf="@+id/image_layout"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    onClickDelayed="@{v->viewModel.contactNumDetail(0)}"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:singleLine="true"
+                                        android:text="@{String.valueOf(contactNum.concernCount)}"
+                                        android:textColor="@color/black_252"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold"
+                                        tools:text="35" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:text="关注"
+                                        android:textColor="@color/black_c3b"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                onClickDelayed="@{v->viewModel.contactNumDetail(1)}"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:singleLine="true"
+                                    android:text="@{String.valueOf(contactNum.fansCount)}"
+                                    android:textColor="@color/black_252"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    tools:text="35" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="粉丝"
+                                    android:textColor="@color/black_c3b"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_beLike"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:singleLine="true"
+                                        android:text="@{String.valueOf(contactNum.beLikeCount)}"
+                                        android:textColor="@color/black_252"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold"
+                                        tools:text="3124125" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:text="被喜欢"
+                                        android:textColor="@color/black_c3b"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_intro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/num_linear"
+                            android:layout_marginStart="50dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_toEndOf="@+id/image_layout"
+                            android:singleLine="true"
+                            android:text="@{memberInfo.personalitySign.empty?@string/sign_content:memberInfo.personalitySign}"
+                            android:textColor="@color/black_4d4"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            tools:text="为了减肥了我劳务纠纷另外二九六我来我家 " />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="29dp"
+                            android:layout_below="@+id/tv_intro"
+                            android:layout_marginStart="50dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_toEndOf="@+id/image_layout"
+                            android:background="@{isFollow?@drawable/btn_bg_black_c3b_radius60:@drawable/btn_bg_purple_7a4_radius60}"
+                            android:gravity="center"
+                            android:onClick="@{viewModel::follow}"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:text="@{isFollow?@string/attention_false:@string/attention_true}"
+                            android:textColor="@{isFollow?@color/black_827:@color/white}"
+                            android:textSize="14sp"
+                            android:visibility="@{isMine?View.GONE:View.VISIBLE}" />
+                    </RelativeLayout>
+                </androidx.appcompat.widget.Toolbar>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.yimi.rentme.views.TabView
+                        onClickDelayed="@{v->viewModel.selectIndex(0)}"
+                        tabSelect="@{index==0}"
+                        tabTitle="@{@string/dyn_image}"
+                        android:layout_width="70dp"
+                        android:layout_height="40dp"
+                        android:gravity="center" />
+
+                    <com.yimi.rentme.views.TabView
+                        onClickDelayed="@{v->viewModel.selectIndex(1)}"
+                        tabSelect="@{index==1}"
+                        tabTitle="@{@string/dyn_video}"
+                        android:layout_width="70dp"
+                        android:layout_height="40dp"
+                        android:gravity="center" />
+                </LinearLayout>
+
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <FrameLayout
+                android:id="@+id/dyn_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@mipmap/white_bg">
+
+            <TextView
+                onClickDelayed="@{viewModel::update}"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/gradient_purple_6d5_ae7"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:paddingStart="40dp"
+                android:paddingEnd="40dp"
+                android:text="求更新"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@mipmap/icon_maimeng" />
+        </RelativeLayout>
+    </RelativeLayout>
 </layout>

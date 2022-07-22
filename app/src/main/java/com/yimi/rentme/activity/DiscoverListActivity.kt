@@ -1,6 +1,9 @@
 package com.yimi.rentme.activity
 
+import android.content.Intent
+import com.umeng.socialize.UMShareAPI
 import com.yimi.rentme.R
+import com.yimi.rentme.bean.ContactNum
 import com.yimi.rentme.bean.MemberInfo
 import com.yimi.rentme.databinding.AcDiscoverListBinding
 import com.yimi.rentme.vm.DiscoverListViewModel
@@ -23,7 +26,22 @@ class DiscoverListActivity : BaseWhiteActivity() {
         if (extras != null) {
             viewModel.otherUserId = extras.getLong("otherUserId")
             viewModel.memberInfo = extras.getSerializable("memberInfo") as MemberInfo
+            viewModel.contactNum = extras.getSerializable("contactNum") as ContactNum
         }
         viewModel.initViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
+    }
+
+    /**
+     * 分享重写
+     */
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data)
     }
 }
