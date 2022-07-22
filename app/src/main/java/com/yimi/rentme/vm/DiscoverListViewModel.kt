@@ -71,9 +71,7 @@ class DiscoverListViewModel : BaseViewModel() {
                 FunctionDF(activity).setUmImage(
                     binding.memberInfo!!.image.replace("YM0000", "430X430")
                 ).setSharedName(sharedName).setContent(content).setSharedUrl(sharedUrl)
-                    .setOtherUserId(otherUserId).setIsVideo(false)
-                    .setIsDiscover(false).setIsList(false)
-                    .setCallBack(object : FunctionDF.CallBack {
+                    .setOtherUserId(otherUserId).setCallBack(object : FunctionDF.CallBack {
                         override fun report() {
                             activity.startActivity<ReportActivity>(
                                 Pair("otherUserId", otherUserId)
@@ -251,19 +249,12 @@ class DiscoverListViewModel : BaseViewModel() {
                             likeTypeInfo.mainUserId = getLong("userId")
                             MineApp.likeTypeDaoManager.insert(likeTypeInfo)
                         } else {
-                            MineApp.likeTypeDaoManager.updateLikeType(1, otherUserId)
+                            MineApp.likeTypeDaoManager.updateLikeType(2, otherUserId)
                         }
                     }
                 } else if (it == 4) {
                     // 超级喜欢时，非会员或超级喜欢次数用尽
-                    if (MineApp.mineInfo.memberType == 2) {
-                        SCToastUtil.showToast(activity, "今日超级喜欢次数已用完", 2)
-                    } else {
-                        VipAdDF(activity).setType(3)
-                            .setOtherImage(binding.memberInfo!!.image)
-                            .setMainDataSource(mainDataSource)
-                            .show(activity.supportFragmentManager)
-                    }
+                    SCToastUtil.showToast(activity, "今日超级喜欢次数已用完", 2)
                 } else {
                     BaseApp.fixedThreadPool.execute {
                         if (MineApp.likeTypeDaoManager.getLikeTypeInfo(otherUserId) == null) {
@@ -273,7 +264,7 @@ class DiscoverListViewModel : BaseViewModel() {
                             likeTypeInfo.mainUserId = getLong("userId")
                             MineApp.likeTypeDaoManager.insert(likeTypeInfo)
                         } else {
-                            MineApp.likeTypeDaoManager.updateLikeType(1, otherUserId)
+                            MineApp.likeTypeDaoManager.updateLikeType(2, otherUserId)
                         }
                     }
                     SCToastUtil.showToast(activity, "你已超级喜欢过对方", 2)

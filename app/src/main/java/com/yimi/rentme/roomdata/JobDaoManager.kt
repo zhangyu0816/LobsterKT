@@ -3,6 +3,9 @@ package com.yimi.rentme.roomdata
 import android.content.Context
 import androidx.room.*
 
+/**
+ * 工作
+ */
 @Entity(tableName = "JobInfo")
 data class JobInfo(
     @PrimaryKey

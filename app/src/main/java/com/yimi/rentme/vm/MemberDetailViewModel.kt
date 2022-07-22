@@ -121,9 +121,7 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
                 FunctionDF(activity).setUmImage(
                     binding.memberInfo!!.image.replace("YM0000", "430X430")
                 ).setSharedName(sharedName).setContent(content).setSharedUrl(sharedUrl)
-                    .setOtherUserId(otherUserId).setIsVideo(false)
-                    .setIsDiscover(false).setIsList(false)
-                    .setCallBack(object : FunctionDF.CallBack {
+                    .setOtherUserId(otherUserId).setCallBack(object : FunctionDF.CallBack {
                         override fun report() {
                             activity.startActivity<ReportActivity>(
                                 Pair("otherUserId", otherUserId)

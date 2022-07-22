@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="videoView"
+            type="com.yimi.rentme.views.VideoFunctionView" />
+
+        <variable
+            name="discoverInfo"
+            type="com.yimi.rentme.bean.DiscoverInfo" />
+
+        <variable
+            name="isMine"
+            type="boolean" />
+
+        <variable
+            name="isFollow"
+            type="boolean" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/right_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <View
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(130)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(130)}"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/circle_white" />
+
+            <ImageView
+                android:id="@+id/iv_logo"
+                imageUrl="@{discoverInfo.image}"
+                isCircle="@{true}"
+                onClickDelayed="@{videoView::toMemberDetail}"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(126)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(126)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+            <RelativeLayout
+                android:id="@+id/attention_layout"
+                onClickDelayed="@{videoView::attentionOther}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="35dp"
+                android:paddingStart="11dp"
+                android:paddingEnd="11dp"
+                android:visibility="@{isMine?View.INVISIBLE:View.VISIBLE}">
+
+                <ImageView
+                    android:id="@+id/iv_attention"
+                    viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(60)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(60)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@{isFollow?@drawable/attention_get_icon:@drawable/attention_icon}" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp">
+
+            <ImageView
+                android:id="@+id/iv_unLike"
+                onClickDelayed="@{videoView::doLike}"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(96)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(96)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/video_play_zan_unpressed"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_like"
+                onClickDelayed="@{videoView::doLike}"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(96)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(96)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/video_play_zan_pressed"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-18dp"
+            android:layout_marginBottom="15dp"
+            android:ellipsize="end"
+            android:maxLength="4"
+            android:shadowColor="#4d000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="1"
+            android:singleLine="true"
+            android:text="@{LobsterObjectUtil.getGoodNum(discoverInfo.goodNum)}"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            tools:text="1.1万" />
+
+        <ImageView
+            onClickDelayed="@{videoView::toReview}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(96)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(96)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@mipmap/video_reviews_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:ellipsize="end"
+            android:maxLength="4"
+            android:shadowColor="#4d000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="1"
+            android:singleLine="true"
+            android:text="@{LobsterObjectUtil.getReviews(discoverInfo.reviews)}"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            tools:text="1.1万" />
+
+        <ImageView
+            onClickDelayed="@{videoView::toShare}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(96)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(96)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@mipmap/video_play_share" />
+
+        <ImageView
+            onClickDelayed="@{videoView::doReward}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(111)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(111)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
+            android:background="@mipmap/video_gift_icon"
+            android:visibility="@{isMine?View.GONE:View.VISIBLE}" />
+    </LinearLayout>
+</layout>

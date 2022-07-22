@@ -221,8 +221,7 @@ class MNImageBrowserViewModel : BaseViewModel() {
                         "430X430"
                     )
                 ).setSharedName(sharedName).setContent(content).setSharedUrl(sharedUrl)
-                    .setOtherUserId(binding.discoverInfo!!.userId).setIsVideo(false)
-                    .setIsDiscover(true).setIsList(false)
+                    .setOtherUserId(binding.discoverInfo!!.userId).setIsDiscover(true)
                     .setCallBack(object : FunctionDF.CallBack {
                         override fun report() {
                             activity.startActivity<ReportActivity>(

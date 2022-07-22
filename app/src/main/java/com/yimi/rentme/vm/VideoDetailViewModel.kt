@@ -36,6 +36,23 @@ class VideoDetailViewModel : BaseViewModel() {
         animator!!.repeatMode = ValueAnimator.RESTART
         animator!!.repeatCount = Animation.INFINITE
         animator!!.start()
+
+        initGood(binding.viewClick, binding.ivGood, {
+//            videoPlay(null)
+        }) {
+            BaseApp.fixedThreadPool.execute {
+                val goodInfo = MineApp.goodDaoManager.getGood(friendDynId)
+                if(goodInfo!=null){
+
+                }
+            }
+//            if (!GoodDb.getInstance().hasGood(friendDynId)) {
+//                mBinding.ivUnLike.setVisibility(View.GONE)
+//                mBinding.ivLike.setVisibility(View.VISIBLE)
+//                GoodDb.getInstance().saveGood(CollectID(friendDynId))
+//                dynDoLike()
+//            }
+        }
         dynDetail()
     }
 

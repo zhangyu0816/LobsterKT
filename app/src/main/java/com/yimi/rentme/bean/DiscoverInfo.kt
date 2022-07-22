@@ -30,5 +30,5 @@ class DiscoverInfo {
     var constellation = 0
     var birthday = ""
     var age = 0
-    var isLike = false
+    var isLike = false // 是否点赞
 }

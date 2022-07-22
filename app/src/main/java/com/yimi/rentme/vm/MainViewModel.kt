@@ -22,7 +22,6 @@ import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.utils.*
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import com.zb.baselibs.views.replaceFragment
-import org.jetbrains.anko.runOnUiThread
 import org.simple.eventbus.EventBus
 
 class MainViewModel : BaseViewModel() {

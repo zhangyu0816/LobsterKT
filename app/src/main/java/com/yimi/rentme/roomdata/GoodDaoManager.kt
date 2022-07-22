@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.room.*
 import com.zb.baselibs.utils.getLong
 
+/**
+ * 点赞
+ */
 @Entity(tableName = "GoodInfo")
 data class GoodInfo(
     @PrimaryKey

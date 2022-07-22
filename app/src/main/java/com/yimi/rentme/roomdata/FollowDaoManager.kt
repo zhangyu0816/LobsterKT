@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.room.*
 import com.zb.baselibs.utils.getLong
 
+/**
+ * 关注
+ */
 @Entity(tableName = "FollowInfo")
 data class FollowInfo(
     @PrimaryKey

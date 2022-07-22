@@ -155,4 +155,16 @@ object LobsterObjectUtil {
     fun getVipIntroHeight(): Int {
         return (BaseApp.W * 3737f / 1125f).toInt()
     }
+
+    @JvmStatic
+    fun getGoodNum(goodNum: Int): String {
+        return if (goodNum < 10000) goodNum.toString()
+        else String.format("%.1f万", goodNum / 10000f)
+    }
+
+    @JvmStatic
+    fun getReviews(reviews: Int): String {
+        return if (reviews < 10000) reviews.toString()
+        else String.format("%.1f万", reviews / 10000f)
+    }
 }

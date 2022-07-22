@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.room.*
 import com.zb.baselibs.utils.getLong
 
+/**
+ * 喜欢
+ */
 @Entity(tableName = "LikeTypeInfo")
 data class LikeTypeInfo(
     @PrimaryKey

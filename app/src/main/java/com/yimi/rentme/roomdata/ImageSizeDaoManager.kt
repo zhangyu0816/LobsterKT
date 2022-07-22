@@ -3,6 +3,9 @@ package com.yimi.rentme.roomdata
 import android.content.Context
 import androidx.room.*
 
+/**
+ * 图片大小
+ */
 @Entity(tableName = "ImageSize")
 data class ImageSize(
     @PrimaryKey

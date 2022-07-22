@@ -144,13 +144,12 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 val sharedName = it.text.replace("{userId}", discoverInfo.userId.toString())
                     .replace("{nick}", discoverInfo.nick)
                 val content = discoverInfo.text.ifEmpty { discoverInfo.friendTitle }
-                val sharedUrl: String =
+                val sharedUrl =
                     BaseApp.baseUrl + "mobile/Dyn_dynDetail?friendDynId=" + friendDynId
                 FunctionDF(activity).setUmImage(
                     discoverInfo.image.replace("YM0000", "430X430")
                 ).setSharedName(sharedName).setContent(content).setSharedUrl(sharedUrl)
-                    .setOtherUserId(discoverInfo.userId).setIsVideo(false)
-                    .setIsDiscover(true).setIsList(false)
+                    .setOtherUserId(discoverInfo.userId) .setIsDiscover(true)
                     .setCallBack(object : FunctionDF.CallBack {
                         override fun report() {
                             activity.startActivity<ReportActivity>(

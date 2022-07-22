@@ -3,6 +3,9 @@ package com.yimi.rentme.roomdata
 import android.content.Context
 import androidx.room.*
 
+/**
+ * 标签
+ */
 @Entity(tableName = "TagInfo")
 data class TagInfo(
     @PrimaryKey
