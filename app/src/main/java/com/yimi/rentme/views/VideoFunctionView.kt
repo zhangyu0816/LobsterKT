@@ -1,14 +1,18 @@
 package com.yimi.rentme.views
 
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.SystemClock
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.yimi.rentme.ApiService
@@ -28,7 +32,10 @@ import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.http.MainDataSource
 import com.zb.baselibs.utils.SCToastUtil
+import com.zb.baselibs.utils.getInteger
 import com.zb.baselibs.utils.getLong
+import com.zb.baselibs.utils.permission.requestPermissionsForResult
+import com.zb.baselibs.utils.saveInteger
 import org.jetbrains.anko.startActivity
 import org.simple.eventbus.EventBus
 
@@ -74,10 +81,9 @@ class VideoFunctionView : LinearLayout {
         binding.isMine = discoverInfo.userId == getLong("userId")
         BaseApp.fixedThreadPool.execute {
             discoverInfo.isLike = MineApp.goodDaoManager.getGood(discoverInfo.friendDynId) != null
-            binding.isFollow = MineApp.followDaoManager.getFollowInfo(discoverInfo.userId) != null
             binding.discoverInfo = discoverInfo
         }
-//        attentionStatus()
+        attentionStatus()
     }
 
     fun setCallBack(callBack: CallBack) {
@@ -234,6 +240,35 @@ class VideoFunctionView : LinearLayout {
                                     .show(activity.supportFragmentManager)
                             }
                         }
+
+                        override fun download() {
+                            if (checkPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                                callBack.download()
+                            } else {
+                                if (getInteger("download_permission", 0) == 0) {
+                                    saveInteger("download_permission", 1)
+                                    RemindDF(activity).setTitle("权限说明")
+                                        .setContent(
+                                            "下载保存视频时，我们将会申请存储权限：" +
+                                                    "\n 1、申请存储权限--获取保存视频功能，" +
+                                                    "\n 2、若您点击“同意”按钮，我们方可正式申请上述权限，以便下载保存视频，" +
+                                                    "\n 3、若您点击“拒绝”按钮，我们将不再主动弹出该提示，您也无法下载保存视频，不影响使用其他的虾菇功能/服务，" +
+                                                    "\n 4、您也可以通过“手机设置--应用--虾菇--权限”或app内“我的--设置--权限管理--权限”，手动开启或关闭存储权限。"
+                                        ).setSureName("同意").setCancelName("拒绝")
+                                        .setCallBack(object : RemindDF.CallBack {
+                                            override fun sure() {
+                                                callBack.download()
+                                            }
+                                        }).show(activity.supportFragmentManager)
+                                } else {
+                                    Toast.makeText(
+                                        activity,
+                                        "可通过“手机设置--应用--虾菇--权限”或app内“我的--设置--权限管理--权限”，手动开启或关闭存储权限。",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
                     })
                     .show(activity.supportFragmentManager)
             }
@@ -262,6 +297,7 @@ class VideoFunctionView : LinearLayout {
 
     interface CallBack {
         fun stopVideo()
+        fun download()
         fun onFinish()
     }
 
@@ -480,5 +516,19 @@ class VideoFunctionView : LinearLayout {
                 }
             }
         }
+    }
+
+    private fun checkPermissionGranted(vararg permissions: String): Boolean {
+        var flag = true
+        for (p in permissions) {
+            if (ActivityCompat.checkSelfPermission(
+                    BaseApp.context, p
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                flag = false
+                break
+            }
+        }
+        return flag
     }
 }

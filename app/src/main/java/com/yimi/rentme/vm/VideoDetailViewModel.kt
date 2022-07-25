@@ -1,7 +1,9 @@
 package com.yimi.rentme.vm
 
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.os.Environment
 import android.view.View
 import android.view.animation.Animation
 import com.yimi.rentme.MineApp
@@ -17,12 +19,11 @@ import com.yimi.rentme.roomdata.ImageSize
 import com.yimi.rentme.utils.PicSizeUtil
 import com.yimi.rentme.views.VideoFunctionView
 import com.zb.baselibs.app.BaseApp
-import com.zb.baselibs.utils.ObjectUtils
-import com.zb.baselibs.utils.RomUtils
+import com.zb.baselibs.utils.*
 import com.zb.baselibs.utils.awesome.DownLoadUtil
-import com.zb.baselibs.utils.getLong
-import com.zb.baselibs.utils.getVideoFile
+import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import org.jetbrains.anko.startActivity
+import java.io.File
 
 class VideoDetailViewModel : BaseViewModel(), VideoFunctionView.CallBack {
 
@@ -84,8 +85,21 @@ class VideoDetailViewModel : BaseViewModel(), VideoFunctionView.CallBack {
         binding.reviewList.stop()
     }
 
+    override fun download() {
+        launchMain {
+            activity.requestPermissionsForResult(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = "为了更好的提供服务，需要获取定位权限"
+            )
+            DownLoadUtil.downLoad(
+                binding.discoverInfo!!.videoUrl, getVideoFile(), object : DownLoadUtil.CallBack {
+                    override fun onFinish(filePath: String) {
+                    }
+                })
+        }
+    }
+
     override fun onFinish() {
-        activity.finish()
+        back(binding.ivBack)
     }
 
     /**

@@ -198,17 +198,20 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
      * 跳至视频详情
      */
     fun toDiscoverVideo(position: Int) {
-        if (otherUserId == 0L) {
-            // 视频列表
-            MineApp.discoverInfoList.clear()
-            MineApp.discoverInfoList.addAll(discoverInfoList)
-            activity.startActivity<VideoListActivity>()
-        } else {
-            // 视频详情
-            activity.startActivity<VideoDetailActivity>(
-                Pair("friendDynId", discoverInfoList[position].friendDynId)
-            )
-        }
+        activity.startActivity<VideoDetailActivity>(
+            Pair("friendDynId", discoverInfoList[position].friendDynId)
+        )
+//        if (otherUserId == 0L) {
+//            // 视频列表
+//            MineApp.discoverInfoList.clear()
+//            MineApp.discoverInfoList.addAll(discoverInfoList)
+//            activity.startActivity<VideoListActivity>()
+//        } else {
+//            // 视频详情
+//            activity.startActivity<VideoDetailActivity>(
+//                Pair("friendDynId", discoverInfoList[position].friendDynId)
+//            )
+//        }
     }
 
     /**

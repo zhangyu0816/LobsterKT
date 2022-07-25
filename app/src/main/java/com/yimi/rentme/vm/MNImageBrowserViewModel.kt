@@ -338,17 +338,27 @@ class MNImageBrowserViewModel : BaseViewModel() {
             //图片加载
             imageEngine.loadImage(activity, url, imageView)
             imageView.setOnClickListener { //单击事件
-                if (onClickListener != null)
+                if (onClickListener != null) {
                     onClickListener!!.onClick(activity, imageView, position, url)
+                }
             }
             imageView.setOnLongClickListener {
-                if (onLongClickListener != null)
+                if (onLongClickListener != null) {
                     onLongClickListener!!.onLongClick(activity, imageView, position, url)
+                    binding.saveRelative.visibility = View.VISIBLE
+                }
                 false
             }
             container.addView(inflate)
             return inflate
         }
+    }
+
+    fun closeView(view: View) {
+        binding.saveRelative.visibility = View.GONE
+    }
+
+    fun downloadImage(view: View) {
 
     }
 }
