@@ -48,6 +48,11 @@ class VideoDetailActivity : BaseActivity() {
         alphaOA = ObjectAnimator.ofFloat(iv_image, "alpha", 1f, 0f).setDuration(500)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         if (alphaOA != null) {

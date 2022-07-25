@@ -2,24 +2,36 @@ package com.yimi.rentme.vm
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.view.View
 import android.view.animation.Animation
 import com.yimi.rentme.MineApp
+import com.yimi.rentme.R
+import com.yimi.rentme.activity.MemberDetailActivity
+import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.bean.MemberInfo
+import com.yimi.rentme.bean.Review
 import com.yimi.rentme.databinding.AcVideoDetailBinding
+import com.yimi.rentme.dialog.ReviewDF
 import com.yimi.rentme.roomdata.ImageSize
 import com.yimi.rentme.utils.PicSizeUtil
+import com.yimi.rentme.views.VideoFunctionView
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.ObjectUtils
 import com.zb.baselibs.utils.RomUtils
 import com.zb.baselibs.utils.awesome.DownLoadUtil
+import com.zb.baselibs.utils.getLong
 import com.zb.baselibs.utils.getVideoFile
+import org.jetbrains.anko.startActivity
 
-class VideoDetailViewModel : BaseViewModel() {
+class VideoDetailViewModel : BaseViewModel(), VideoFunctionView.CallBack {
 
     lateinit var binding: AcVideoDetailBinding
     var friendDynId = 0L
     private var animator: ObjectAnimator? = null
+    lateinit var adapter: BaseAdapter<Review>
+    private val reviewList = ArrayList<Review>()
+    private var isFirst = true
 
     override fun initViewModel() {
         if (!RomUtils.isHuawei) {
@@ -32,28 +44,76 @@ class VideoDetailViewModel : BaseViewModel() {
         binding.discoverInfo = DiscoverInfo()
         binding.memberInfo = MemberInfo()
         binding.isProgress = true
+        binding.isPlay = true
+        binding.activity = activity
         animator = ObjectAnimator.ofFloat(binding.ivProgress, "rotation", 0f, 360f).setDuration(700)
         animator!!.repeatMode = ValueAnimator.RESTART
         animator!!.repeatCount = Animation.INFINITE
         animator!!.start()
 
-        initGood(binding.viewClick, binding.ivGood, {
-//            videoPlay(null)
-        }) {
-            BaseApp.fixedThreadPool.execute {
-                val goodInfo = MineApp.goodDaoManager.getGood(friendDynId)
-                if(goodInfo!=null){
+        adapter = BaseAdapter(activity, R.layout.item_video_review, reviewList, this)
 
-                }
-            }
-//            if (!GoodDb.getInstance().hasGood(friendDynId)) {
-//                mBinding.ivUnLike.setVisibility(View.GONE)
-//                mBinding.ivLike.setVisibility(View.VISIBLE)
-//                GoodDb.getInstance().saveGood(CollectID(friendDynId))
-//                dynDoLike()
-//            }
+        initGood(binding.viewClick, binding.ivGood, {
+            if (binding.isPlay)
+                stopVideo()
+            else
+                onResume()
+        }) {
+            binding.videoFunctionView.doLike(null)
         }
         dynDetail()
+    }
+
+    override fun back(view: View) {
+        super.back(view)
+        stopVideo()
+        activity.finish()
+    }
+
+    fun onResume() {
+        if (!isFirst) {
+            binding.videoView.start()
+            binding.videoFunctionView.setFollow()
+            binding.reviewList.start()
+        }
+        isFirst = false
+    }
+
+    override fun stopVideo() {
+        binding.videoView.pause()
+        binding.reviewList.stop()
+    }
+
+    override fun onFinish() {
+        activity.finish()
+    }
+
+    /**
+     * 访问评论用户详情
+     */
+    fun toMemberDetail(otherUserId: Long) {
+        if (otherUserId != getLong("userId")) {
+            stopVideo()
+            activity.startActivity<MemberDetailActivity>(
+                Pair("otherUserId", otherUserId)
+            )
+        }
+    }
+
+    /**
+     * 评论列表
+     */
+    fun toReview(view: View) {
+        ReviewDF(activity).setMainDataSource(mainDataSource)
+            .setFriendDynId(binding.discoverInfo!!.friendDynId)
+            .setReviews(binding.discoverInfo!!.reviews)
+            .setOtherUserId(binding.discoverInfo!!.userId)
+            .setCallBack(object : ReviewDF.CallBack {
+                override fun sure() {
+                    binding.discoverInfo!!.reviews = binding.discoverInfo!!.reviews + 1
+                }
+            })
+            .show(activity.supportFragmentManager)
     }
 
     /**
@@ -110,14 +170,22 @@ class VideoDetailViewModel : BaseViewModel() {
                 }
 
                 otherInfo()
+                dynVisit()
             }
         }
     }
 
     /**
+     * 访问动态
+     */
+    private fun dynVisit() {
+        mainDataSource.enqueue({ dynVisit(friendDynId) })
+    }
+
+    /**
      * 设置图片
      */
-    private fun setImageSize(imageSize:ImageSize){
+    private fun setImageSize(imageSize: ImageSize) {
         if (ObjectUtils.getViewSizeByHeight(1.0f) * imageSize.width / imageSize.height > BaseApp.W) {
             binding.width = BaseApp.W
             binding.height = BaseApp.W * imageSize.height / imageSize.width
@@ -140,4 +208,5 @@ class VideoDetailViewModel : BaseViewModel() {
             }
         }
     }
+
 }

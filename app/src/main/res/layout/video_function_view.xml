@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:background="@drawable/video_play_zan_unpressed"
-                android:visibility="gone" />
+                android:visibility="@{discoverInfo.isLike?View.GONE:View.VISIBLE}" />
 
             <ImageView
                 android:id="@+id/iv_like"
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:background="@drawable/video_play_zan_pressed"
-                android:visibility="gone" />
+                android:visibility="@{discoverInfo.isLike?View.VISIBLE:View.GONE}" />
         </RelativeLayout>
 
         <TextView

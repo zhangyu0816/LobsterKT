@@ -119,6 +119,7 @@ class DiscoverListViewModel : BaseViewModel() {
      * 选择动态类型
      */
     fun selectIndex(index: Int) {
+        binding.index = index
         if (index == 0)
             activity.replaceFragment(MemberDiscoverFrag(otherUserId), R.id.dyn_content)
         else

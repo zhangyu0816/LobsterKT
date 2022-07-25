@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.VideoDetailViewModel" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.Review" />
+    </data>
+
+    <RelativeLayout
+        viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(120)}"
+        viewWidthSize="@{-2}"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
+        android:background="@{item.type==1?@drawable/btn_bg_red_ff3_radius60_4d:@drawable/btn_bg_white_radius60_4d}">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            defaultRes="@{R.mipmap.empty_icon}"
+            imageUrl="@{item.image}"
+            isCircle="@{true}"
+            onClickDelayed="@{v->viewModel.toMemberDetail(item.userId)}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(90)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(90)}"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_toEndOf="@+id/iv_logo"
+            android:orientation="vertical"
+            android:visibility="@{item.type==1?View.GONE:View.VISIBLE}">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@{item.nick}"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="@{item.type==2?View.VISIBLE:View.GONE}"
+                tools:text="啊啊啊" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@{item.text}"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="@{item.type==2?View.VISIBLE:View.GONE}"
+                tools:text="啊啊啊" />
+        </LinearLayout>
+
+        <ImageView
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(66)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(66)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/iv_logo"
+            android:layout_alignBottom="@+id/iv_logo"
+            android:layout_marginEnd="-5dp"
+            android:layout_marginBottom="-5dp"
+            android:background="@mipmap/small_good_icon"
+            android:visibility="@{item.type==2?View.GONE:View.VISIBLE}" />
+    </RelativeLayout>
+</layout>

@@ -4,13 +4,17 @@ import android.graphics.Color
 import android.media.MediaPlayer
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.BindingAdapter
+import com.yimi.rentme.ApiService
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
+import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.bean.VideoInfo
 import com.yimi.rentme.views.*
 import com.zb.baselibs.adapter.viewSize
 import com.zb.baselibs.app.BaseApp
+import com.zb.baselibs.http.MainDataSource
 import com.zb.baselibs.utils.ObjectUtils
 import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.views.FullScreenVideoView
@@ -54,7 +58,7 @@ fun FullScreenVideoView.setVideoUrl(videoUrl: String, showSize: Boolean) {
                         videoInfo.width = ObjectUtils.getViewSizeByHeight(1.0f) * width / height
                         videoInfo.height = ObjectUtils.getViewSizeByHeight(1.0f)
                     }
-                    this.viewSize(videoInfo.width,  videoInfo.height)
+                    this.viewSize(videoInfo.width, videoInfo.height)
 
 
                     EventBus.getDefault().post(videoInfo, "lobsterVideoPlay")
@@ -119,4 +123,18 @@ fun GoodView.likeStatus(isLike: Boolean, isGrey: Boolean, isLightGrey: Boolean) 
 fun SuperLikeBigView.superLike(superLikeInterface: SuperLikeInterface, isPlay: Boolean) {
     this.setSuperLikeInterface(superLikeInterface)
     if (isPlay) this.play() else this.stop()
+}
+
+@BindingAdapter(
+    value = ["activity", "mainDataSource", "discoverInfo", "callBack"],
+    requireAll = false
+)
+fun VideoFunctionView.setFunctionView(
+    activity: AppCompatActivity, mainDataSource: MainDataSource<ApiService>,
+    discoverInfo: DiscoverInfo, callBack: VideoFunctionView.CallBack
+) {
+    this.setActivity(activity)
+    this.setMainDataSource(mainDataSource)
+    this.setDiscoverInfo(discoverInfo)
+    this.setCallBack(callBack)
 }

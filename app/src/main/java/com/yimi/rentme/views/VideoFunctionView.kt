@@ -18,11 +18,9 @@ import com.yimi.rentme.activity.MemberDetailActivity
 import com.yimi.rentme.activity.ReportActivity
 import com.yimi.rentme.activity.RewardListActivity
 import com.yimi.rentme.bean.DiscoverInfo
+import com.yimi.rentme.bean.GiftInfo
 import com.yimi.rentme.databinding.VideoFunctionViewBinding
-import com.yimi.rentme.dialog.FunctionDF
-import com.yimi.rentme.dialog.ReviewDF
-import com.yimi.rentme.dialog.SuperLikeDF
-import com.yimi.rentme.dialog.VipAdDF
+import com.yimi.rentme.dialog.*
 import com.yimi.rentme.roomdata.FollowInfo
 import com.yimi.rentme.roomdata.GoodInfo
 import com.yimi.rentme.roomdata.LikeTypeInfo
@@ -79,6 +77,7 @@ class VideoFunctionView : LinearLayout {
             binding.isFollow = MineApp.followDaoManager.getFollowInfo(discoverInfo.userId) != null
             binding.discoverInfo = discoverInfo
         }
+//        attentionStatus()
     }
 
     fun setCallBack(callBack: CallBack) {
@@ -91,6 +90,15 @@ class VideoFunctionView : LinearLayout {
         ) as VideoFunctionViewBinding
         addView(binding.root)
         binding.videoView = this
+    }
+
+    /**
+     * 设置关注
+     */
+    fun setFollow() {
+        BaseApp.fixedThreadPool.execute {
+            binding.isFollow = MineApp.followDaoManager.getFollowInfo(discoverInfo.userId) != null
+        }
     }
 
     /**
@@ -147,7 +155,7 @@ class VideoFunctionView : LinearLayout {
     /**
      * 点赞
      */
-    fun doLike(view: View) {
+    fun doLike(view: View?) {
         if (binding.discoverInfo!!.isLike) {
             binding.ivUnLike.visibility = View.VISIBLE
             binding.ivLike.visibility = View.GONE
@@ -232,9 +240,54 @@ class VideoFunctionView : LinearLayout {
         }
     }
 
+    /**
+     * 礼物打赏
+     */
+    fun doReward(view: View) {
+        GiftDF(activity).setMainDataSource(mainDataSource)
+            .setCallBack(object : GiftDF.CallBack {
+                override fun sure(giftInfo: GiftInfo) {
+                    GiftPayDF(activity).setGiftInfo(giftInfo)
+                        .setFriendDynId(discoverInfo.friendDynId)
+                        .setMainDataSource(mainDataSource)
+                        .setCallBack(object : GiftPayDF.CallBack {
+                            override fun sure(giftNum: Int) {
+                                GiveSuccessDF(activity).setGiftInfo(giftInfo)
+                                    .setGiftNum(giftNum).show(activity.supportFragmentManager)
+                            }
+                        }).show(activity.supportFragmentManager)
+                }
+            }).show(activity.supportFragmentManager)
+    }
+
     interface CallBack {
         fun stopVideo()
         fun onFinish()
+    }
+
+    /**
+     * 关注状态
+     */
+    private fun attentionStatus() {
+        mainDataSource.enqueue({ attentionStatus(discoverInfo.userId) }) {
+            onSuccess {
+                binding.isFollow = true
+                BaseApp.fixedThreadPool.execute {
+                    val followInfo = FollowInfo()
+                    followInfo.image = binding.discoverInfo!!.image
+                    followInfo.nick = binding.discoverInfo!!.nick
+                    followInfo.otherUserId = binding.discoverInfo!!.userId
+                    followInfo.mainUserId = getLong("userId")
+                    MineApp.followDaoManager.insert(followInfo)
+                }
+            }
+            onFailed {
+                binding.isFollow = false
+                BaseApp.fixedThreadPool.execute {
+                    MineApp.followDaoManager.deleteFollowInfo(discoverInfo.userId)
+                }
+            }
+        }
     }
 
     /**
@@ -250,7 +303,6 @@ class VideoFunctionView : LinearLayout {
             SystemClock.sleep(200)
             activity.runOnUiThread {
                 binding.isFollow = true
-//                binding.ivAttention.setBackgroundResource(R.drawable.attention_get_icon)
                 pvhR = PropertyValuesHolder.ofFloat("rotation", 90f, 0f)
                 pvh =
                     ObjectAnimator.ofPropertyValuesHolder(binding.ivAttention, pvhR).setDuration(50)
@@ -263,8 +315,6 @@ class VideoFunctionView : LinearLayout {
                     .setDuration(100)
                 pvh!!.start()
             }
-            SystemClock.sleep(750)
-            activity.runOnUiThread { binding.attentionLayout.visibility = View.INVISIBLE }
         }
     }
 

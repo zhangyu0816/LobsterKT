@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -38,6 +40,14 @@
         <variable
             name="isProgress"
             type="boolean" />
+
+        <variable
+            name="isPlay"
+            type="boolean" />
+
+        <variable
+            name="activity"
+            type="androidx.appcompat.app.AppCompatActivity" />
     </data>
 
     <RelativeLayout
@@ -72,7 +82,13 @@
             android:layout_centerInParent="true"
             android:background="@mipmap/loading_icon"
             android:visibility="@{isProgress?View.VISIBLE:View.GONE}" />
-
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:visibility="@{isPlay?View.GONE:View.VISIBLE}"
+            android:alpha="0.5"
+            app:srcCompat="@mipmap/video_play_icon" />
         <ImageView
             android:id="@+id/iv_good"
             android:layout_width="wrap_content"
@@ -100,6 +116,101 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/gradient_black_80_00" />
 
+        <com.yimi.rentme.views.VideoFunctionView
+            android:id="@+id/video_function_view"
+            activity="@{activity}"
+            callBack="@{viewModel}"
+            discoverInfo="@{discoverInfo}"
+            mainDataSource="@{viewModel.mainDataSource}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/info_layout"
+            android:layout_marginStart="15dp">
 
+            <com.zb.baselibs.views.autopoll.AutoPollRecyclerView
+                android:id="@+id/review_list"
+                autoAdapter="@{viewModel.adapter}"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(330)}"
+                viewWidthSize="@{-2}"
+                android:layout_width="wrap_content"
+                android:layout_height="240dp"
+                android:fadingEdgeLength="30dp"
+                android:requiresFadingEdge="vertical"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/info_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/video_function_view"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:shadowColor="#4d000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="1"
+                android:text="@{String.format(@string/at_nick,discoverInfo.nick)}"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="zhangyu" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:maxLines="4"
+                android:shadowColor="#4d000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="1"
+                android:text="@{discoverInfo.text.empty?discoverInfo.friendTitle:discoverInfo.text}"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:text="我看见佛二五九佛微积分围殴就佛为访问哦哦ij" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    onClickDelayed="@{viewModel::back}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:src="@mipmap/video_play_back_ico" />
+
+                <TextView
+                    onClickDelayed="@{viewModel::toReview}"
+                    android:layout_width="match_parent"
+                    android:layout_height="37dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/btn_bg_black_3b_radius60"
+                    android:gravity="center_vertical"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="说句动听的表白吧..."
+                    android:textColor="@color/black_80"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
     </RelativeLayout>
 </layout>
