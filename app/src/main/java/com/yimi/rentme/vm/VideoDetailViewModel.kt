@@ -4,9 +4,9 @@ import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.media.MediaMetadataRetriever
-import android.os.Environment
 import android.view.View
 import android.view.animation.Animation
+import android.widget.RelativeLayout
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.activity.MemberDetailActivity
@@ -21,12 +21,14 @@ import com.yimi.rentme.utils.PicSizeUtil
 import com.yimi.rentme.utils.water.WaterMark
 import com.yimi.rentme.views.VideoFunctionView
 import com.zb.baselibs.app.BaseApp
-import com.zb.baselibs.utils.*
+import com.zb.baselibs.utils.ObjectUtils
+import com.zb.baselibs.utils.RomUtils
 import com.zb.baselibs.utils.awesome.DownLoadUtil
+import com.zb.baselibs.utils.getLong
+import com.zb.baselibs.utils.getVideoFile
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.startActivity
-import java.io.File
 
 class VideoDetailViewModel : BaseViewModel(), VideoFunctionView.CallBack {
 
@@ -201,7 +203,7 @@ class VideoDetailViewModel : BaseViewModel(), VideoFunctionView.CallBack {
                         }
                     }
                 }
-
+                seeReviews()
                 otherInfo()
                 dynVisit()
             }
@@ -242,4 +244,63 @@ class VideoDetailViewModel : BaseViewModel(), VideoFunctionView.CallBack {
         }
     }
 
+    /**
+     * 评论
+     */
+    private fun seeReviews() {
+        showLoading(Job(), "加载访问数据...")
+        mainDataSource.enqueue({ seeReviews(friendDynId, 1, 1, 10) }) {
+            onSuccess {
+                for (item in it) {
+                    item.type = 2
+                    reviewList.add(item)
+                }
+                seeLikers()
+            }
+            onFailToast { false }
+            onFailed {
+                seeLikers()
+            }
+        }
+    }
+
+    /**
+     * 喜欢
+     */
+    private fun seeLikers() {
+        mainDataSource.enqueue({ seeLikers(friendDynId, 1, 20) }) {
+            onSuccess {
+                for (item in it) {
+                    item.type = 1
+                    reviewList.add(item)
+                }
+                dismissLoading()
+                showAutoList()
+            }
+            onFailToast { false }
+            onFailed {
+                dismissLoading()
+                showAutoList()
+            }
+        }
+    }
+
+    /**
+     * 显示列表
+     */
+    private fun showAutoList() {
+        if (reviewList.size > 0) {
+            binding.reviewList.visibility = View.VISIBLE
+            adapter.notifyItemRangeChanged(0, reviewList.size)
+
+            if (reviewList.size > 2) {
+                binding.reviewList.layoutParams = RelativeLayout.LayoutParams(
+                    -2, ObjectUtils.getViewSizeByWidthFromMax(400)
+                )
+                binding.reviewList.start()
+            } else {
+                binding.reviewList.layoutParams = RelativeLayout.LayoutParams(-2, -2)
+            }
+        }
+    }
 }

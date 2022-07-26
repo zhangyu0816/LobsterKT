@@ -34,7 +34,6 @@ import com.zb.baselibs.http.MainDataSource
 import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.utils.getInteger
 import com.zb.baselibs.utils.getLong
-import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import com.zb.baselibs.utils.saveInteger
 import org.jetbrains.anko.startActivity
 import org.simple.eventbus.EventBus

@@ -195,6 +195,15 @@ interface ApiService {
         @Field("pageNo") pageNo: Int, @Field("row") row: Int
     ): HttpWrapBean<ArrayList<Review>>
 
+    // 查看喜欢
+    @FormUrlEncoded
+    @POST("api/Interactive_seeLikers")
+    suspend fun seeLikers(
+        @Field("friendDynId") friendDynId: Long,
+        @Field("pageNo") pageNo: Int,
+        @Field("pageSize") pageSize: Int
+    ): HttpWrapBean<ArrayList<Review>>
+
     // 给动态评论
     @FormUrlEncoded
     @POST("api/Interactive_dynDoReview")
