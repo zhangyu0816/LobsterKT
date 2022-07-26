@@ -1,5 +1,6 @@
 package com.yimi.rentme.vm
 
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.Animation
+import android.widget.Toast
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.github.chrisbanes.photoview.PhotoView
@@ -25,13 +27,18 @@ import com.yimi.rentme.utils.imagebrowser.MyMNImage
 import com.yimi.rentme.utils.imagebrowser.OnDeleteListener
 import com.yimi.rentme.utils.imagebrowser.OnDiscoverClickListener
 import com.yimi.rentme.utils.imagebrowser.OnFinishListener
+import com.yimi.rentme.utils.water.WaterMark
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
+import com.zb.baselibs.utils.getInteger
+import com.zb.baselibs.utils.permission.requestPermissionsForResult
+import com.zb.baselibs.utils.saveInteger
 import com.zb.baselibs.views.imagebrowser.base.ImageBrowserConfig
 import com.zb.baselibs.views.imagebrowser.listener.ImageEngine
 import com.zb.baselibs.views.imagebrowser.listener.OnClickListener
 import com.zb.baselibs.views.imagebrowser.listener.OnLongClickListener
 import com.zb.baselibs.views.imagebrowser.transforms.*
+import kotlinx.coroutines.Job
 import org.jetbrains.anko.startActivity
 
 class MNImageBrowserViewModel : BaseViewModel() {
@@ -312,6 +319,9 @@ class MNImageBrowserViewModel : BaseViewModel() {
         }
     }
 
+    private var mPosition = 0
+    private var mUrl = ""
+
     private inner class MyAdapter : PagerAdapter() {
         private val layoutInflater: LayoutInflater = LayoutInflater.from(activity)
         override fun setPrimaryItem(container: ViewGroup, position: Int, `object`: Any) {
@@ -343,10 +353,10 @@ class MNImageBrowserViewModel : BaseViewModel() {
                 }
             }
             imageView.setOnLongClickListener {
-                if (onLongClickListener != null) {
-                    onLongClickListener!!.onLongClick(activity, imageView, position, url)
-                    binding.saveRelative.visibility = View.VISIBLE
-                }
+                mPosition = position
+                mUrl = url
+                binding.saveRelative.visibility = View.VISIBLE
+
                 false
             }
             container.addView(inflate)
@@ -359,6 +369,51 @@ class MNImageBrowserViewModel : BaseViewModel() {
     }
 
     fun downloadImage(view: View) {
+        binding.saveRelative.visibility = View.GONE
+        showLoading(Job(), "保存图片...")
+        if (checkPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            saveImage()
+        } else {
+            if (getInteger("download_permission", 0) == 0) {
+                saveInteger("download_permission", 1)
+                RemindDF(activity).setTitle("权限说明")
+                    .setContent(
+                        "保存照片时，我们将会申请存储权限：" +
+                                "\n 1、申请存储权限--获取保存图片功能，" +
+                                "\n 2、若您点击“同意”按钮，我们方可正式申请上述权限，以便保存图片，" +
+                                "\n 3、若您点击“拒绝”按钮，我们将不再主动弹出该提示，您也无法保存图片，不影响使用其他的虾菇功能/服务，" +
+                                "\n 4、您也可以通过“手机设置--应用--虾菇--权限”或app内“我的--设置--权限管理--权限”，手动开启或关闭存储权限。"
+                    ).setSureName("同意").setCancelName("拒绝")
+                    .setCallBack(object : RemindDF.CallBack {
+                        override fun sure() {
+                            saveImage()
+                        }
+                    }).show(activity.supportFragmentManager)
+            } else {
+                Toast.makeText(
+                    activity,
+                    "可通过“手机设置--应用--虾菇--权限”或app内“我的--设置--权限管理--权限”，手动开启或关闭存储权限。",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
 
+
+    /**
+     * 保存图片
+     */
+    private fun saveImage() {
+        launchMain {
+            activity.requestPermissionsForResult(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = "为了更好的提供服务，需要获取定位权限"
+            )
+            WaterMark.saveImage(activity,binding.discoverInfo!!.userId,
+                mUrl, object : WaterMark.CallBack {
+                    override fun sure() {
+                        dismissLoading()
+                    }
+                })
+        }
     }
 }

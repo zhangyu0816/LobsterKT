@@ -3,6 +3,7 @@ package com.yimi.rentme.vm
 import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.media.MediaMetadataRetriever
 import android.os.Environment
 import android.view.View
 import android.view.animation.Animation
@@ -17,11 +18,13 @@ import com.yimi.rentme.databinding.AcVideoDetailBinding
 import com.yimi.rentme.dialog.ReviewDF
 import com.yimi.rentme.roomdata.ImageSize
 import com.yimi.rentme.utils.PicSizeUtil
+import com.yimi.rentme.utils.water.WaterMark
 import com.yimi.rentme.views.VideoFunctionView
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.*
 import com.zb.baselibs.utils.awesome.DownLoadUtil
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
+import kotlinx.coroutines.Job
 import org.jetbrains.anko.startActivity
 import java.io.File
 
@@ -90,9 +93,25 @@ class VideoDetailViewModel : BaseViewModel(), VideoFunctionView.CallBack {
             activity.requestPermissionsForResult(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = "为了更好的提供服务，需要获取定位权限"
             )
+            showLoading(Job(), "下载中...")
             DownLoadUtil.downLoad(
                 binding.discoverInfo!!.videoUrl, getVideoFile(), object : DownLoadUtil.CallBack {
                     override fun onFinish(filePath: String) {
+                        val media = MediaMetadataRetriever()
+                        media.setDataSource(binding.discoverInfo!!.videoUrl)
+                        val bitmap =
+                            media.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+                        val duration =
+                            media.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                        WaterMark.createWater(
+                            activity, filePath, binding.discoverInfo!!.userId,
+                            bitmap!!.width, bitmap.height, duration!!.toLong(),
+                            object : WaterMark.CallBack {
+                                override fun sure() {
+                                    dismissLoading()
+                                }
+                            }
+                        )
                     }
                 })
         }
