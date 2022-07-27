@@ -21,7 +21,7 @@ import com.zb.baselibs.views.FullScreenVideoView
 import org.simple.eventbus.EventBus
 
 @BindingAdapter(value = ["videoUrl", "showSize"], requireAll = false)
-fun FullScreenVideoView.setVideoUrl(videoUrl: String, showSize: Boolean) {
+fun FullScreenVideoView.setVideoUrl(videoUrl: String?, showSize: Boolean) {
     this.setOnPreparedListener { mp -> }
     //异常回调
     this.setOnErrorListener { mp, what, extra ->
@@ -59,8 +59,6 @@ fun FullScreenVideoView.setVideoUrl(videoUrl: String, showSize: Boolean) {
                         videoInfo.height = ObjectUtils.getViewSizeByHeight(1.0f)
                     }
                     this.viewSize(videoInfo.width, videoInfo.height)
-
-
                     EventBus.getDefault().post(videoInfo, "lobsterVideoPlay")
                 }
                 this.setBackgroundColor(Color.TRANSPARENT)
@@ -68,8 +66,10 @@ fun FullScreenVideoView.setVideoUrl(videoUrl: String, showSize: Boolean) {
         }
         false //如果方法处理了信息，则为true；如果没有，则为false。返回false或根本没有OnInfoListener，将导致丢弃该信息。
     }
-    this.setVideoPath(videoUrl)
-    this.start()
+    if(videoUrl!=null){
+        this.setVideoPath(videoUrl)
+        this.start()
+    }
 }
 
 @BindingAdapter("isBig")
@@ -126,15 +126,12 @@ fun SuperLikeBigView.superLike(superLikeInterface: SuperLikeInterface, isPlay: B
 }
 
 @BindingAdapter(
-    value = ["activity", "mainDataSource", "discoverInfo", "callBack"],
+    value = ["activity", "mainDataSource", "discoverInfo", "position", "callBack"],
     requireAll = false
 )
 fun VideoFunctionView.setFunctionView(
     activity: AppCompatActivity, mainDataSource: MainDataSource<ApiService>,
-    discoverInfo: DiscoverInfo, callBack: VideoFunctionView.CallBack
+    discoverInfo: DiscoverInfo, position: Int, callBack: VideoFunctionView.CallBack
 ) {
-    this.setActivity(activity)
-    this.setMainDataSource(mainDataSource)
-    this.setDiscoverInfo(discoverInfo)
-    this.setCallBack(callBack)
+    this.setParam(activity, mainDataSource, discoverInfo, position, callBack)
 }

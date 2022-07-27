@@ -60,6 +60,7 @@ class VideoFunctionView : LinearLayout {
     private lateinit var activity: AppCompatActivity
     private lateinit var mainDataSource: MainDataSource<ApiService>
     private lateinit var discoverInfo: DiscoverInfo
+    private var position = 0
     private lateinit var callBack: CallBack
     private var pvhSY: PropertyValuesHolder? = null
     private var pvhSX: PropertyValuesHolder? = null
@@ -67,26 +68,21 @@ class VideoFunctionView : LinearLayout {
     private var pvhR: PropertyValuesHolder? = null
     private var pvh: ObjectAnimator? = null
 
-    fun setActivity(activity: AppCompatActivity) {
+    fun setParam(
+        activity: AppCompatActivity, mainDataSource: MainDataSource<ApiService>,
+        discoverInfo: DiscoverInfo, position: Int, callBack: CallBack
+    ) {
         this.activity = activity
-    }
-
-    fun setMainDataSource(mainDataSource: MainDataSource<ApiService>) {
         this.mainDataSource = mainDataSource
-    }
-
-    fun setDiscoverInfo(discoverInfo: DiscoverInfo) {
         this.discoverInfo = discoverInfo
+        this.position = position
+        this.callBack = callBack
         binding.isMine = discoverInfo.userId == getLong("userId")
         BaseApp.fixedThreadPool.execute {
             discoverInfo.isLike = MineApp.goodDaoManager.getGood(discoverInfo.friendDynId) != null
             binding.discoverInfo = discoverInfo
         }
         attentionStatus()
-    }
-
-    fun setCallBack(callBack: CallBack) {
-        this.callBack = callBack
     }
 
     private fun initView(context: Context) {
@@ -160,7 +156,7 @@ class VideoFunctionView : LinearLayout {
     /**
      * 点赞
      */
-    fun doLike(view: View?) {
+    fun doLike(view: View) {
         if (binding.discoverInfo!!.isLike) {
             binding.ivUnLike.visibility = View.VISIBLE
             binding.ivLike.visibility = View.GONE
@@ -171,6 +167,19 @@ class VideoFunctionView : LinearLayout {
             binding.ivLike.visibility = View.VISIBLE
             likeOrNot(binding.ivLike)
             dynDoLike()
+        }
+    }
+
+    fun showDoLike() {
+        if (!binding.discoverInfo!!.isLike) {
+            binding.ivUnLike.visibility = View.GONE
+            binding.ivLike.visibility = View.VISIBLE
+            likeOrNot(binding.ivLike)
+            dynDoLike()
+        } else {
+            binding.ivUnLike.visibility = View.GONE
+            binding.ivLike.visibility = View.VISIBLE
+            likeOrNot(binding.ivLike)
         }
     }
 
@@ -186,6 +195,7 @@ class VideoFunctionView : LinearLayout {
                 override fun sure() {
                     discoverInfo.reviews = discoverInfo.reviews + 1
                     binding.discoverInfo = discoverInfo
+                    callBack.updateAuto(position)
                 }
             })
             .show(activity.supportFragmentManager)
@@ -208,14 +218,14 @@ class VideoFunctionView : LinearLayout {
                     .setOtherUserId(discoverInfo.userId).setIsVideo(true)
                     .setIsDiscover(true).setCallBack(object : FunctionDF.CallBack {
                         override fun report() {
-                            callBack.stopVideo()
+                            callBack.stopVideo(position)
                             activity.startActivity<ReportActivity>(
                                 Pair("otherUserId", discoverInfo.userId)
                             )
                         }
 
                         override fun rewardList() {
-                            callBack.stopVideo()
+                            callBack.stopVideo(position)
                             activity.startActivity<RewardListActivity>(
                                 Pair("friendDynId", binding.discoverInfo!!.friendDynId)
                             )
@@ -242,7 +252,7 @@ class VideoFunctionView : LinearLayout {
 
                         override fun download() {
                             if (checkPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                                callBack.download()
+                                callBack.download(position)
                             } else {
                                 if (getInteger("download_permission", 0) == 0) {
                                     saveInteger("download_permission", 1)
@@ -256,7 +266,7 @@ class VideoFunctionView : LinearLayout {
                                         ).setSureName("同意").setCancelName("拒绝")
                                         .setCallBack(object : RemindDF.CallBack {
                                             override fun sure() {
-                                                callBack.download()
+                                                callBack.download(position)
                                             }
                                         }).show(activity.supportFragmentManager)
                                 } else {
@@ -295,9 +305,10 @@ class VideoFunctionView : LinearLayout {
     }
 
     interface CallBack {
-        fun stopVideo()
-        fun download()
-        fun onFinish()
+        fun stopVideo(position: Int)
+        fun download(position: Int)
+        fun onFinish(position: Int)
+        fun updateAuto(position: Int)
     }
 
     /**
@@ -388,10 +399,8 @@ class VideoFunctionView : LinearLayout {
                     SystemClock.sleep(200)
                     EventBus.getDefault()
                         .post(binding.discoverInfo!!.friendDynId.toString(), "lobsterDoLike")
-//                    activity.runOnUiThread {
-//                        adapter.notifyItemChanged(prePosition)
-//                    }
                 }
+                callBack.updateAuto(position)
             }
             onFailToast { false }
             onFailed {
@@ -406,9 +415,6 @@ class VideoFunctionView : LinearLayout {
                         SystemClock.sleep(200)
                         EventBus.getDefault()
                             .post(binding.discoverInfo!!.friendDynId.toString(), "lobsterDoLike")
-//                        activity.runOnUiThread {
-//                            adapter.notifyItemChanged(prePosition)
-//                        }
                     }
                 }
             }
@@ -421,6 +427,7 @@ class VideoFunctionView : LinearLayout {
     private fun dynCancelLike() {
         mainDataSource.enqueue({ dynCancelLike(binding.discoverInfo!!.friendDynId) }) {
             onSuccess {
+                callBack.updateAuto(position)
                 BaseApp.fixedThreadPool.execute {
                     MineApp.goodDaoManager.deleteGood(binding.discoverInfo!!.friendDynId)
                     discoverInfo.goodNum = discoverInfo.goodNum - 1
@@ -429,9 +436,6 @@ class VideoFunctionView : LinearLayout {
                     SystemClock.sleep(200)
                     EventBus.getDefault()
                         .post(binding.discoverInfo!!.friendDynId.toString(), "lobsterCancelLike")
-//                    activity.runOnUiThread {
-//                        adapter.notifyItemChanged(prePosition)
-//                    }
                 }
             }
             onFailToast { false }
@@ -443,9 +447,6 @@ class VideoFunctionView : LinearLayout {
                     SystemClock.sleep(200)
                     EventBus.getDefault()
                         .post(binding.discoverInfo!!.friendDynId.toString(), "lobsterCancelLike")
-//                    activity.runOnUiThread {
-//                        adapter.notifyItemChanged(prePosition)
-//                    }
                 }
             }
         }
@@ -459,7 +460,7 @@ class VideoFunctionView : LinearLayout {
             onSuccess {
                 EventBus.getDefault().post("删除动态", "lobsterDeleteDyn")
                 SCToastUtil.showToast(activity, "删除成功", 2)
-                callBack.onFinish()
+                callBack.onFinish(position)
             }
         }
     }
@@ -473,45 +474,49 @@ class VideoFunctionView : LinearLayout {
                 val myHead = MineApp.mineInfo.image
                 val otherHead = binding.discoverInfo!!.image
                 // 1喜欢成功 2匹配成功 3喜欢次数用尽
-                if (it == 1) {
-                    SuperLikeDF(activity).setMyHead(myHead).setOtherHead(otherHead)
-                        .setMySex(MineApp.mineInfo.sex)
-                        .setOtherSex(binding.discoverInfo!!.sex)
-                        .show(activity.supportFragmentManager)
-                    EventBus.getDefault().post("更新关注/粉丝/喜欢", "lobsterUpdateFCL")
-                    BaseApp.fixedThreadPool.execute {
-                        if (MineApp.likeTypeDaoManager.getLikeTypeInfo(binding.discoverInfo!!.userId) == null) {
-                            val likeTypeInfo = LikeTypeInfo()
-                            likeTypeInfo.likeType = 2
-                            likeTypeInfo.otherUserId = binding.discoverInfo!!.userId
-                            likeTypeInfo.mainUserId = getLong("userId")
-                            MineApp.likeTypeDaoManager.insert(likeTypeInfo)
-                        } else {
-                            MineApp.likeTypeDaoManager.updateLikeType(
-                                2,
-                                binding.discoverInfo!!.userId
-                            )
+                when (it) {
+                    1 -> {
+                        SuperLikeDF(activity).setMyHead(myHead).setOtherHead(otherHead)
+                            .setMySex(MineApp.mineInfo.sex)
+                            .setOtherSex(binding.discoverInfo!!.sex)
+                            .show(activity.supportFragmentManager)
+                        EventBus.getDefault().post("更新关注/粉丝/喜欢", "lobsterUpdateFCL")
+                        BaseApp.fixedThreadPool.execute {
+                            if (MineApp.likeTypeDaoManager.getLikeTypeInfo(binding.discoverInfo!!.userId) == null) {
+                                val likeTypeInfo = LikeTypeInfo()
+                                likeTypeInfo.likeType = 2
+                                likeTypeInfo.otherUserId = binding.discoverInfo!!.userId
+                                likeTypeInfo.mainUserId = getLong("userId")
+                                MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                            } else {
+                                MineApp.likeTypeDaoManager.updateLikeType(
+                                    2,
+                                    binding.discoverInfo!!.userId
+                                )
+                            }
                         }
                     }
-                } else if (it == 4) {
-                    // 超级喜欢时，非会员或超级喜欢次数用尽
-                    SCToastUtil.showToast(activity, "今日超级喜欢次数已用完", 2)
-                } else {
-                    BaseApp.fixedThreadPool.execute {
-                        if (MineApp.likeTypeDaoManager.getLikeTypeInfo(binding.discoverInfo!!.userId) == null) {
-                            val likeTypeInfo = LikeTypeInfo()
-                            likeTypeInfo.likeType = 2
-                            likeTypeInfo.otherUserId = binding.discoverInfo!!.userId
-                            likeTypeInfo.mainUserId = getLong("userId")
-                            MineApp.likeTypeDaoManager.insert(likeTypeInfo)
-                        } else {
-                            MineApp.likeTypeDaoManager.updateLikeType(
-                                2,
-                                binding.discoverInfo!!.userId
-                            )
-                        }
+                    4 -> {
+                        // 超级喜欢时，非会员或超级喜欢次数用尽
+                        SCToastUtil.showToast(activity, "今日超级喜欢次数已用完", 2)
                     }
-                    SCToastUtil.showToast(activity, "你已超级喜欢过对方", 2)
+                    else -> {
+                        BaseApp.fixedThreadPool.execute {
+                            if (MineApp.likeTypeDaoManager.getLikeTypeInfo(binding.discoverInfo!!.userId) == null) {
+                                val likeTypeInfo = LikeTypeInfo()
+                                likeTypeInfo.likeType = 2
+                                likeTypeInfo.otherUserId = binding.discoverInfo!!.userId
+                                likeTypeInfo.mainUserId = getLong("userId")
+                                MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                            } else {
+                                MineApp.likeTypeDaoManager.updateLikeType(
+                                    2,
+                                    binding.discoverInfo!!.userId
+                                )
+                            }
+                        }
+                        SCToastUtil.showToast(activity, "你已超级喜欢过对方", 2)
+                    }
                 }
             }
         }

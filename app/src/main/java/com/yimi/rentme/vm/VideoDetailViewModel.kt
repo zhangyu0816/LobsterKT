@@ -3,6 +3,7 @@ package com.yimi.rentme.vm
 import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.media.MediaMetadataRetriever
 import android.view.View
 import android.view.animation.Animation
@@ -61,18 +62,18 @@ class VideoDetailViewModel : BaseViewModel(), VideoFunctionView.CallBack {
 
         initGood(binding.viewClick, binding.ivGood, {
             if (binding.isPlay)
-                stopVideo()
+                stopVideo(0)
             else
                 onResume()
         }) {
-            binding.videoFunctionView.doLike(null)
+            binding.videoFunctionView.showDoLike()
         }
         dynDetail()
     }
 
     override fun back(view: View) {
         super.back(view)
-        stopVideo()
+        stopVideo(0)
         activity.finish()
     }
 
@@ -85,12 +86,12 @@ class VideoDetailViewModel : BaseViewModel(), VideoFunctionView.CallBack {
         isFirst = false
     }
 
-    override fun stopVideo() {
+    override fun stopVideo(position: Int) {
         binding.videoView.pause()
         binding.reviewList.stop()
     }
 
-    override fun download() {
+    override fun download(position: Int) {
         launchMain {
             activity.requestPermissionsForResult(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = "为了更好的提供服务，需要获取定位权限"
@@ -119,8 +120,15 @@ class VideoDetailViewModel : BaseViewModel(), VideoFunctionView.CallBack {
         }
     }
 
-    override fun onFinish() {
+    override fun onFinish(position: Int) {
         back(binding.ivBack)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun updateAuto(position: Int) {
+        reviewList.clear()
+        adapter.notifyDataSetChanged()
+        seeReviews()
     }
 
     /**
@@ -128,7 +136,7 @@ class VideoDetailViewModel : BaseViewModel(), VideoFunctionView.CallBack {
      */
     fun toMemberDetail(otherUserId: Long) {
         if (otherUserId != getLong("userId")) {
-            stopVideo()
+            stopVideo(0)
             activity.startActivity<MemberDetailActivity>(
                 Pair("otherUserId", otherUserId)
             )
@@ -301,6 +309,9 @@ class VideoDetailViewModel : BaseViewModel(), VideoFunctionView.CallBack {
             } else {
                 binding.reviewList.layoutParams = RelativeLayout.LayoutParams(-2, -2)
             }
+        } else {
+            binding.reviewList.visibility = View.GONE
+            binding.reviewList.stop()
         }
     }
 }

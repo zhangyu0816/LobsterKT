@@ -1,6 +1,9 @@
 package com.yimi.rentme.adapter
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.yimi.rentme.ApiService
 import com.yimi.rentme.BR
@@ -20,6 +23,12 @@ class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
     private var mainDataSource: MainDataSource<ApiService>? = null
     private var selectPosition = -1
     val userIdList = ArrayList<Long>()
+    private var itemBinding: ViewDataBinding? = null
+    var needItemBinding = false
+
+    fun getItemBinding(): ViewDataBinding? {
+        return itemBinding
+    }
 
     constructor(
         activity: AppCompatActivity?,
@@ -112,6 +121,16 @@ class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
                 }
             }
         }
+    }
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecyclerHolder<ViewDataBinding?> {
+        if (needItemBinding)
+            itemBinding =
+                DataBindingUtil.inflate(LayoutInflater.from(mContext), layoutId, parent, false)
+        return super.onCreateViewHolder(parent, viewType)
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {

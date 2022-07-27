@@ -105,6 +105,7 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
                 for (item in it) {
                     BaseApp.fixedThreadPool.execute {
                         item.isLike = MineApp.goodDaoManager.getGood(item.friendDynId) != null
+                        item.isMine = item.userId == getLong("userId")
                         activity.runOnUiThread {
                             if (updateTop) {
                                 discoverInfoList.add(0, item)
@@ -202,7 +203,9 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
             // 视频列表
             MineApp.discoverInfoList.clear()
             MineApp.discoverInfoList.addAll(discoverInfoList)
-            activity.startActivity<VideoListActivity>()
+            activity.startActivity<VideoListActivity>(
+                Pair("pageNo", pageNo)
+            )
         } else {
             // 视频详情
             activity.startActivity<VideoDetailActivity>(

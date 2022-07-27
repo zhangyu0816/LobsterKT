@@ -31,4 +31,5 @@ class DiscoverInfo {
     var birthday = ""
     var age = 0
     var isLike = false // 是否点赞
+    var isMine = false
 }
