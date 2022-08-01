@@ -204,7 +204,8 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
             MineApp.discoverInfoList.clear()
             MineApp.discoverInfoList.addAll(discoverInfoList)
             activity.startActivity<VideoListActivity>(
-                Pair("pageNo", pageNo)
+                Pair("pageNo", pageNo),
+                Pair("position", position)
             )
         } else {
             // 视频详情

@@ -5,12 +5,14 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.media.MediaMetadataRetriever
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.OrientationHelper
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
+import com.yimi.rentme.activity.MemberDetailActivity
 import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.DiscoverInfo
 import com.yimi.rentme.bean.Review
@@ -31,8 +33,9 @@ import com.zb.baselibs.utils.awesome.DownLoadUtil
 import com.zb.baselibs.utils.getLong
 import com.zb.baselibs.utils.getVideoFile
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
-import com.zb.baselibs.views.FullScreenVideoView
+import com.zb.baselibs.views.autopoll.ScrollSpeedLinearLayoutManger
 import kotlinx.coroutines.Job
+import org.jetbrains.anko.startActivity
 
 class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
 
@@ -40,27 +43,20 @@ class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
     var pageNo = 1
     lateinit var adapter: BaseAdapter<DiscoverInfo>
     private lateinit var douYinLayoutManager: DouYinLayoutManager
-    private var position = -1
+    var position = -1
     private var isUp = false
     private var isOver = false
     private var showPosition = -1
     private var canUpdate = false
-
-    @SuppressLint("StaticFieldLeak")
-    private var lastVideoView: FullScreenVideoView? = null
-
-    @SuppressLint("StaticFieldLeak")
-    private var videoView: FullScreenVideoView? = null
     private lateinit var discoverInfo: DiscoverInfo
     private lateinit var mBinding: ItemVideoListBinding
+    private var reviewAdapter: BaseAdapter<Review>? = null
     private val reviewList = ArrayList<Review>()
-    private var alphaOA: ObjectAnimator? = null
     private var animator: ObjectAnimator? = null
 
     @SuppressLint("NotifyDataSetChanged")
     override fun initViewModel() {
         adapter = BaseAdapter(activity, R.layout.item_video_list, MineApp.discoverInfoList, this)
-        adapter.needItemBinding = true
         douYinLayoutManager = DouYinLayoutManager(activity, OrientationHelper.VERTICAL, false)
         binding.videoList.layoutManager = douYinLayoutManager
         binding.videoList.adapter = adapter
@@ -69,10 +65,9 @@ class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
 
         douYinLayoutManager.setOnViewPagerListener(object : OnViewPagerListener {
             override fun onPageRelease(isNest: Boolean, view: View?) {
-                val binding = adapter.getItemBinding() as ItemVideoListBinding
+                val binding = adapter.bindingMap[position] as ItemVideoListBinding
                 binding.videoView.stopPlayback() //停止播放视频,并且释放
                 binding.videoView.suspend() //在任何状态下释放媒体播放器
-                binding.ivImage.visibility = View.VISIBLE
                 binding.isProgress = false
                 binding.isPlay = false
                 binding.videoView.setBackgroundColor(activity.resources.getColor(R.color.black_252))
@@ -87,9 +82,7 @@ class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
                 if (position == -1) return
                 if (showPosition == position) return
                 showPosition = position
-
                 canUpdate = false
-
                 playVideo(view!!)
                 if (!isOver && position == MineApp.discoverInfoList.size - 1 && isUp) {
                     pageNo++
@@ -103,12 +96,17 @@ class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
         })
     }
 
+    override fun back(view: View) {
+        super.back(view)
+        onFinish(0)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        if (alphaOA != null) {
-            alphaOA!!.cancel()
+        if (animator != null) {
+            animator!!.cancel()
         }
-        alphaOA = null
+        animator = null
     }
 
     override fun stopVideo(position: Int) {
@@ -147,11 +145,14 @@ class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
     }
 
     override fun onFinish(position: Int) {
+        stopVideo(position)
+        activity.finish()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun updateAuto(position: Int) {
         reviewList.clear()
-        adapter.notifyItemChanged(position)
+        reviewAdapter!!.notifyDataSetChanged()
         seeReviews(MineApp.discoverInfoList[position].friendDynId)
     }
 
@@ -206,18 +207,13 @@ class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
     /**
      * 播放视频
      */
+    @SuppressLint("NotifyDataSetChanged")
     private fun playVideo(view: View) {
-        if (lastVideoView != null) {
-            lastVideoView!!.stopPlayback() //停止播放视频,并且释放
-            lastVideoView!!.suspend() //在任何状态下释放媒体播放器
-            lastVideoView = null
-        }
         discoverInfo = MineApp.discoverInfoList[position]
         // 访问动态
         mainDataSource.enqueue({ dynVisit(discoverInfo.friendDynId) })
 
-        mBinding = adapter.getItemBinding() as ItemVideoListBinding
-        alphaOA = ObjectAnimator.ofFloat(mBinding.ivImage, "alpha", 1f, 0f).setDuration(500)
+        mBinding = adapter.bindingMap[position] as ItemVideoListBinding
 
         animator =
             ObjectAnimator.ofFloat(mBinding.ivProgress, "rotation", 0f, 360f).setDuration(700)
@@ -226,9 +222,11 @@ class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
         animator!!.start()
 
         initGood(mBinding.viewClick, mBinding.ivGood, {
-            if (mBinding.isPlay)
+            if (mBinding.isPlay) {
+                mBinding.isPlay = false
                 stopVideo(position)
-            else {
+            } else {
+                mBinding.isPlay = true
                 mBinding.videoView.start()
                 mBinding.videoFunctionView.setFollow()
                 mBinding.reviewList.start()
@@ -236,6 +234,21 @@ class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
         }) {
             mBinding.videoFunctionView.showDoLike()
         }
+
+        if (reviewAdapter == null)
+            reviewAdapter = BaseAdapter(activity, R.layout.item_auto_review, reviewList, this)
+        else {
+            reviewList.clear()
+            reviewAdapter!!.notifyDataSetChanged()
+        }
+        reviewAdapter!!.setMax(true)
+        reviewAdapter!!.notifyDataSetChanged()
+        mBinding.reviewList.adapter = reviewAdapter
+        val layoutManager1 = ScrollSpeedLinearLayoutManger(view.context)
+        layoutManager1.isSmoothScrollbarEnabled = true
+        layoutManager1.isAutoMeasureEnabled = true
+        mBinding.reviewList.layoutManager = layoutManager1 // 布局管理器。
+        mBinding.reviewList.setHasFixedSize(true) // 如果Item够简单，高度是确定的，打开FixSize将提高性能。
 
         // 视频启动页
         BaseApp.fixedThreadPool.execute {
@@ -265,32 +278,44 @@ class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
                 DownLoadUtil.downLoad(
                     discoverInfo.videoUrl, getVideoFile(), object : DownLoadUtil.CallBack {
                         override fun onFinish(filePath: String) {
+                            Log.e("filePath", filePath)
                             mBinding.videoPath = filePath
-                            mBinding.isProgress = false
-                            activity.runOnUiThread {
-                                animator!!.cancel()
-                                animator = null
-                            }
+                            mBinding.isProgress = true
+                            mBinding.isPlay = true
                         }
                     })
             else {
+                Log.e("filePath", videoPath)
                 mBinding.videoPath = videoPath
-                mBinding.isProgress = false
-                activity.runOnUiThread {
-                    animator!!.cancel()
-                    animator = null
-                }
+                mBinding.isProgress = true
+                mBinding.isPlay = true
             }
         }
 
-        seeReviews(MineApp.discoverInfoList[position].friendDynId)
+        seeReviews(discoverInfo.friendDynId)
     }
 
     fun playAlphaOA(videoInfo: VideoInfo) {
         mBinding.isPlay = true
         mBinding.isProgress = false
-        alphaOA!!.start()
+        mBinding.width = videoInfo.width
+        mBinding.height = videoInfo.height
+        animator!!.cancel()
+        animator = null
     }
+
+    /**
+     * 用户详情
+     */
+    fun toMemberDetail(otherUserId: Long) {
+        if (otherUserId != getLong("userId")) {
+            stopVideo(0)
+            activity.startActivity<MemberDetailActivity>(
+                Pair("otherUserId", otherUserId)
+            )
+        }
+    }
+
     /**
      * 设置图片
      */
@@ -304,13 +329,12 @@ class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
             mBinding.height = ObjectUtils.getViewSizeByHeight(1.0f)
         }
         mBinding.imageUrl = imageSize.imageUrl
-        mBinding.ivImage.alpha = 1.0f
     }
+
     /**
      * 评论
      */
     private fun seeReviews(friendDynId: Long) {
-        showLoading(Job(), "加载访问数据...")
         mainDataSource.enqueue({ seeReviews(friendDynId, 1, 1, 10) }) {
             onSuccess {
                 for (item in it) {
@@ -336,12 +360,10 @@ class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
                     item.type = 1
                     reviewList.add(item)
                 }
-                dismissLoading()
                 showAutoList()
             }
             onFailToast { false }
             onFailed {
-                dismissLoading()
                 showAutoList()
             }
         }
@@ -353,7 +375,7 @@ class VideoListViewModel : BaseViewModel(), VideoFunctionView.CallBack {
     private fun showAutoList() {
         if (reviewList.size > 0) {
             mBinding.reviewList.visibility = View.VISIBLE
-            adapter.notifyItemRangeChanged(0, reviewList.size)
+            reviewAdapter!!.notifyItemRangeChanged(0, reviewList.size)
 
             if (reviewList.size > 2) {
                 mBinding.reviewList.layoutParams = RelativeLayout.LayoutParams(

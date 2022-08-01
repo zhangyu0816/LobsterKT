@@ -1,13 +1,12 @@
 package com.yimi.rentme.adapter
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.yimi.rentme.ApiService
 import com.yimi.rentme.BR
+import com.yimi.rentme.R
 import com.yimi.rentme.bean.MemberInfo
+import com.yimi.rentme.databinding.ItemVideoListBinding
 import com.yimi.rentme.vm.FCLViewModel
 import com.zb.baselibs.adapter.BindingItemAdapter
 import com.zb.baselibs.adapter.RecyclerHolder
@@ -23,19 +22,14 @@ class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
     private var mainDataSource: MainDataSource<ApiService>? = null
     private var selectPosition = -1
     val userIdList = ArrayList<Long>()
-    private var itemBinding: ViewDataBinding? = null
-    var needItemBinding = false
-
-    fun getItemBinding(): ViewDataBinding? {
-        return itemBinding
-    }
+    private var mLayoutId = 0
+    val bindingMap = HashMap<Int, ViewDataBinding>()
 
     constructor(
         activity: AppCompatActivity?,
         layoutId: Int,
         list: MutableList<T>?
-    ) : super(activity, layoutId, list) {
-    }
+    ) : super(activity, layoutId, list)
 
     constructor(
         activity: AppCompatActivity?,
@@ -53,6 +47,7 @@ class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
         viewModel: BaseLibsViewModel?
     ) : super(activity, layoutId, list) {
         this.viewModel = viewModel
+        mLayoutId = layoutId
     }
 
     constructor(
@@ -120,23 +115,18 @@ class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
                     }
                 }
             }
-        }
-    }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): RecyclerHolder<ViewDataBinding?> {
-        if (needItemBinding)
-            itemBinding =
-                DataBindingUtil.inflate(LayoutInflater.from(mContext), layoutId, parent, false)
-        return super.onCreateViewHolder(parent, viewType)
+            if (mLayoutId == R.layout.item_video_list) {
+                val mBinding = holder.binding as ItemVideoListBinding
+                bindingMap[position] = mBinding
+            }
+        }
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
         if (list != null) {
-            if (list!![fromPosition].toString().isNotEmpty() && list!![toPosition].toString()
-                    .isNotEmpty()
+            if (list!![fromPosition].toString().isNotEmpty()
+                && list!![toPosition].toString().isNotEmpty()
             ) {
                 if (fromPosition < toPosition) {
                     //从上往下拖动，每滑动一个item，都将list中的item向下交换，向上滑同理。

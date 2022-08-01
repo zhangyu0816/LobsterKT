@@ -55,6 +55,8 @@
             android:id="@+id/video_view"
             showSize="@{true}"
             videoUrl="@{videoPath}"
+            viewHeightSize="@{height}"
+            viewWidthSize="@{width}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true" />
@@ -67,16 +69,16 @@
             android:visibility="@{isPlay?View.GONE:View.VISIBLE}"
             app:srcCompat="@mipmap/video_play_icon" />
 
-        <ImageView
-            android:id="@+id/iv_image"
-            imageUrl="@{imageUrl}"
-            viewHeightSize="@{height}"
-            viewWidthSize="@{width}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:alpha="0.0"
-            android:scaleType="fitXY" />
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_image"-->
+<!--            imageUrl="@{imageUrl}"-->
+<!--            viewHeightSize="@{height}"-->
+<!--            viewWidthSize="@{width}"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:alpha="0.0"-->
+<!--            android:scaleType="fitXY" />-->
 
         <ImageView
             android:id="@+id/iv_good"

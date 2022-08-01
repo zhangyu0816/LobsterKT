@@ -66,7 +66,7 @@ fun FullScreenVideoView.setVideoUrl(videoUrl: String?, showSize: Boolean) {
         }
         false //如果方法处理了信息，则为true；如果没有，则为false。返回false或根本没有OnInfoListener，将导致丢弃该信息。
     }
-    if(videoUrl!=null){
+    if (videoUrl != null) {
         this.setVideoPath(videoUrl)
         this.start()
     }

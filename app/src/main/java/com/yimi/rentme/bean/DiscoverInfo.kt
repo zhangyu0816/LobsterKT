@@ -32,4 +32,5 @@ class DiscoverInfo {
     var age = 0
     var isLike = false // 是否点赞
     var isMine = false
+    var reviewList = ArrayList<Review>()
 }
