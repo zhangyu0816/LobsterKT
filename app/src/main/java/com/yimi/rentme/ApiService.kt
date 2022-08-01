@@ -392,4 +392,27 @@ interface ApiService {
         @Field("isAppearance") isAppearance: Int, @Field("addressInfo") addressInfo: String,
         @Field("friendTitle") friendTitle: String
     ): HttpWrapBean<Any?>
+
+    // 寻找漂流瓶
+    @FormUrlEncoded
+    @POST("api/DriftBottle_findBottle")
+    suspend fun findBottle(@FieldMap map: Map<String, String>): HttpWrapBean<BottleInfo>
+
+    // 随机获取一条最新动态
+    @FormUrlEncoded
+    @POST("api/Interactive_randomNewDyn")
+    suspend fun randomNewDyn(@FieldMap map: Map<String, String>): HttpWrapBean<DiscoverInfo>
+
+    // 拾取漂流瓶(包括销毁漂流瓶)
+    @FormUrlEncoded
+    @POST("api/DriftBottle_pcikBottle")
+    suspend fun pickBottle(
+        @Field("driftBottleId") driftBottleId: Long,
+        @Field("driftBottleType") driftBottleType: Int
+    ): HttpWrapBean<Any?>
+
+    // 投掷漂流瓶
+    @FormUrlEncoded
+    @POST("api/DriftBottle_castBottle")
+    suspend fun castBottle(@Field("text") text: String): HttpWrapBean<Any?>
 }

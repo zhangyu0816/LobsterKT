@@ -1,6 +1,7 @@
 package com.yimi.rentme
 
 import android.annotation.SuppressLint
+import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import com.yimi.rentme.bean.*
 import com.yimi.rentme.roomdata.FollowDaoManager
@@ -76,6 +77,8 @@ class MineApp : BaseApp() {
         var minAge = 0
         var maxAge = 100
         var likeCount = 30
+        var noReadBottleNum = 0
+        lateinit var QingSongShouXieTiType: Typeface
 
         @JvmField
         val selectImageList = ArrayList<SelectImage>()

@@ -63,4 +63,6 @@
     <string name="member_expire_time">有效期至%s</string>
     <string name="dyn_image">动态</string>
     <string name="dyn_video">小视频</string>
+    <string name="throw_repeat">立即回复</string>
+    <string name="tv_context">在这里写下你想说的话…(100字)</string>
 </resources>

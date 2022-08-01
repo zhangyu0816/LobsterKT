@@ -68,6 +68,8 @@ class MainHomeViewModel : BaseViewModel() {
      * 选择
      */
     fun selectIndex(index: Int) {
+        if (binding.index == index)
+            return
         binding.index = index
         when (index) {
             0 -> activity.replaceFragment(FollowFrag(), R.id.home_content)

@@ -2,6 +2,7 @@ package com.yimi.rentme.vm
 
 import android.Manifest
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Build
 import android.os.SystemClock
 import android.provider.Settings
@@ -34,6 +35,9 @@ class MainViewModel : BaseViewModel() {
         MineApp.goodDaoManager = GoodDaoManager(BaseApp.context)
         MineApp.likeTypeDaoManager = LikeTypeDaoManager(BaseApp.context)
         MineApp.imageSizeDaoManager = ImageSizeDaoManager(BaseApp.context)
+        MineApp.QingSongShouXieTiType = Typeface.createFromAsset(
+            BaseApp.context.assets, "fonts/QingSongShouXieTi.ttf"
+        )
         // 设备信息
         if (checkPermissionGranted(Manifest.permission.READ_PHONE_STATE)) {
             setDeviceCode()
@@ -106,6 +110,8 @@ class MainViewModel : BaseViewModel() {
      * 选择
      */
     fun selectIndex(index: Int) {
+        if (binding.index == index)
+            return
         when (index) {
             0 -> activity.replaceFragment(MainHomeFrag(), R.id.main_content)
             1 -> activity.replaceFragment(MainCardFrag(), R.id.main_content)

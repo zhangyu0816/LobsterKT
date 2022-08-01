@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.BottleEditDF" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/content_layout"
+            viewHeightSize="@{ObjectUtils.getViewSizeByHeightFromMax(1200)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(1050)}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/bottle_content_bg"
+            android:paddingTop="80dp"
+            android:paddingBottom="80dp">
+
+            <EditText
+                android:id="@+id/ed_content"
+                viewHeightSize="@{ObjectUtils.getViewSizeByHeightFromMax(1200)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(1050)}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="top"
+                android:lineSpacingExtra="15dp"
+                android:maxLength="100"
+                android:minLines="5"
+                android:paddingStart="30dp"
+                android:paddingEnd="30dp"
+                android:textColor="@color/black_252"
+                android:textColorHint="@color/black_9"
+                android:textCursorDrawable="@drawable/cursor_color_black_4d4"
+                android:textSize="20sp"
+                tools:text="是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类是会计访问了就我法律文件法律文件分类" />
+        </RelativeLayout>
+
+        <TextView
+            onClickDelayed="@{dialog::sure}"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="30dp"
+            android:background="@drawable/gradient_purple_6d5_ae7"
+            android:gravity="center"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="回复"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</layout>
