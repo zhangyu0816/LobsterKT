@@ -585,7 +585,7 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
         pvh = ObjectAnimator.ofPropertyValuesHolder(view, pvhSY, pvhSX).setDuration(500)
         pvh!!.start()
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(500)
+            SystemClock.sleep(500L)
             activity.runOnUiThread {
                 if (pvh != null) pvh!!.cancel()
                 pvh = null
@@ -613,7 +613,7 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
         translateY = ObjectAnimator.ofFloat(view, "translationY", 0f, 1000f).setDuration(500)
         translateY!!.start()
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(500)
+            SystemClock.sleep(500L)
             activity.runOnUiThread {
                 translateY!!.cancel()
                 translateY = null

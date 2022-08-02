@@ -146,6 +146,8 @@
         <activity android:name=".activity.SelectLocationActivity" />
         <activity android:name=".activity.DiscoverListActivity" />
         <activity android:name=".activity.OpenVipActivity" />
+        <activity android:name=".activity.bottle.BottleListActivity" />
+        <activity android:name=".activity.bottle.BottleChatActivity" />
     </application>
 
 </manifest>

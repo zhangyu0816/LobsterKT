@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.BaseViewModel" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="right"
+            type="String" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            onClickDelayed="@{viewModel::back}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:src="@mipmap/back_white_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@{title}"
+            android:textColor="@color/black_252"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            onClickDelayed="@{viewModel::right}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="15dp"
+            android:text="@{right}"
+            android:textColor="@color/black_827"
+            android:textSize="14sp"
+            android:visibility="@{(right==null||right.empty)?View.GONE:View.VISIBLE}"
+            tools:text="全部已读" />
+    </RelativeLayout>
+</layout>

@@ -40,7 +40,7 @@ class LoginViewModel : BaseViewModel() {
         } else {
             activity.removeFragment(fragment)
             BaseApp.fixedThreadPool.execute {
-                SystemClock.sleep(10)
+                SystemClock.sleep(10L)
                 activity.runOnUiThread {
                     fragment =
                         activity.supportFragmentManager.findFragmentById(R.id.login_content) as BaseFragment

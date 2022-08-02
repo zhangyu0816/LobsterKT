@@ -37,4 +37,12 @@ class MainActivity : BaseScreenActivity() {
     private fun lobsterUpdateMineInfo(data: String) {
         viewModel.myInfo()
     }
+
+    /**
+     * 更新漂流瓶
+     */
+    @Subscriber(tag = "lobsterBottleNoReadNum")
+    private fun lobsterBottleNoReadNum(data: String) {
+        viewModel.bottleNoReadNum()
+    }
 }

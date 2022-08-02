@@ -18,7 +18,7 @@ class RegisterBirthdayViewModel : BaseViewModel() {
         binding.canNext = false
         binding.birthday = ""
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(200)
+            SystemClock.sleep(200L)
             activity.runOnUiThread {
                 selectBirthday(binding.tvBirthday)
             }

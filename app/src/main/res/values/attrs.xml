@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CutView">
+        <attr name="floatColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="BlurredView">
+        <attr name="src" format="reference" />
+        <attr name="move" format="boolean" />
+        <attr name="disableBlurred" format="boolean" />
+    </declare-styleable>
+    <!-- 表情 -->
+    <declare-styleable name="Emoji">
+        <attr name="emojiSize" format="reference|dimension" />
+    </declare-styleable>
+    <declare-styleable name="LeanTextView">
+        <attr name="degree" format="dimension" />
+    </declare-styleable>
+</resources>

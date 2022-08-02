@@ -180,7 +180,7 @@ class PhotoManager(
                         isCompress = false
                         if (i == fileList.size - 1) {
                             val ra = Runnable {
-                                SystemClock.sleep(100)
+                                SystemClock.sleep(100L)
                                 context.runOnUiThread {
                                     if (compressOverBack != null) {
                                         compressOverBack!!.success()

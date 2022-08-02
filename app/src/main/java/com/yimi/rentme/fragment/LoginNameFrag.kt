@@ -37,7 +37,7 @@ class LoginNameFrag : BaseFragment() {
         MineApp.registerInfo.bindPhone = dataList[0]
         MineApp.registerInfo.captcha = dataList[1]
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(200)
+            SystemClock.sleep(200L)
             viewModel.activity.runOnUiThread {
                 EventBus.getDefault().post("", "lobsterRegisterSex")
             }

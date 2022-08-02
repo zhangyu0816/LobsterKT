@@ -157,7 +157,7 @@ class MNImageBrowserViewModel : BaseViewModel() {
             pvh!!.repeatCount = Animation.INFINITE
             pvh!!.start()
             BaseApp.fixedThreadPool.execute {
-                SystemClock.sleep(1000)
+                SystemClock.sleep(1000L)
                 activity.runOnUiThread {
                     binding.likeLayout.visibility = View.GONE
                 }

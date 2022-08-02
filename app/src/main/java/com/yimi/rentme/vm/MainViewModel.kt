@@ -14,10 +14,7 @@ import com.yimi.rentme.fragment.MainCardFrag
 import com.yimi.rentme.fragment.MainChatFrag
 import com.yimi.rentme.fragment.MainHomeFrag
 import com.yimi.rentme.fragment.MainMineFrag
-import com.yimi.rentme.roomdata.FollowDaoManager
-import com.yimi.rentme.roomdata.GoodDaoManager
-import com.yimi.rentme.roomdata.ImageSizeDaoManager
-import com.yimi.rentme.roomdata.LikeTypeDaoManager
+import com.yimi.rentme.roomdata.*
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.utils.*
@@ -35,6 +32,9 @@ class MainViewModel : BaseViewModel() {
         MineApp.goodDaoManager = GoodDaoManager(BaseApp.context)
         MineApp.likeTypeDaoManager = LikeTypeDaoManager(BaseApp.context)
         MineApp.imageSizeDaoManager = ImageSizeDaoManager(BaseApp.context)
+        MineApp.chatListDaoManager = ChatListDaoManager(BaseApp.context)
+        MineApp.historyDaoManager = HistoryDaoManager(BaseApp.context)
+
         MineApp.QingSongShouXieTiType = Typeface.createFromAsset(
             BaseApp.context.assets, "fonts/QingSongShouXieTi.ttf"
         )
@@ -76,7 +76,7 @@ class MainViewModel : BaseViewModel() {
         comType()
         firstOpenMemberPage()
         openedMemberPriceList()
-
+        driftBottleChatList(1)
         if (getInteger(
                 "toLikeCount_${getLong("userId")}_${DateUtil.getNow(DateUtil.yyyy_MM_dd)}",
                 -1
@@ -89,7 +89,7 @@ class MainViewModel : BaseViewModel() {
                 -1
             )
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(500)
+            SystemClock.sleep(500L)
             activity.runOnUiThread {
                 if (getInteger("love_activity") == 0) {
                     saveInteger("love_activity", 1)
@@ -266,6 +266,88 @@ class MainViewModel : BaseViewModel() {
                 MineApp.mineInfo = it
                 MineApp.sex = it.sex
                 firstOpenMemberPage()
+            }
+        }
+    }
+
+    /**
+     * 更新漂流瓶
+     */
+    fun bottleNoReadNum() {
+        BaseApp.fixedThreadPool.execute {
+            var chatListInfo =
+                MineApp.chatListDaoManager.getChatListInfo("common_${MineApp.bottleUserId}")
+            if (chatListInfo == null) {
+                chatListInfo = ChatListInfo()
+                chatListInfo.chatId = "common_${MineApp.bottleUserId}"
+                chatListInfo.otherUserId = MineApp.bottleUserId
+                chatListInfo.nick = "漂流瓶"
+                chatListInfo.image = "bottle_logo_icon"
+                chatListInfo.creationDate = DateUtil.getNow(DateUtil.yyyy_MM_dd_HH_mm_ss)
+                chatListInfo.stanza = if (MineApp.noReadBottleNum == 0) "茫茫人海中，需要流浪到何时" else "您有新消息"
+                chatListInfo.msgType = 1
+                chatListInfo.noReadNum = MineApp.noReadBottleNum
+                chatListInfo.publicTag = ""
+                chatListInfo.effectType = 1
+                chatListInfo.authType = 1
+                chatListInfo.msgChannelType = 1
+                chatListInfo.chatType = 2
+                chatListInfo.mainUserId = getLong("userId")
+                MineApp.chatListDaoManager.insert(chatListInfo)
+            } else {
+                MineApp.chatListDaoManager.updateChatListInfo(
+                    "漂流瓶", "bottle_logo_icon", DateUtil.getNow(DateUtil.yyyy_MM_dd_HH_mm_ss),
+                    if (MineApp.noReadBottleNum == 0) "茫茫人海中，需要流浪到何时" else "您有新消息",
+                    1, MineApp.noReadBottleNum, "common_${MineApp.bottleUserId}"
+                )
+            }
+        }
+    }
+
+    /**
+     * 漂流瓶会话列表
+     */
+    private fun driftBottleChatList(pageNo: Int) {
+        mainDataSource.enqueue({ driftBottleChatList(1, pageNo) }) {
+            onSuccess {
+                BaseApp.fixedThreadPool.execute {
+                    for (item in it) {
+                        item.mainUserId = getLong("userId")
+                        val chatListInfo = ChatListInfo()
+                        chatListInfo.chatId = "drift_${item.driftBottleId}"
+                        chatListInfo.otherUserId = item.userId
+                        chatListInfo.nick = item.nick
+                        chatListInfo.image = item.image
+                        chatListInfo.creationDate = item.creationDate
+                        chatListInfo.stanza = item.stanza
+                        chatListInfo.msgType = item.msgType
+                        chatListInfo.noReadNum = item.noReadNum
+                        chatListInfo.publicTag = item.publicTag
+                        chatListInfo.effectType = item.effectType
+                        chatListInfo.authType = item.authType
+                        chatListInfo.msgChannelType = 2
+                        chatListInfo.chatType = 2
+                        chatListInfo.mainUserId = item.mainUserId
+                        MineApp.chatListDaoManager.insert(chatListInfo)
+                    }
+                    activity.runOnUiThread {
+                        driftBottleChatList(pageNo + 1)
+                    }
+                }
+
+            }
+            onFailed {
+                if (it.isNoData) {
+                    BaseApp.fixedThreadPool.execute {
+                        val chatListInfoList = MineApp.chatListDaoManager.getChatListInfoList(2)
+                        for (item in chatListInfoList) {
+                            MineApp.noReadBottleNum += item.noReadNum
+                        }
+                        activity.runOnUiThread {
+                            bottleNoReadNum()
+                        }
+                    }
+                }
             }
         }
     }

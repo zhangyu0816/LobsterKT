@@ -415,4 +415,26 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/DriftBottle_castBottle")
     suspend fun castBottle(@Field("text") text: String): HttpWrapBean<Any?>
+
+    // 漂流瓶未读会话列表
+    @FormUrlEncoded
+    @POST("api/DriftBottle_chatList")
+    suspend fun driftBottleChatList(
+        @Field("isPublicAccount") isPublicAccount: Int,
+        @Field("pageNo") pageNo: Int
+    ): HttpWrapBean<ArrayList<BottleCache>>
+
+    // 我的漂流瓶列表
+    @FormUrlEncoded
+    @POST("api/DriftBottle_myBottleList")
+    suspend fun myBottleList(@Field("pageNo") pageNo: Int): HttpWrapBean<ArrayList<BottleInfo>>
+
+    // 清除与这个人的消息
+    @FormUrlEncoded
+    @POST("api/DriftBottle_clearHistoryMsg")
+    suspend fun clearAllDriftBottleHistoryMsg(
+        @Field("otherUserId") otherUserId: Long,
+        @Field("driftBottleId") driftBottleId: Long
+    ): HttpWrapBean<Any?>
+
 }

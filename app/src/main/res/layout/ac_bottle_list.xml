@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.bottle.BottleListViewModel" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="showBg"
+            type="boolean" />
+
+        <variable
+            name="noData"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:splitMotionEvents="false">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:elevation="0dp">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:minHeight="82dp"
+                    app:contentInsetStart="0dp"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                    <ImageView
+                        viewHeightSize="@{ObjectUtils.getViewSizeByWidth(660f/1125f)}"
+                        viewWidthSize="@{ObjectUtils.getViewSizeByWidth(1.0f)}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@mipmap/bottle_top_3" />
+                </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/refresh"
+                onRefreshListener="@{viewModel}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black_efe"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/bottle_list"
+                    adapter="@{viewModel.adapter}"
+                    color="@{R.color.black_efe}"
+                    recyclerType="@{0}"
+                    size="@{1}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white" />
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
+                android:gravity="center_horizontal"
+                android:text="暂无数据"
+                android:textColor="@color/black_4d4"
+                android:textSize="20sp"
+                android:visibility="@{noData?View.VISIBLE:View.GONE}"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@{showBg?@color/black_252:@android:color/transparent}"
+            android:orientation="vertical">
+
+            <include
+                layout="@layout/back_white_layout"
+                title="@{title}"
+                viewModel="@{viewModel}" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

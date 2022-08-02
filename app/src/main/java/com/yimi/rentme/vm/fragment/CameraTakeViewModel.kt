@@ -68,7 +68,7 @@ class CameraTakeViewModel : BaseViewModel() {
             else
                 EventBus.getDefault().post(MineApp.selectImageList, "lobsterUploadImageList")
             BaseApp.fixedThreadPool.execute {
-                SystemClock.sleep(200)
+                SystemClock.sleep(200L)
                 activity.runOnUiThread {
                     back(binding.ivBack)
                 }

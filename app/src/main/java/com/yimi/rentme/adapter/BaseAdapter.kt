@@ -8,6 +8,7 @@ import com.yimi.rentme.R
 import com.yimi.rentme.bean.MemberInfo
 import com.yimi.rentme.databinding.ItemVideoListBinding
 import com.yimi.rentme.vm.FCLViewModel
+import com.yimi.rentme.vm.bottle.BottleListViewModel
 import com.zb.baselibs.adapter.BindingItemAdapter
 import com.zb.baselibs.adapter.RecyclerHolder
 import com.zb.baselibs.dialog.BaseDialogFragment
@@ -145,5 +146,8 @@ class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
     }
 
     override fun onItemDelete(position: Int) {
+        if (viewModel is BottleListViewModel) {
+            (viewModel as BottleListViewModel).deleteBottle(position)
+        }
     }
 }

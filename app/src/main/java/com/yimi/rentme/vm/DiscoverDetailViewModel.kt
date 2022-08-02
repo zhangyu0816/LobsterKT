@@ -427,9 +427,9 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 if (discoverInfo.goodNum == 0 || discoverInfo.reviews == 0) {
                     binding.ivRemind.visibility = View.VISIBLE
                     BaseApp.fixedThreadPool.execute {
-                        SystemClock.sleep(500)
+                        SystemClock.sleep(500L)
                         if (binding.ivRemind.visibility == View.VISIBLE) {
-                            SystemClock.sleep(2500)
+                            SystemClock.sleep(2500L)
                             activity.runOnUiThread { binding.ivRemind.visibility = View.GONE }
                         }
                     }
@@ -578,7 +578,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                     discoverInfo.goodNum = discoverInfo.goodNum + 1
                     discoverInfo.isLike = true
                     binding.discoverInfo = discoverInfo
-                    SystemClock.sleep(200)
+                    SystemClock.sleep(200L)
                     EventBus.getDefault().post(friendDynId.toString(), "lobsterDoLike")
                 }
             }
@@ -592,7 +592,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                         MineApp.goodDaoManager.insert(goodInfo)
                         discoverInfo.isLike = true
                         binding.discoverInfo = discoverInfo
-                        SystemClock.sleep(200)
+                        SystemClock.sleep(200L)
                         EventBus.getDefault().post(friendDynId.toString(), "lobsterDoLike")
                     }
                 }
@@ -611,7 +611,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                     discoverInfo.goodNum = discoverInfo.goodNum - 1
                     discoverInfo.isLike = false
                     binding.discoverInfo = discoverInfo
-                    SystemClock.sleep(200)
+                    SystemClock.sleep(200L)
                     EventBus.getDefault().post(friendDynId.toString(), "lobsterCancelLike")
                 }
             }
@@ -621,7 +621,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                     MineApp.goodDaoManager.deleteGood(friendDynId)
                     discoverInfo.isLike = false
                     binding.discoverInfo = discoverInfo
-                    SystemClock.sleep(200)
+                    SystemClock.sleep(200L)
                     EventBus.getDefault().post(friendDynId.toString(), "lobsterCancelLike")
                 }
             }
@@ -854,7 +854,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
         pvh = ObjectAnimator.ofPropertyValuesHolder(view, pvhSY, pvhSX).setDuration(500)
         pvh!!.start()
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(500)
+            SystemClock.sleep(500L)
             activity.runOnUiThread {
                 if (pvh != null) pvh!!.cancel()
                 pvh = null
@@ -882,7 +882,7 @@ class DiscoverDetailViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
         translateY = ObjectAnimator.ofFloat(view, "translationY", 0f, 1000f).setDuration(500)
         translateY!!.start()
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(500)
+            SystemClock.sleep(500L)
             activity.runOnUiThread {
                 translateY!!.cancel()
                 translateY = null

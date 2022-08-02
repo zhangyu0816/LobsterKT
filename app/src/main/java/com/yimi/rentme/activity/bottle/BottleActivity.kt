@@ -1,11 +1,13 @@
 package com.yimi.rentme.activity.bottle
 
 import android.view.KeyEvent
+import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcBottleBinding
 import com.yimi.rentme.vm.bottle.BottleViewModel
 import com.zb.baselibs.activity.BaseScreenActivity
 import kotlinx.android.synthetic.main.ac_mnimage_browser.*
+import org.simple.eventbus.Subscriber
 
 class BottleActivity : BaseScreenActivity() {
 
@@ -20,6 +22,7 @@ class BottleActivity : BaseScreenActivity() {
     }
 
     override fun initView() {
+        needEvenBus = true
         viewModel.initViewModel()
     }
 
@@ -41,6 +44,14 @@ class BottleActivity : BaseScreenActivity() {
     override fun onRestart() {
         super.onRestart()
         viewModel.onResume()
+    }
+
+    /**
+     * 更新漂流瓶
+     */
+    @Subscriber(tag = "lobsterBottleNoReadNum")
+    private fun lobsterBottleNoReadNum(data: String) {
+        viewModel.binding.noReadNum = MineApp.noReadBottleNum
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

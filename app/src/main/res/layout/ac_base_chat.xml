@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.BaseChatViewModel" />
+
+        <variable
+            name="memberInfo"
+            type="com.yimi.rentme.bean.MemberInfo" />
+
+        <variable
+            name="msgChannelType"
+            type="Integer" />
+
+        <variable
+            name="isLockImage"
+            type="boolean" />
+
+        <variable
+            name="content"
+            type="String" />
+
+        <variable
+            name="isVoice"
+            type="boolean" />
+
+        <variable
+            name="isEmoji"
+            type="boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -119,7 +119,7 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
                     }
                 }
                 BaseApp.fixedThreadPool.execute {
-                    SystemClock.sleep(2000)
+                    SystemClock.sleep(2000L)
                     activity.runOnUiThread {
                         dismissLoading()
                     }
@@ -129,7 +129,7 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
             }
             onFailed {
                 BaseApp.fixedThreadPool.execute {
-                    SystemClock.sleep(2000)
+                    SystemClock.sleep(2000L)
                     activity.runOnUiThread {
                         dismissLoading()
                     }
@@ -170,7 +170,7 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
                     }
                 }
                 BaseApp.fixedThreadPool.execute {
-                    SystemClock.sleep(2000)
+                    SystemClock.sleep(2000L)
                     activity.runOnUiThread {
                         dismissLoading()
                     }
@@ -180,7 +180,7 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
             }
             onFailed {
                 BaseApp.fixedThreadPool.execute {
-                    SystemClock.sleep(2000)
+                    SystemClock.sleep(2000L)
                     activity.runOnUiThread {
                         dismissLoading()
                     }

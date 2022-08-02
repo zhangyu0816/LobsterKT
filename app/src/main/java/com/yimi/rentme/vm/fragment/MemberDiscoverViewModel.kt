@@ -108,7 +108,7 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
             }
             onFailed {
                 BaseApp.fixedThreadPool.execute {
-                    SystemClock.sleep(2000)
+                    SystemClock.sleep(2000L)
                     activity.runOnUiThread {
                         dismissLoading()
                     }
@@ -155,7 +155,7 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
             }
             onFailed {
                 BaseApp.fixedThreadPool.execute {
-                    SystemClock.sleep(2000)
+                    SystemClock.sleep(2000L)
                     activity.runOnUiThread {
                         dismissLoading()
                     }
@@ -213,7 +213,7 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                     }
             }
 
-            SystemClock.sleep(2000)
+            SystemClock.sleep(2000L)
             activity.runOnUiThread {
                 dismissLoading()
             }

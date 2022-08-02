@@ -96,8 +96,10 @@
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable/progressbar.xml" value="0.2305" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable/shape_dotted_line.xml" value="0.2305" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/drawable/vip_circle_pressed.xml" value="0.2305" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/ac_base_chat.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/ac_binding_phone.xml" value="0.3609375" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/ac_bottle.xml" value="0.3609375" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/ac_bottle_list.xml" value="0.3609375" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/ac_discover_detail.xml" value="0.33" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/ac_discover_list.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/ac_fcl.xml" value="0.3609375" />
@@ -119,6 +121,7 @@
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/activity_main.xml" value="0.121875" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/back_black_layout.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/back_black_more_layout.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/back_white_layout.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/bottle_bg.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/bottle_title.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/bottle_white_back.xml" value="0.3619791666666667" />
@@ -164,6 +167,7 @@
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/good_layout.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_ad.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_auto_review.xml" value="0.3609375" />
+        <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_bottle_list.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_bottom_function.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_camera_image.xml" value="0.29615384615384616" />
         <entry key="..\:/Users/yu/Documents/AndroidStudioProjects/LobsterKT/app/src/main/res/layout/item_df_review.xml" value="0.29615384615384616" />

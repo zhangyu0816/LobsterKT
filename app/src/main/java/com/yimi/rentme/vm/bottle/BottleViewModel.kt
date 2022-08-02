@@ -9,6 +9,7 @@ import android.view.animation.LinearInterpolator
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.activity.bottle.BottleActivity
+import com.yimi.rentme.activity.bottle.BottleListActivity
 import com.yimi.rentme.bean.BottleInfo
 import com.yimi.rentme.bean.MemberInfo
 import com.yimi.rentme.databinding.AcBottleBinding
@@ -20,6 +21,7 @@ import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.DateUtil
 import com.zb.baselibs.utils.ObjectUtils
 import com.zb.baselibs.utils.SCToastUtil
+import org.jetbrains.anko.startActivity
 import java.io.IOException
 
 class BottleViewModel : BaseViewModel() {
@@ -48,7 +50,7 @@ class BottleViewModel : BaseViewModel() {
 
         mPlayer = MediaPlayer.create(activity, R.raw.sea_wave)
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(200)
+            SystemClock.sleep(200L)
             activity.runOnUiThread {
                 appSound()
             }
@@ -179,7 +181,7 @@ class BottleViewModel : BaseViewModel() {
         }
         binding.bottleWhiteBack.bottleBg.stopBg()
         openBottle()
-//        ActivityUtils.getBottleList()
+        activity.startActivity<BottleListActivity>()
     }
 
     /**
@@ -348,7 +350,7 @@ class BottleViewModel : BaseViewModel() {
             e.printStackTrace()
         }
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(500)
+            SystemClock.sleep(500L)
             activity.runOnUiThread {
                 if (mPlayer != null) {
                     mPlayer.stop()

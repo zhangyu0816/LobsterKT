@@ -106,7 +106,7 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
                             }
                     }
 
-                    SystemClock.sleep(2000)
+                    SystemClock.sleep(2000L)
                     activity.runOnUiThread {
                         dismissLoading()
                     }
@@ -117,7 +117,7 @@ class FollowViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
             }
             onFailed {
                 BaseApp.fixedThreadPool.execute {
-                    SystemClock.sleep(2000)
+                    SystemClock.sleep(2000L)
                     activity.runOnUiThread {
                         dismissLoading()
                     }

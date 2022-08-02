@@ -44,7 +44,7 @@ class MainHomeViewModel : BaseViewModel() {
             .setDuration(2000)
         pvh!!.repeatCount = Animation.INFINITE
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(200)
+            SystemClock.sleep(200L)
             activity.runOnUiThread {
                 binding.publishLayout.visibility = View.VISIBLE
                 pvh!!.start()

@@ -21,7 +21,7 @@ class LoadingViewModel : BaseViewModel() {
 
     override fun initViewModel() {
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(2000)
+            SystemClock.sleep(2000L)
             if (getInteger("rule") == 0)
                 RuleDF(activity).setContent(
                     "欢迎您使用${BaseApp.context.resources.getString(R.string.app_name)}！${

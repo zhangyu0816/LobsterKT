@@ -346,7 +346,7 @@ class VideoFunctionView : LinearLayout {
             ObjectAnimator.ofPropertyValuesHolder(binding.ivAttention, pvhR, pvhA).setDuration(200)
         pvh!!.start()
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(200)
+            SystemClock.sleep(200L)
             activity.runOnUiThread {
                 binding.isFollow = true
                 pvhR = PropertyValuesHolder.ofFloat("rotation", 90f, 0f)
@@ -354,7 +354,7 @@ class VideoFunctionView : LinearLayout {
                     ObjectAnimator.ofPropertyValuesHolder(binding.ivAttention, pvhR).setDuration(50)
                 pvh!!.start()
             }
-            SystemClock.sleep(50)
+            SystemClock.sleep(50L)
             activity.runOnUiThread {
                 pvhA = PropertyValuesHolder.ofFloat("alpha", 0f, 1f)
                 pvh = ObjectAnimator.ofPropertyValuesHolder(binding.ivAttention, pvhA)
@@ -373,7 +373,7 @@ class VideoFunctionView : LinearLayout {
         pvh = ObjectAnimator.ofPropertyValuesHolder(view, pvhSY, pvhSX).setDuration(500)
         pvh!!.start()
         BaseApp.fixedThreadPool.execute {
-            SystemClock.sleep(500)
+            SystemClock.sleep(500L)
             activity.runOnUiThread {
                 if (pvh != null) pvh!!.cancel()
                 pvh = null
@@ -396,7 +396,7 @@ class VideoFunctionView : LinearLayout {
                     discoverInfo.goodNum = discoverInfo.goodNum + 1
                     discoverInfo.isLike = true
                     binding.discoverInfo = discoverInfo
-                    SystemClock.sleep(200)
+                    SystemClock.sleep(200L)
                     EventBus.getDefault()
                         .post(binding.discoverInfo!!.friendDynId.toString(), "lobsterDoLike")
                 }
@@ -412,7 +412,7 @@ class VideoFunctionView : LinearLayout {
                         MineApp.goodDaoManager.insert(goodInfo)
                         discoverInfo.isLike = true
                         binding.discoverInfo = discoverInfo
-                        SystemClock.sleep(200)
+                        SystemClock.sleep(200L)
                         EventBus.getDefault()
                             .post(binding.discoverInfo!!.friendDynId.toString(), "lobsterDoLike")
                     }
@@ -433,7 +433,7 @@ class VideoFunctionView : LinearLayout {
                     discoverInfo.goodNum = discoverInfo.goodNum - 1
                     discoverInfo.isLike = false
                     binding.discoverInfo = discoverInfo
-                    SystemClock.sleep(200)
+                    SystemClock.sleep(200L)
                     EventBus.getDefault()
                         .post(binding.discoverInfo!!.friendDynId.toString(), "lobsterCancelLike")
                 }
@@ -444,7 +444,7 @@ class VideoFunctionView : LinearLayout {
                     MineApp.goodDaoManager.deleteGood(binding.discoverInfo!!.friendDynId)
                     discoverInfo.isLike = false
                     binding.discoverInfo = discoverInfo
-                    SystemClock.sleep(200)
+                    SystemClock.sleep(200L)
                     EventBus.getDefault()
                         .post(binding.discoverInfo!!.friendDynId.toString(), "lobsterCancelLike")
                 }
