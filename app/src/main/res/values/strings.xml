@@ -65,4 +65,8 @@
     <string name="dyn_video">小视频</string>
     <string name="throw_repeat">立即回复</string>
     <string name="tv_context">在这里写下你想说的话…(100字)</string>
+    <string name="notice_ta">打开通知，第一时间回复</string>
+    <string name="symbol_money_">¥ </string>
+    <string name="mp3">.mp3</string>
+    <string name="quotation">”</string>
 </resources>

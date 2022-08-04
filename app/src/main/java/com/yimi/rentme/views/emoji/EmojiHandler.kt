@@ -1,4 +1,4 @@
-package com.yimi.rentme.views.emojj
+package com.yimi.rentme.views.emoji
 
 import android.content.Context
 import android.text.Spannable
@@ -9,6 +9,7 @@ import java.util.regex.Pattern
 
 object EmojiHandler {
     var maxEmojiCount = 88
+
     val sCustomizeEmojisMap: MutableMap<Int, Int> = HashMap()
     private fun getPic(pid: String): Int {
         val f: Field

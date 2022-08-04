@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <variable
+            name="item"
+            type="Integer" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.BaseChatViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{v->viewModel.addEmoji(position,item)}">
+
+        <ImageView
+            imageRes="@{item}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(90)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(90)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp" />
+    </RelativeLayout>
+</layout>

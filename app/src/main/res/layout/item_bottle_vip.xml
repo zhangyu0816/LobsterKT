@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="dialog"
+            type="com.yimi.rentme.dialog.BottleVipDF" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.VipInfo" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="isSelect"
+            type="boolean" />
+    </data>
+
+    <RelativeLayout
+        onClickDelayed="@{v->dialog.selectIndex(position)}"
+        viewHeightSize="@{-2}"
+        viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.235f)}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:background="@{isSelect?@drawable/btn_bg_white_red_radius5:@drawable/btn_bg_white_black_efe_radius5}"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:text="@{String.valueOf(item.dayCount/30)}"
+                    android:textColor="@{isSelect?@color/red_fe4:@color/black_252}"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:text="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="个月"
+                    android:textColor="@{isSelect?@color/red_fe4:@color/black_827}"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text='@{@string/symbol_money_ + String.format("%.1f",item.price)}'
+                android:textColor="@{isSelect?@color/red_fe4:@color/black_252}"
+                android:textSize="12sp"
+                tools:text="¥ 28" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="15dp"
+                android:text="@{String.format(@string/price_moth, (item.price/item.dayCount))}"
+                android:textColor="@{isSelect?@color/red_fe4:@color/black_827}"
+                android:textSize="9sp"
+                tools:text="¥28/月" />
+        </LinearLayout>
+
+        <TextView
+            viewHeightSize="@{-2}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+            android:layout_width="150dp"
+            android:layout_height="18dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/btn_bg_red_fe4_radius18"
+            android:gravity="center"
+            android:text="@{String.format(@string/price_save, item.originalPrice-item.price)}"
+            android:textColor="@android:color/white"
+            android:textSize="10sp"
+            android:visibility="@{isSelect?View.VISIBLE:View.GONE}"
+            tools:text="省16元" />
+    </RelativeLayout>
+</layout>

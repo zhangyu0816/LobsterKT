@@ -15,14 +15,17 @@ import com.yimi.rentme.fragment.MainChatFrag
 import com.yimi.rentme.fragment.MainHomeFrag
 import com.yimi.rentme.fragment.MainMineFrag
 import com.yimi.rentme.roomdata.*
+import com.yimi.rentme.utils.OpenNotice
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
+import com.zb.baselibs.mimc.CustomMessageBody
+import com.zb.baselibs.mimc.UserManager
 import com.zb.baselibs.utils.*
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import com.zb.baselibs.views.replaceFragment
 import org.simple.eventbus.EventBus
 
-class MainViewModel : BaseViewModel() {
+class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
 
     lateinit var binding: AcMainBinding
 
@@ -77,6 +80,7 @@ class MainViewModel : BaseViewModel() {
         firstOpenMemberPage()
         openedMemberPriceList()
         driftBottleChatList(1)
+        myImAccountInfo()
         if (getInteger(
                 "toLikeCount_${getLong("userId")}_${DateUtil.getNow(DateUtil.yyyy_MM_dd)}",
                 -1
@@ -102,6 +106,7 @@ class MainViewModel : BaseViewModel() {
                         })
                         .show(activity.supportFragmentManager)
                 }
+                OpenNotice.remindNotice(activity)
             }
         }
     }
@@ -271,9 +276,9 @@ class MainViewModel : BaseViewModel() {
     }
 
     /**
-     * 更新漂流瓶
+     * 更新普通会话列表中的漂流瓶
      */
-    fun bottleNoReadNum() {
+    fun updateCommonBottle() {
         BaseApp.fixedThreadPool.execute {
             var chatListInfo =
                 MineApp.chatListDaoManager.getChatListInfo("common_${MineApp.bottleUserId}")
@@ -300,6 +305,20 @@ class MainViewModel : BaseViewModel() {
                     if (MineApp.noReadBottleNum == 0) "茫茫人海中，需要流浪到何时" else "您有新消息",
                     1, MineApp.noReadBottleNum, "common_${MineApp.bottleUserId}"
                 )
+            }
+        }
+    }
+
+    /**
+     * 我的聊天账号
+     */
+    private fun myImAccountInfo() {
+        mainDataSource.enqueue({ myImAccountInfo(3) }) {
+            onSuccess {
+                UserManager.instance.setHandleMIMCMsgListener(this@MainViewModel)
+                BaseApp.imUserId = it.imUserId
+                BaseApp.mimcUser = UserManager.instance.newMIMCUser(it.imUserId)
+                BaseApp.mimcUser!!.login()
             }
         }
     }
@@ -340,15 +359,100 @@ class MainViewModel : BaseViewModel() {
                 if (it.isNoData) {
                     BaseApp.fixedThreadPool.execute {
                         val chatListInfoList = MineApp.chatListDaoManager.getChatListInfoList(2)
+                        MineApp.noReadBottleNum = 0
                         for (item in chatListInfoList) {
                             MineApp.noReadBottleNum += item.noReadNum
                         }
                         activity.runOnUiThread {
-                            bottleNoReadNum()
+                            updateCommonBottle()
                         }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * 消息回调
+     */
+    override fun onHandleMessage(customMessageBody: CustomMessageBody, thirdMessageId: String) {
+        activity.runOnUiThread {
+            customMessageBody.thirdMessageId = thirdMessageId
+            customMessageBody.creationDate = DateUtil.getNow(DateUtil.yyyy_MM_dd_HH_mm_ss)
+            val otherUserId =
+                if (customMessageBody.mFromId == getLong("userId")) customMessageBody.mToId else customMessageBody.mFromId
+            if (customMessageBody.mDriftBottleId != 0L) { // 漂流瓶
+                customMessageBody.msgChannelType = 2
+                BaseApp.fixedThreadPool.execute {
+                    val chatListInfo =
+                        MineApp.chatListDaoManager.getChatListInfo("drift_${customMessageBody.mDriftBottleId}")
+                    if (chatListInfo == null) {
+                        activity.runOnUiThread {
+                            otherInfo(otherUserId,  customMessageBody)
+                        }
+                    } else {
+                        val noReadNum =
+                            if (MineApp.nowChatId == "drift_${customMessageBody.mDriftBottleId}") 0 else chatListInfo.noReadNum + 1
+
+                        MineApp.chatListDaoManager.updateChatListInfo(
+                            chatListInfo.nick, chatListInfo.image, customMessageBody.creationDate,
+                            customMessageBody.mStanza, customMessageBody.mMsgType,
+                            noReadNum, "drift_${customMessageBody.mDriftBottleId}"
+                        )
+                        updateBottle(customMessageBody)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 用户信息
+     */
+    private fun otherInfo(otherUserId: Long,  body: CustomMessageBody) {
+        mainDataSource.enqueue({ otherInfo(otherUserId) }) {
+            onSuccess {
+                when (body.msgChannelType) {
+                    1 -> {}
+                    2 ->
+                        BaseApp.fixedThreadPool.execute {
+                            // 漂流瓶会话列表
+                            val noReadNum =
+                                if (MineApp.nowChatId == "drift_${body.mDriftBottleId}") 0 else 1
+                            val chatListInfo = ChatListInfo()
+                            chatListInfo.chatId = "drift_${body.mDriftBottleId}"
+                            chatListInfo.otherUserId = otherUserId
+                            chatListInfo.nick = it.nick
+                            chatListInfo.image = it.image
+                            chatListInfo.creationDate = body.creationDate
+                            chatListInfo.stanza = body.mStanza
+                            chatListInfo.msgType = body.mMsgType
+                            chatListInfo.noReadNum = noReadNum
+                            chatListInfo.msgChannelType = body.msgChannelType
+                            chatListInfo.chatType = 2
+                            chatListInfo.mainUserId = getLong("userId")
+                            MineApp.chatListDaoManager.insert(chatListInfo)
+                            updateBottle(body)
+                        }
+                    3 -> {}
+                }
+            }
+        }
+    }
+
+    /**
+     * 更新漂流瓶
+     */
+    private fun updateBottle(body: CustomMessageBody) {
+        EventBus.getDefault()
+            .post(body.mDriftBottleId.toString(), "lobsterSingleBottle")
+        if (MineApp.nowChatId == "drift_${body.mDriftBottleId}")
+            EventBus.getDefault().post(body, "lobsterUpdateChat")
+        val chatListInfoList = MineApp.chatListDaoManager.getChatListInfoList(2)
+        MineApp.noReadBottleNum = 0
+        for (item in chatListInfoList) {
+            MineApp.noReadBottleNum += item.noReadNum
+        }
+        EventBus.getDefault().post("", "lobsterBottleNoReadNum")
     }
 }

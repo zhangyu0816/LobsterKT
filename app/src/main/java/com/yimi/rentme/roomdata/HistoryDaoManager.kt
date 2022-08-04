@@ -2,6 +2,8 @@ package com.yimi.rentme.roomdata
 
 import android.content.Context
 import androidx.room.*
+import com.yimi.rentme.bean.PrivateMsg
+import com.zb.baselibs.mimc.CustomMessageBody
 import com.zb.baselibs.utils.getLong
 
 /**
@@ -25,7 +27,7 @@ data class HistoryInfo(
     var driftBottleId: Long = 0,//所属漂流瓶
     var flashTalkId: Long = 0,//所属闪聊
     var otherUserId: Long = 0,//所属普通聊天
-    var imPlatformType: Int = 0,//
+    var imPlatformType: Int = 0,// 1.zuwoIM 2.阿里OpenIM 当前使用：2
     var showTime: Boolean = false,
     var theChatUk: String = "", //两个人的Id拼接起来，小的在前面  #12#101#
     var chatId: String = "", // 1、普通聊天：common_otherUserId   2、漂流瓶：drift_driftBottleId   3、闪聊：flash_flashTalkId
@@ -33,6 +35,53 @@ data class HistoryInfo(
 ) {
     @Ignore
     constructor() : this("")
+
+    fun createBottleHistoryInfo(
+        privateMsg: PrivateMsg,
+        otherUserId: Long,
+        msgChannelType: Int,
+        driftBottleId: Long
+    ): HistoryInfo {
+        val historyInfo = HistoryInfo()
+        historyInfo.thirdMessageId = privateMsg.thirdMessageId
+        historyInfo.mainUserId = getLong("userId")
+        historyInfo.fromId = privateMsg.fromId
+        historyInfo.toId = privateMsg.toId
+        historyInfo.creationDate = privateMsg.creationDate
+        historyInfo.stanza = privateMsg.stanza
+        historyInfo.msgType = privateMsg.msgType
+        historyInfo.title = privateMsg.title
+        historyInfo.resLink = privateMsg.resLink
+        historyInfo.resTime = privateMsg.resTime
+        historyInfo.otherUserId = otherUserId
+        historyInfo.msgChannelType = msgChannelType
+        historyInfo.driftBottleId = driftBottleId
+        historyInfo.chatId = "drift_$driftBottleId"
+        return historyInfo
+    }
+    fun createBottleHistoryInfoFromBody(
+        body: CustomMessageBody,
+        otherUserId: Long,
+        msgChannelType: Int,
+        driftBottleId: Long
+    ): HistoryInfo {
+        val historyInfo = HistoryInfo()
+        historyInfo.thirdMessageId = body.thirdMessageId
+        historyInfo.mainUserId = getLong("userId")
+        historyInfo.fromId = body.mFromId
+        historyInfo.toId = body.mToId
+        historyInfo.creationDate = body.creationDate
+        historyInfo.stanza = body.mStanza
+        historyInfo.msgType = body.mMsgType
+        historyInfo.title = body.mStanza
+        historyInfo.resLink = body.mResLink
+        historyInfo.resTime =  body.mResTime
+        historyInfo.otherUserId = otherUserId
+        historyInfo.msgChannelType = msgChannelType
+        historyInfo.driftBottleId = driftBottleId
+        historyInfo.chatId = "drift_$driftBottleId"
+        return historyInfo
+    }
 }
 
 @Dao
@@ -42,33 +91,30 @@ interface HistoryInfoDao {
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg historyInfo: HistoryInfo)
-//
-//    /**
-//     * 获取单个会话
-//     */
-//    @Query("select * from ChatListInfo where chatId=:chatId and mainUserId=:mainUserId")
-//    fun queryChatListInfo(chatId: String, mainUserId: Long): ChatListInfo?
+
+    /**
+     * 获取单个历史记录
+     */
+    @Query("select * from HistoryInfo where thirdMessageId=:thirdMessageId and mainUserId=:mainUserId")
+    fun queryHistoryInfo(thirdMessageId: String, mainUserId: Long): HistoryInfo?
 
     /**
      * 获取单个会话的历史记录 -- 按时间降序
      */
     @Query("select * from HistoryInfo where chatId=:chatId and mainUserId=:mainUserId order by creationDate desc")
     fun queryHistoryInfoList(chatId: String, mainUserId: Long): MutableList<HistoryInfo>
-//
-//    /**
-//     * 更新未读数
-//     */
-//    @Query("update ChatListInfo set noReadNum=:noReadNum where chatId=:chatId and mainUserId=:mainUserId")
-//    fun updateNoReadNum(noReadNum: Int, chatId: String, mainUserId: Long)
-//
-//    /**
-//     * 更新所有
-//     */
-//    @Query("update ChatListInfo set nick=:nick,image=:image,creationDate=:creationDate,stanza=:stanza,msgType=:msgType,noReadNum=:noReadNum  where chatId=:chatId and mainUserId=:mainUserId")
-//    fun updateChatListInfo(
-//        nick: String, image: String, creationDate: String, stanza: String, msgType: Int,
-//        noReadNum: Int, chatId: String, mainUserId: Long
-//    )
+
+    /**
+     * 更新已读
+     */
+    @Query("update HistoryInfo set isRead=:isRead where thirdMessageId=:thirdMessageId and mainUserId=:mainUserId")
+    fun updateRead(isRead: Int, thirdMessageId: String, mainUserId: Long)
+
+    /**
+     * 更新显示时间
+     */
+    @Query("update HistoryInfo set showTime=:showTime where thirdMessageId=:thirdMessageId and mainUserId=:mainUserId")
+    fun updateShowTime(showTime: Boolean, thirdMessageId: String, mainUserId: Long)
 
     /**
      * 删除历史记录
@@ -99,12 +145,12 @@ class HistoryDaoManager(private val context: Context) {
         dao.insert(historyInfo)
     }
 
-//    /**
-//     * 获取单个会话
-//     */
-//    fun getChatListInfo(chatId: String): ChatListInfo? {
-//        return dao.queryChatListInfo(chatId, getLong("userId"))
-//    }
+    /**
+     * 获取单个历史记录
+     */
+    fun getHistoryInfo(thirdMessageId: String): HistoryInfo? {
+        return dao.queryHistoryInfo(thirdMessageId, getLong("userId"))
+    }
 
     /**
      * 获取单个会话的历史记录 -- 按时间降序
@@ -112,26 +158,20 @@ class HistoryDaoManager(private val context: Context) {
     fun getHistoryInfoList(chatId: String): MutableList<HistoryInfo> {
         return dao.queryHistoryInfoList(chatId, getLong("userId"))
     }
-//
-//    /**
-//     * 更新未读数
-//     */
-//    fun updateNoReadNum(noReadNum: Int, chatId: String) {
-//        dao.updateNoReadNum(noReadNum, chatId, getLong("userId"))
-//    }
-//
-//    /**
-//     * 更新所有
-//     */
-//    fun updateChatListInfo(
-//        nick: String, image: String, creationDate: String, stanza: String, msgType: Int,
-//        noReadNum: Int, chatId: String
-//    ) {
-//        dao.updateChatListInfo(
-//            nick, image, creationDate, stanza, msgType,
-//            noReadNum, chatId, getLong("userId")
-//        )
-//    }
+
+    /**
+     * 更新已读
+     */
+    fun updateRead(thirdMessageId: String) {
+        dao.updateRead(1, thirdMessageId, getLong("userId"))
+    }
+
+    /**
+     * 更新显示时间
+     */
+    fun updateShowTime(thirdMessageId: String) {
+        dao.updateShowTime(true, thirdMessageId, getLong("userId"))
+    }
 
     /**
      * 删除历史记录

@@ -34,7 +34,7 @@
             android:id="@+id/iv_image"
             defaultRes="@{R.mipmap.empty_icon}"
             imageUrl="@{item.otherHeadImage}"
-            isBlur="@{true}"
+            isBlur="@{viewModel.isBlur}"
             isCircle="@{true}"
             viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
             viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
@@ -62,7 +62,7 @@
             android:textSize="12sp"
             tools:text="20:02" />
 
-        <com.yimi.rentme.views.emojj.EmojiTextView
+        <com.yimi.rentme.views.emoji.EmojiTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_nick"

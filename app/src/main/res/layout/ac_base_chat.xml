@@ -36,11 +36,351 @@
         <variable
             name="isEmoji"
             type="boolean" />
+
+        <variable
+            name="showNotice"
+            type="boolean" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
+        android:id="@+id/main_relative"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/black_efe">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <RelativeLayout
+            android:id="@+id/relativeLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_purple_6d5_ae7_noradius">
+
+            <ImageView
+                android:id="@+id/iv_top_bg"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(261)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(353)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@mipmap/chat_water_icon" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/iv_top_bg">
+
+                <ImageView
+                    onClickDelayed="@{viewModel::back}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:src="@mipmap/back_white_icon" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        onClickDelayed="@{viewModel::toMemberDetail}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="@{memberInfo.userId>10010?View.VISIBLE:View.GONE}">
+
+                        <View
+                            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.09f)}"
+                            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.09f)}"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/circle_white" />
+
+                        <ImageView
+                            imageUrl="@{memberInfo.image}"
+                            isBlur="@{isLockImage}"
+                            isCircle="@{true}"
+                            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.08f)}"
+                            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.08f)}"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_centerInParent="true" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="@{memberInfo.nick}"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ImageView
+                    onClickDelayed="@{viewModel::toMemberDetail}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="15dp"
+                    android:src="@mipmap/look_icon"
+                    android:visibility="@{msgChannelType==2?View.VISIBLE:View.GONE}" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/relativeLayout3"
+            android:scaleType="centerCrop"
+            android:visibility="@{msgChannelType==2?View.GONE:View.VISIBLE}" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/relativeLayout3"
+            android:alpha="0.2"
+            android:background="@color/black"
+            android:visibility="@{msgChannelType==2?View.GONE:View.VISIBLE}" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:layout_below="@+id/relativeLayout3">
+
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/refresh"
+                onRefreshListener="@{viewModel}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:paddingBottom="15dp"
+                android:scrollbars="none">
+
+                <com.yimi.rentme.views.MyHeaderView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/chat_list"
+                    adapter="@{viewModel.adapter}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:visibility="@{showNotice?View.VISIBLE:View.GONE}">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:text='@{@string/notice_ta+(memberInfo.sex==0?"她":"他")}'
+                    android:textColor="@color/black_252"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    onClickDelayed="@{viewModel::closeNotice}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:padding="15dp"
+                    android:src="@mipmap/close_grey_icon" />
+
+                <TextView
+                    android:id="@+id/tv_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_title"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:text="别因为等太久，让缘分悄悄溜走"
+                    android:textColor="@color/black_827"
+                    android:textSize="14sp" />
+
+                <TextView
+                    onClickDelayed="@{viewModel::openNotice}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/tv_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/gradient_purple_6d5_ae7"
+                    android:gravity="center"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:text="打开通知"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/audio_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@mipmap/voice_anim_1"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_voice_keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:onClick="@{viewModel::toVoiceKeyboard}"
+                    android:paddingStart="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingEnd="1dp"
+                    android:paddingBottom="15dp"
+                    android:src="@{isVoice?@drawable/chat_keyboard_icon:@drawable/chat_voice_icon}"
+                    android:visibility="@{msgChannelType==2?View.GONE:View.VISIBLE}" />
+
+                <com.yimi.rentme.views.emoji.EmojiEditText
+                    android:id="@+id/ed_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_toStartOf="@+id/btn_linear"
+                    android:layout_toEndOf="@+id/iv_voice_keyboard"
+                    android:background="@color/white"
+                    android:hint="输入文字"
+                    android:imeOptions="actionSend"
+                    android:onClick="@{viewModel::toKeyboard}"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:singleLine="true"
+                    android:text="@={content}"
+                    android:textColor="@color/black_4d4"
+                    android:textColorHint="#C3BDCD"
+                    android:textCursorDrawable="@drawable/cursor_color_black_4d4"
+                    android:textSize="16sp"
+                    android:visibility="@{isVoice?View.GONE:View.VISIBLE}" />
+
+                <TextView
+                    android:id="@+id/tv_speak"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_toStartOf="@+id/btn_linear"
+                    android:layout_toEndOf="@+id/iv_voice_keyboard"
+                    android:background="@drawable/btn_bg_black_efe_white_radius2"
+                    android:gravity="center"
+                    android:paddingStart="12dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="8dp"
+                    android:text="按住说话"
+                    android:textColor="@color/black_827"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="@{isVoice?View.VISIBLE:View.GONE}" />
+
+                <LinearLayout
+                    android:id="@+id/btn_linear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        onClickDelayed="@{viewModel::toCamera}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:src="@mipmap/chat_camera_icon"
+                        android:visibility="@{msgChannelType==2?View.INVISIBLE:View.VISIBLE}" />
+
+                    <ImageView
+                        onClickDelayed="@{viewModel::toEmoji}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:src="@mipmap/chat_emoji_icon" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_send"
+                    onClickDelayed="@{viewModel::sendMsg}"
+                    android:layout_width="50dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/btn_bg_purple_7a4_radius5"
+                    android:gravity="center"
+                    android:text="发送"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="@{isEmoji?View.VISIBLE:View.GONE}" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{isEmoji?View.VISIBLE:View.GONE}">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/emoji_list"
+                    adapter="@{viewModel.emojiAdapter}"
+                    gridNum="@{7}"
+                    recyclerType="@{2}"
+                    size="@{10}"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:padding="15dp" />
+
+                <RelativeLayout
+                    viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(140)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(140)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/emoji_list"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/gradient_white"
+                    android:onClick="@{viewModel::deleteContent}">
+
+                    <ImageView
+                        imageRes="@{R.mipmap.emoji_delete}"
+                        viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(75)}"
+                        viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(90)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
 </layout>

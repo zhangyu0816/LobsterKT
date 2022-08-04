@@ -11,6 +11,7 @@ import com.yimi.rentme.R
 import com.yimi.rentme.activity.bottle.BottleChatActivity
 import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.BottleInfo
+import com.yimi.rentme.bean.SelectImage
 import com.yimi.rentme.databinding.AcBottleListBinding
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
@@ -21,6 +22,7 @@ import com.zb.baselibs.utils.dip2px
 import com.zb.baselibs.utils.getLong
 import com.zb.baselibs.views.touch.SimpleItemTouchHelperCallback
 import kotlinx.coroutines.Job
+import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.startActivity
 import org.simple.eventbus.EventBus
 import java.util.*
@@ -30,6 +32,8 @@ class BottleListViewModel : BaseViewModel(), OnRefreshListener {
     lateinit var binding: AcBottleListBinding
     lateinit var adapter: BaseAdapter<BottleInfo>
     private val bottleInfoList = ArrayList<BottleInfo>()
+    var isBlur = true
+    private val comparator = BottleInfoComparator()
 
     override fun initViewModel() {
         adapter = BaseAdapter(activity, R.layout.item_bottle_list, bottleInfoList, this)
@@ -45,6 +49,7 @@ class BottleListViewModel : BaseViewModel(), OnRefreshListener {
         binding.appbar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             binding.showBg = verticalOffset <= height
         }
+        isBlur = MineApp.mineInfo.memberType == 1
         myBottleList(1)
     }
 
@@ -62,6 +67,45 @@ class BottleListViewModel : BaseViewModel(), OnRefreshListener {
     }
 
     /**
+     * 更新毛玻璃
+     */
+    fun updateBlur() {
+        isBlur = false
+        adapter.notifyItemRangeChanged(0, bottleInfoList.size)
+    }
+
+    /**
+     * 更新单个漂流瓶
+     */
+    fun singleBottle(driftBottleId: Long) {
+        var hasBottle = false
+        var position = 0
+        for (i in 0 until bottleInfoList.size) {
+            if (bottleInfoList[i].driftBottleId == driftBottleId) {
+                hasBottle = true
+                position = i
+                break
+            }
+        }
+        if (hasBottle) {
+            BaseApp.fixedThreadPool.execute {
+                val chatListInfo =
+                    MineApp.chatListDaoManager.getChatListInfo("drift_${driftBottleId}")
+                bottleInfoList[position].noReadNum = chatListInfo!!.noReadNum
+                bottleInfoList[position].text = chatListInfo.stanza
+                bottleInfoList[position].modifyTime = chatListInfo.creationDate
+                activity.runOnUiThread {
+                    Collections.sort(bottleInfoList, comparator)
+                    adapter.notifyItemRangeChanged(0, bottleInfoList.size)
+                }
+            }
+
+        } else {
+            onRefresh(binding.refresh)
+        }
+    }
+
+    /**
      * 去漂流瓶聊天
      */
     fun toBottleChat(bottleInfo: BottleInfo, position: Int) {
@@ -71,12 +115,11 @@ class BottleListViewModel : BaseViewModel(), OnRefreshListener {
             MineApp.chatListDaoManager.updateNoReadNum(0, "drift_${bottleInfo.driftBottleId}")
             SystemClock.sleep(500L)
             val chatListInfoList = MineApp.chatListDaoManager.getChatListInfoList(2)
+            MineApp.noReadBottleNum = 0
             for (item in chatListInfoList) {
                 MineApp.noReadBottleNum += item.noReadNum
             }
-            activity.runOnUiThread {
-                EventBus.getDefault().post("", "lobsterBottleNoReadNum")
-            }
+            EventBus.getDefault().post("", "lobsterBottleNoReadNum")
         }
 
         activity.startActivity<BottleChatActivity>(
@@ -96,7 +139,7 @@ class BottleListViewModel : BaseViewModel(), OnRefreshListener {
                 }
 
                 override fun cancel() {
-                    adapter.notifyItemChanged(position)
+                    adapter.notifyItemRangeChanged(0, bottleInfoList.size)
                 }
             }).show(activity.supportFragmentManager)
     }
@@ -123,12 +166,12 @@ class BottleListViewModel : BaseViewModel(), OnRefreshListener {
                             bottleInfo.otherHeadImage = MineApp.mineInfo.image
                             bottleInfo.otherNick = MineApp.mineInfo.nick
                         }
-                        val bottleCache =
+                        val chatListInfo =
                             MineApp.chatListDaoManager.getChatListInfo("drift_${bottleInfo.driftBottleId}")
-                        if (bottleCache != null) {
-                            bottleInfo.text = bottleCache.stanza
-                            bottleInfo.noReadNum = bottleCache.noReadNum
-                            bottleInfo.modifyTime = bottleCache.creationDate
+                        if (chatListInfo != null) {
+                            bottleInfo.text = chatListInfo.stanza
+                            bottleInfo.noReadNum = chatListInfo.noReadNum
+                            bottleInfo.modifyTime = chatListInfo.creationDate
                         } else {
                             bottleInfo.modifyTime = bottleInfo.createTime
                         }
@@ -146,17 +189,15 @@ class BottleListViewModel : BaseViewModel(), OnRefreshListener {
                 binding.refresh.finishLoadMore()
                 binding.noData = bottleInfoList.size == 0
                 if (!binding.noData) {
-                    val comparator = BottleInfoComparator()
                     Collections.sort(bottleInfoList, comparator)
                     adapter.notifyItemRangeChanged(0, bottleInfoList.size)
                     BaseApp.fixedThreadPool.execute {
                         val chatListInfoList = MineApp.chatListDaoManager.getChatListInfoList(2)
+                        MineApp.noReadBottleNum = 0
                         for (item in chatListInfoList) {
                             MineApp.noReadBottleNum += item.noReadNum
                         }
-                        activity.runOnUiThread {
-                            EventBus.getDefault().post("", "lobsterBottleNoReadNum")
-                        }
+                        EventBus.getDefault().post("", "lobsterBottleNoReadNum")
                     }
                 }
             }
@@ -184,11 +225,12 @@ class BottleListViewModel : BaseViewModel(), OnRefreshListener {
                     MineApp.historyDaoManager.deleteHistoryInfo("drift_${bottleInfo.driftBottleId}")
                     SystemClock.sleep(500L)
                     val chatListInfoList = MineApp.chatListDaoManager.getChatListInfoList(2)
+                    MineApp.noReadBottleNum = 0
                     for (item in chatListInfoList) {
                         MineApp.noReadBottleNum += item.noReadNum
                     }
+                    EventBus.getDefault().post("", "lobsterBottleNoReadNum")
                     activity.runOnUiThread {
-                        EventBus.getDefault().post("", "lobsterBottleNoReadNum")
                         mainDataSource.enqueue({
                             clearAllDriftBottleHistoryMsg(
                                 otherUserId, bottleInfo.driftBottleId
@@ -197,6 +239,7 @@ class BottleListViewModel : BaseViewModel(), OnRefreshListener {
                     }
                 }
             }
+            onFailed { adapter.notifyItemRangeChanged(0, bottleInfoList.size) }
         }
     }
 

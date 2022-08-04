@@ -6,7 +6,10 @@ import com.yimi.rentme.ApiService
 import com.yimi.rentme.BR
 import com.yimi.rentme.R
 import com.yimi.rentme.bean.MemberInfo
+import com.yimi.rentme.bean.StanzaInfo
 import com.yimi.rentme.databinding.ItemVideoListBinding
+import com.yimi.rentme.roomdata.HistoryInfo
+import com.yimi.rentme.vm.BaseChatViewModel
 import com.yimi.rentme.vm.FCLViewModel
 import com.yimi.rentme.vm.bottle.BottleListViewModel
 import com.zb.baselibs.adapter.BindingItemAdapter
@@ -15,6 +18,8 @@ import com.zb.baselibs.dialog.BaseDialogFragment
 import com.zb.baselibs.http.MainDataSource
 import com.zb.baselibs.views.touch.ItemTouchHelperAdapter
 import com.zb.baselibs.vm.BaseLibsViewModel
+import org.json.JSONException
+import org.json.JSONObject
 import java.util.*
 
 class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
@@ -120,6 +125,30 @@ class BaseAdapter<T> : BindingItemAdapter<T>, ItemTouchHelperAdapter {
             if (mLayoutId == R.layout.item_video_list) {
                 val mBinding = holder.binding as ItemVideoListBinding
                 bindingMap[position] = mBinding
+            }
+            if (viewModel is BaseChatViewModel && t is HistoryInfo) {
+                val item = t as HistoryInfo
+                if (item.msgType == 112) {
+                    try {
+                        val `object` = JSONObject(item.stanza)
+                        val stanzaInfo = StanzaInfo()
+                        if (`object`.has("image")) stanzaInfo.image = `object`.optString("image")
+                        if (`object`.has("styleType")) stanzaInfo.styleType =
+                            `object`.optInt("styleType")
+                        if (`object`.has("sex")) stanzaInfo.sex = `object`.optInt("sex")
+                        if (`object`.has("link")) stanzaInfo.link = `object`.optString("link")
+                        if (`object`.has("memberType")) stanzaInfo.memberType =
+                            `object`.optInt("memberType")
+                        if (`object`.has("title")) stanzaInfo.title = `object`.optString("title")
+                        if (`object`.has("content")) stanzaInfo.content =
+                            `object`.optString("content")
+                        if (`object`.has("linkContent")) stanzaInfo.linkContent =
+                            `object`.optString("linkContent")
+                        holder.binding!!.setVariable(BR.stanzaInfo, stanzaInfo)
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+                }
             }
         }
     }

@@ -148,7 +148,7 @@ class ReportViewModel : BaseViewModel() {
             val sourceImageList = ArrayList<String>()
             for (i in 0 until imageList.size - 1)
                 sourceImageList.add(imageList[i])
-            MyMNImage.setIndex(0).setSourceImageList(sourceImageList)
+            MyMNImage.setIndex(position).setSourceImageList(sourceImageList)
                 .setTransformType(ImageBrowserConfig.TransformType.TransformDepthPage)
                 .setDeleteListener(object : OnDeleteListener {
                     override fun delete(index: Int) {

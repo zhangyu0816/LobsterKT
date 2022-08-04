@@ -7,6 +7,10 @@ import com.yimi.rentme.R
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.DateUtil
 import com.zb.baselibs.utils.ObjectUtils
+import com.zb.baselibs.utils.getLong
+import org.json.JSONException
+import org.json.JSONObject
+import java.util.regex.Pattern
 
 object LobsterObjectUtil {
 
@@ -166,5 +170,56 @@ object LobsterObjectUtil {
     fun getReviews(reviews: Int): String {
         return if (reviews < 10000) reviews.toString()
         else String.format("%.1f万", reviews / 10000f)
+    }
+
+    @JvmStatic
+    fun getChat(creationDate: String): String {
+        return DateUtil.strToStr(creationDate, DateUtil.CN_yyyy_MM_dd_HH_mm_ss)
+    }
+
+    @JvmStatic
+    fun isMine(fromId: Long): Boolean {
+        return fromId == getLong("userId")
+    }
+
+    @JvmStatic
+    fun judgeString(str: String): ArrayList<String> {
+        val m = Pattern.compile(
+            "(((https|http)?://)?([a-z0-9]+[.])|(www.))"
+                    + "\\w+[.|\\/]([a-z0-9]{0,})?[[.]([a-z0-9]{0,})]+((/[\\S&&[^,;\u4E00-\u9FA5]]+)+)?([.][a-z0-9]{0,}+|/?)"
+        ).matcher(str)
+        val url = ArrayList<String>()
+        while (m.find()) {
+            url.add(m.group())
+        }
+        return url
+    }
+
+    @JvmStatic
+    fun getTitle(stanza: String, msgType: Int): String {
+        //消息类型 1：文字 2：图片 3：语音 4：视频
+        return if (msgType == 1)
+            stanza
+        else if (msgType == 2)
+            "[图片]"
+        else if (msgType == 3)
+            "[语音]"
+        else if (msgType == 4)
+            "[视频]"
+        else if (msgType == 112) {
+            var `object`: JSONObject? = null
+            try {
+                `object` = JSONObject(stanza)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+            assert(`object` != null)
+            if (`object`!!.has("content"))
+                `object`.optString("content")
+            else
+                "[你有新的动态消息]"
+        } else if (msgType == 1000) {
+            "每人发10句可以解锁资料哦~"
+        } else "[暂不支付该类型消息]"
     }
 }

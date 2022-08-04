@@ -26,6 +26,7 @@ import com.zb.baselibs.utils.ObjectUtils
 import com.zb.baselibs.utils.SCToastUtil
 import com.zb.baselibs.views.xbanner.ImageLoader
 import com.zb.baselibs.views.xbanner.XBanner
+import org.simple.eventbus.EventBus
 
 class VipAdDF(activity: AppCompatActivity) : BaseDialogFragment(activity) {
 
@@ -156,10 +157,9 @@ class VipAdDF(activity: AppCompatActivity) : BaseDialogFragment(activity) {
     fun cancel(view: View) {
         binding.banner.releaseBanner()
         dismiss()
-//        if (type == 7) {
-//            LocalBroadcastManager.getInstance(MineApp.sContext)
-//                .sendBroadcast(Intent("lobster_flashChat"))
-//        }
+        if (type == 7) {
+            EventBus.getDefault().post("", "lobsterFlashChat")
+        }
     }
 
     /**

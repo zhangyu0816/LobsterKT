@@ -137,6 +137,8 @@ class CameraImageViewModel : BaseViewModel() {
             val selectImage = SelectImage()
             selectImage.videoUrl = image
             selectImage.bitmap = media.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+            selectImage.resTime =
+                media.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong()
             MineApp.selectImageList.add(selectImage)
             activity.startActivity<VideoPlayActivity>(
                 Pair("videoUrl", image),

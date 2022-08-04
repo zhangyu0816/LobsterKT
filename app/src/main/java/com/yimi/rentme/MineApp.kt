@@ -3,6 +3,7 @@ package com.yimi.rentme
 import android.annotation.SuppressLint
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
+import com.xiaomi.mimc.MIMCUser
 import com.yimi.rentme.bean.*
 import com.yimi.rentme.roomdata.*
 import com.zb.baselibs.app.BaseApp
@@ -13,7 +14,8 @@ class MineApp : BaseApp() {
     override fun getBaseUrl(): String {
         return when {
             getIntegerByAllName("lobster_selectBase") == 0 -> "https://xgapi.zuwo.la/" // 正式
-            else -> "http://192.168.1.88:8090/" // 敏耀
+//            getIntegerByAllName("lobster_selectBase") == 0 -> "http://192.168.110.205:8090/" // 正式
+            else -> "http://192.168.110.205:8090/" // 敏耀
         }
     }
 
@@ -76,7 +78,8 @@ class MineApp : BaseApp() {
         var likeCount = 30
         var noReadBottleNum = 0
         lateinit var QingSongShouXieTiType: Typeface
-        val bottleUserId = 1002L // 普通会话列表--漂流瓶
+        const val bottleUserId = 1002L // 普通会话列表--漂流瓶
+        var nowChatId = "" // 正在聊天的人
 
         @JvmField
         val selectImageList = ArrayList<SelectImage>()

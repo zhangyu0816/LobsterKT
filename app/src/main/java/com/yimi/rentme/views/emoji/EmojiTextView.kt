@@ -1,4 +1,4 @@
-package com.yimi.rentme.views.emojj
+package com.yimi.rentme.views.emoji
 
 import android.annotation.SuppressLint
 import android.content.Context

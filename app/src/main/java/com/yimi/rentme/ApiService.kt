@@ -29,6 +29,14 @@ interface ApiService {
         @Part file: MultipartBody.Part
     ): HttpWrapBean<ResourceUrl>
 
+    // 上传语音
+    @Multipart
+    @POST("YmUpload_soundFile")
+    suspend fun uploadSound(
+        @Part("fileFileName") fileName: RequestBody,
+        @Part file: MultipartBody.Part
+    ): HttpWrapBean<ResourceUrl>
+
     // 功能开关
     @GET("api/AppCommon_functionSwitch")
     suspend fun functionSwitch(): HttpWrapBean<CommonSwitch>
@@ -437,4 +445,37 @@ interface ApiService {
         @Field("driftBottleId") driftBottleId: Long
     ): HttpWrapBean<Any?>
 
+    // 我的漂流瓶
+    @FormUrlEncoded
+    @POST("api/DriftBottle_myBottle")
+    suspend fun myBottle(@Field("driftBottleId") driftBottleId: Long): HttpWrapBean<BottleInfo>
+
+    // 漂流瓶历史记录
+    @FormUrlEncoded
+    @POST("api/DriftBottle_historyMsgList")
+    suspend fun bottleHistoryMsgList(
+        @Field("otherUserId") otherUserId: Long, @Field("driftBottleId") driftBottleId: Long,
+        @Field("pageNo") pageNo: Int
+    ): HttpWrapBean<ArrayList<PrivateMsg>>
+
+    // 清空用户消息
+    @FormUrlEncoded
+    @POST("api/DriftBottle_readOverHistoryMsg")
+    suspend fun readOverDriftBottleHistoryMsg(
+        @Field("otherUserId") otherUserId: Long, @Field("driftBottleId") driftBottleId: Long,
+        @Field("messageId") messageId: Long
+    ): HttpWrapBean<Any?>
+
+    // 获取阿里百川登录账号
+    @FormUrlEncoded
+    @POST("api/Contact_myImAccountInfo")
+    suspend fun myImAccountInfo(@Field("imPlatformType") imPlatformType: Int): HttpWrapBean<ImAccount>
+
+    // 获取别人阿里百川账号
+    @FormUrlEncoded
+    @POST("api/Contact_otherImAccountInfo")
+    suspend fun otherImAccountInfo(
+        @Field("otherUserId") otherUserId: Long,
+        @Field("imPlatformType") imPlatformType: Int
+    ): HttpWrapBean<ImAccount>
 }

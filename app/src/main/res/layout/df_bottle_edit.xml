@@ -40,6 +40,7 @@
                 android:paddingStart="30dp"
                 android:paddingEnd="30dp"
                 android:textColor="@color/black_252"
+                android:hint="@string/tv_context"
                 android:textColorHint="@color/black_9"
                 android:textCursorDrawable="@drawable/cursor_color_black_4d4"
                 android:textSize="20sp"

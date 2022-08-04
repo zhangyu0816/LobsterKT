@@ -83,6 +83,14 @@ abstract class BaseViewModel : BaseLibsViewModel() {
         }
     }
 
+    /**
+     * 隐藏键盘
+     */
+    fun closeImplicit(view: View) {
+        imm = activity.inputMethodManager()
+        imm.hideSoftInputFromWindow(view.windowToken, 0) // 强制隐藏键盘
+    }
+
     open fun hintKeyBoard2() {
         //拿到InputMethodManager
         imm = activity.inputMethodManager()

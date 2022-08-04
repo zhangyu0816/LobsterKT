@@ -101,6 +101,7 @@ class CameraVideoViewModel : BaseViewModel() {
         val selectImage = SelectImage()
         selectImage.videoUrl = binding.videoUrl!!
         selectImage.bitmap = media.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+        selectImage.resTime = time
         MineApp.selectImageList.add(selectImage)
         if (isPublish)
             activity.startActivity<PublishDiscoverActivity>()

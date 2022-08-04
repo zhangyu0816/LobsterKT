@@ -9,6 +9,7 @@ import android.view.animation.LinearInterpolator
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.activity.bottle.BottleActivity
+import com.yimi.rentme.activity.bottle.BottleChatActivity
 import com.yimi.rentme.activity.bottle.BottleListActivity
 import com.yimi.rentme.bean.BottleInfo
 import com.yimi.rentme.bean.MemberInfo
@@ -80,7 +81,7 @@ class BottleViewModel : BaseViewModel() {
 
     override fun back(view: View) {
         super.back(view)
-        if (binding.title == "扔一个瓶子"||binding.title == "漂流瓶") {
+        if (binding.title == "扔一个瓶子" || binding.title == "漂流瓶") {
             close(null)
         } else
             activity.finish()
@@ -110,13 +111,11 @@ class BottleViewModel : BaseViewModel() {
     }
 
     fun onResume() {
-        if (BaseApp.mActivityList[0] is BottleActivity) {
-            if (!mPlayer!!.isPlaying) appSound()
-            if (!isFirst) {
-                binding.bottleWhiteBack.bottleBg.startBg()
-            }
-            isFirst = false
+        if (!mPlayer!!.isPlaying) appSound()
+        if (!isFirst) {
+            binding.bottleWhiteBack.bottleBg.startBg()
         }
+        isFirst = false
     }
 
     fun onPause() {
@@ -207,7 +206,7 @@ class BottleViewModel : BaseViewModel() {
     fun cancel(view: View) {
         when (throwIndex) {
             0 -> {
-                if (binding.edContent.getText().toString().trim().isEmpty()) {
+                if (binding.edContent.text.toString().trim().isEmpty()) {
                     SCToastUtil.showToast(activity, "漂流瓶内容不能为空", 2)
                     return
                 }
@@ -247,6 +246,7 @@ class BottleViewModel : BaseViewModel() {
                 binding.isBottle = true
                 binding.showBottleTop = true
             }
+            onFailToast { false }
             onFailed {
                 randomNewDyn()
             }
@@ -307,7 +307,10 @@ class BottleViewModel : BaseViewModel() {
                         }
                     })
                 } else if (driftBottleType == 2) {
-//                    ActivityUtils.getBottleChat(bottleInfo.getDriftBottleId(), false)
+                    activity.startActivity<BottleChatActivity>(
+                        Pair("msgChannelType", 2),
+                        Pair("driftBottleId", bottleInfo.driftBottleId)
+                    )
                     close(null)
                 }
             }
