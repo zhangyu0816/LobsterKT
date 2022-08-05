@@ -30,7 +30,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
     lateinit var binding: AcMainBinding
 
     override fun initViewModel() {
-        selectIndex(0)
+        selectIndex(1)
         MineApp.followDaoManager = FollowDaoManager(BaseApp.context)
         MineApp.goodDaoManager = GoodDaoManager(BaseApp.context)
         MineApp.likeTypeDaoManager = LikeTypeDaoManager(BaseApp.context)
@@ -315,9 +315,9 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
     private fun myImAccountInfo() {
         mainDataSource.enqueue({ myImAccountInfo(3) }) {
             onSuccess {
-                UserManager.instance.setHandleMIMCMsgListener(this@MainViewModel)
+                BaseApp.userManager.setHandleMIMCMsgListener(this@MainViewModel)
                 BaseApp.imUserId = it.imUserId
-                BaseApp.mimcUser = UserManager.instance.newMIMCUser(it.imUserId)
+                BaseApp.mimcUser = BaseApp.userManager.newMIMCUser(it.imUserId)
                 BaseApp.mimcUser!!.login()
             }
         }

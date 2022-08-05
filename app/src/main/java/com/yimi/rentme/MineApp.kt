@@ -3,7 +3,6 @@ package com.yimi.rentme
 import android.annotation.SuppressLint
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
-import com.xiaomi.mimc.MIMCUser
 import com.yimi.rentme.bean.*
 import com.yimi.rentme.roomdata.*
 import com.zb.baselibs.app.BaseApp
@@ -14,7 +13,7 @@ class MineApp : BaseApp() {
     override fun getBaseUrl(): String {
         return when {
             getIntegerByAllName("lobster_selectBase") == 0 -> "https://xgapi.zuwo.la/" // 正式
-//            getIntegerByAllName("lobster_selectBase") == 0 -> "http://192.168.110.205:8090/" // 正式
+//            getIntegerByAllName("lobster_selectBase") == 0 -> "http://xuminyao.gnway.cc/" // 正式
             else -> "http://192.168.110.205:8090/" // 敏耀
         }
     }
@@ -50,7 +49,7 @@ class MineApp : BaseApp() {
     }
 
     override fun getNoticeClassList(): Array<String> {
-        return arrayOf("${context.packageName}.activity.MainActivity")
+        return arrayOf("${context.packageName}.activity.MainActivity","${context.packageName}.activity.NoticeActivity")
     }
 
     override fun getNoticeLogo(): Int {
@@ -79,6 +78,7 @@ class MineApp : BaseApp() {
         var noReadBottleNum = 0
         lateinit var QingSongShouXieTiType: Typeface
         const val bottleUserId = 1002L // 普通会话列表--漂流瓶
+        const val systemUserId = 10000L
         var nowChatId = "" // 正在聊天的人
 
         @JvmField

@@ -60,7 +60,7 @@ class BottleEditDF(activity: AppCompatActivity) : BaseDialogFragment(activity) {
         map["text"] = binding.edContent.text.toString()
         mainDataSource.enqueue({ dynDoReview(map) }) {
             onSuccess {
-                SCToastUtil.showToast(activity, "发布成功", 2)
+                SCToastUtil.showToast(activity, "回复成功", 2)
                 dismiss()
             }
         }

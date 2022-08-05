@@ -148,6 +148,7 @@
         <activity android:name=".activity.OpenVipActivity" />
         <activity android:name=".activity.bottle.BottleListActivity" />
         <activity android:name=".activity.bottle.BottleChatActivity" />
+        <activity android:name=".activity.NoticeActivity" />
     </application>
 
 </manifest>

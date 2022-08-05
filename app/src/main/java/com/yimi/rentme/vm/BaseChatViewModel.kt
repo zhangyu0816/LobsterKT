@@ -8,6 +8,7 @@ import android.content.Context
 import android.graphics.Rect
 import android.graphics.drawable.AnimationDrawable
 import android.os.SystemClock
+import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -49,7 +50,6 @@ import kotlinx.coroutines.Job
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.startActivity
 import java.io.File
 import kotlin.math.min
@@ -200,7 +200,7 @@ class BaseChatViewModel : BaseViewModel(), OnRefreshListener {
         }
 
         photoManager = PhotoManager(activity, mainDataSource) {
-            UserManager.instance.sendMsg(
+            BaseApp.userManager.sendMsg(
                 miUserId, UserManager.PIC_FILE, 2, "", photoManager.jointWebUrl(","),
                 0, "【图片】", driftBottleId, flashTalkId, msgChannelType
             )
@@ -433,7 +433,7 @@ class BaseChatViewModel : BaseViewModel(), OnRefreshListener {
             return
         }
         closeImplicit(binding.edContent)
-        UserManager.instance.sendMsg(
+        BaseApp.userManager.sendMsg(
             miUserId, UserManager.TEXT, 1, binding.content!!, "",
             0, "【文字】", driftBottleId, flashTalkId, msgChannelType
         )
@@ -672,21 +672,32 @@ class BaseChatViewModel : BaseViewModel(), OnRefreshListener {
      * 更新聊天
      */
     fun updateChat(body: CustomMessageBody) {
-        if (body.mDriftBottleId != 0L) { // 漂流瓶
-            BaseApp.fixedThreadPool.execute {
+        when(body.msgChannelType){
+            1->{}
+            2->{
                 var historyInfo = HistoryInfo()
                 historyInfo = historyInfo.createBottleHistoryInfoFromBody(
                     body, otherUserId, body.mMsgChannelType, body.mDriftBottleId
                 )
-                MineApp.historyDaoManager.insert(historyInfo)
-                allHistoryInfoList.add(historyInfo)
-                updateTime()
-                activity.runOnUiThread {
-                    historyInfoList.add(allHistoryInfoList[allHistoryInfoList.size - 1])
+
+                var hasId = false
+                if (isNotice) {
+                    for (item in allHistoryInfoList) {
+                        if (item.thirdMessageId == body.thirdMessageId) {
+                            hasId = true
+                            break
+                        }
+                    }
+                }
+                if (!hasId) {
+                    allHistoryInfoList.add(0, historyInfo)
+                    updateTime()
+                    historyInfoList.add(allHistoryInfoList[0])
                     adapter.notifyItemRangeChanged(0, historyInfoList.size)
                     binding.chatList.scrollToPosition(historyInfoList.size - 1)
                 }
             }
+            3->{}
         }
     }
 
@@ -901,7 +912,6 @@ class BaseChatViewModel : BaseViewModel(), OnRefreshListener {
         if (allHistoryInfoList.size > 0) {
             BaseApp.fixedThreadPool.execute {
                 allHistoryInfoList[allHistoryInfoList.size - 1].showTime = true
-                MineApp.historyDaoManager.updateShowTime(allHistoryInfoList[allHistoryInfoList.size - 1].thirdMessageId)
                 time = allHistoryInfoList[allHistoryInfoList.size - 1].creationDate
                 if (allHistoryInfoList.size > 1) {
                     for (i in allHistoryInfoList.size - 2 downTo 0) {
@@ -912,7 +922,6 @@ class BaseChatViewModel : BaseViewModel(), OnRefreshListener {
                         ) {
                             time = allHistoryInfoList[i].creationDate
                             allHistoryInfoList[i].showTime = true
-                            MineApp.historyDaoManager.updateShowTime(allHistoryInfoList[allHistoryInfoList.size - 1].thirdMessageId)
                         }
                     }
                 }
@@ -934,7 +943,7 @@ class BaseChatViewModel : BaseViewModel(), OnRefreshListener {
             )
         }, false, "", MineApp.CHAT_URL) {
             onSuccess {
-                UserManager.instance.sendMsg(
+                BaseApp.userManager.sendMsg(
                     miUserId, UserManager.PIC_FILE, 3, "", it.url,
                     resTime, "【语音】", driftBottleId, flashTalkId, msgChannelType
                 )
@@ -972,7 +981,7 @@ class BaseChatViewModel : BaseViewModel(), OnRefreshListener {
             }, "正在上传视频....", MineApp.CHAT_URL
         ) {
             onSuccess {
-                UserManager.instance.sendMsg(
+                BaseApp.userManager.sendMsg(
                     miUserId, UserManager.PIC_FILE, 4, "", it.url,
                     (selectImage.resTime / 1000).toInt(), "【视频】", driftBottleId,
                     flashTalkId, msgChannelType
