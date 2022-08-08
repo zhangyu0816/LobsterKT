@@ -478,4 +478,9 @@ interface ApiService {
         @Field("otherUserId") otherUserId: Long,
         @Field("imPlatformType") imPlatformType: Int
     ): HttpWrapBean<ImAccount>
+
+    // 预匹配列表
+    @FormUrlEncoded
+    @POST("api/Pair_prePairList")
+    suspend fun prePairList(@FieldMap map: Map<String, String>): HttpWrapBean<ArrayList<PairInfo>>
 }

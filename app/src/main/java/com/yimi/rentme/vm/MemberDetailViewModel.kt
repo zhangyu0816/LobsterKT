@@ -277,7 +277,7 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
             return
         }
         if (showLike)
-            EventBus.getDefault().post(0, "lobsterCar") // 更新卡片页面 -- 喜欢
+            EventBus.getDefault().post(0, "lobsterCard") // 更新卡片页面 -- 喜欢
         activity.finish()
     }
 
@@ -290,7 +290,7 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
             return
         }
         if (showLike) {
-            EventBus.getDefault().post(1, "lobsterCar") // 更新卡片页面 -- 喜欢
+            EventBus.getDefault().post(1, "lobsterCard") // 更新卡片页面 -- 喜欢
             activity.finish()
         } else {
             isLike(binding.ivLike)
@@ -506,7 +506,7 @@ class MemberDetailViewModel : BaseViewModel(), SuperLikeInterface {
                         }
                         2 -> {
                             if (showLike) {
-                                EventBus.getDefault().post(2, "lobsterCar") // 更新卡片页面 -- 喜欢
+                                EventBus.getDefault().post(2, "lobsterCard") // 更新卡片页面 -- 喜欢
                                 activity.finish()
                             } else {
                                 EventBus.getDefault().post("更新关注/粉丝/喜欢", "lobsterUpdateFCL")

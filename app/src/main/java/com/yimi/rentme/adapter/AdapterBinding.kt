@@ -135,3 +135,12 @@ fun VideoFunctionView.setFunctionView(
 ) {
     this.setParam(activity, mainDataSource, discoverInfo, position, callBack)
 }
+
+@BindingAdapter("isProgressPlay")
+fun ProgressView.onClick(isProgressPlay: Boolean) {
+    if (isProgressPlay) {
+        this.play()
+    } else {
+        this.stop()
+    }
+}

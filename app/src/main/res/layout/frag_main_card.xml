@@ -1,21 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
             type="com.yimi.rentme.vm.fragment.MainCardViewModel" />
+
+        <variable
+            name="isProgressPlay"
+            type="boolean" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="卡片" />
-    </RelativeLayout>
+        <RelativeLayout
+            viewHeightSize="@{ObjectUtils.getViewSizeByHeight(0.14f)}"
+            viewWidthSize="@{-1}"
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            viewHeightSize="@{ObjectUtils.getViewSizeByHeight(0.86f)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.94f)}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.yimi.rentme.views.card.SwipeCardsView
+                android:id="@+id/swipe_cards_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="true"
+                card:alphaOffsetStep="20"
+                card:scaleOffsetStep="0.08"
+                card:yOffsetStep="30dp" />
+
+            <com.yimi.rentme.views.ProgressView
+                isProgressPlay="@{isProgressPlay}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{isProgressPlay?View.VISIBLE:View.GONE}" />
+        </RelativeLayout>
+
+    </LinearLayout>
 </layout>
