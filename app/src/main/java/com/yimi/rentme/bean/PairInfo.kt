@@ -1,5 +1,7 @@
 package com.yimi.rentme.bean
 
+import com.yimi.rentme.adapter.BaseAdapter
+
 class PairInfo {
     var userId = 0L//用户id  预匹配列表中是对方的id
     var otherUserId = 0L//对方用户的id
@@ -19,4 +21,5 @@ class PairInfo {
     var distance = ""
     var singleImage = ""
     var imageList = ArrayList<String>()
+    var position = 0
 }

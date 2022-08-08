@@ -41,7 +41,7 @@ class SwipeCardsView : LinearLayout {
     private var mShowingIndex = 0 // 当前正在显示的卡片位置
     private lateinit var btnListener: OnClickListener
 
-    private var mAdapter: BaseCardAdapter<*>? = null
+     var mAdapter: BaseCardAdapter<*>? = null
     private lateinit var mScroller: Scroller
     private var mTouchSlop: Int = 0
     private var mLastY = -1 // save event y

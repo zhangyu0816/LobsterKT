@@ -22,7 +22,11 @@ import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.utils.*
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import kotlinx.coroutines.Job
+import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.startActivity
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class MainCardViewModel : BaseViewModel() {
 
@@ -45,7 +49,7 @@ class MainCardViewModel : BaseViewModel() {
     }
 
     override fun initViewModel() {
-        adapter = CardAdapter()
+        adapter = CardAdapter(activity, this)
         binding.isProgressPlay = true
         binding.cityName = ""
         aMapLocation = AMapLocation(activity)
@@ -93,6 +97,7 @@ class MainCardViewModel : BaseViewModel() {
 
     override fun onDestroy() {
         super.onDestroy()
+        aMapLocation.destroy()
         mHandler.removeCallbacks(ra)
         stopAnim()
         animator = null
@@ -124,10 +129,20 @@ class MainCardViewModel : BaseViewModel() {
     /**
      * 更新城市
      */
-    fun updateCity() {
+    fun updateCity(type: Int) {
         BaseApp.fixedThreadPool.execute {
             binding.cityName =
                 BaseApp.cityDaoManager.getCityName(MineApp.provinceId, MineApp.cityId)
+            if (type == 1)
+                activity.runOnUiThread {
+                    binding.isProgressPlay = true
+                    userIdList.clear()
+                    pairInfoList.clear()
+                    adapter.setDataList(pairInfoList)
+                    curIndex = 0
+                    binding.swipeCardsView.setAdapter(adapter)
+                    prePairList()
+                }
         }
     }
 
@@ -156,6 +171,18 @@ class MainCardViewModel : BaseViewModel() {
     }
 
     /**
+     * 选择图片
+     */
+    fun selectImage(position: Int) {
+        adapter.adapterMap[curIndex]!!.setSelectIndex(position)
+        adapter.adapterMap[curIndex]!!.notifyItemRangeChanged(
+            pairInfoList[curIndex].position, 1, null
+        )
+        adapter.adapterMap[curIndex]!!.notifyItemRangeChanged(position, 1, null)
+        pairInfoList[curIndex].position = position
+    }
+
+    /**
      * 刷新
      */
     fun onRefresh(view: View) {
@@ -179,6 +206,17 @@ class MainCardViewModel : BaseViewModel() {
                 for (item in it) {
                     if (!userIdList.contains(item.otherUserId)) {
                         userIdList.add(item.otherUserId)
+                        if (item.moreImages.isNotEmpty()) {
+                            val temp = item.moreImages.split("#")
+                            for (image in temp)
+                                item.imageList.add(image)
+                        }
+
+                        item.imageList.add(item.singleImage)
+                        item.imageList.add(item.singleImage)
+                        item.imageList.add(item.singleImage)
+                        item.imageList.add(item.singleImage)
+                        item.imageList.add(item.singleImage)
                         pairInfoList.add(item)
                     }
                 }
@@ -226,12 +264,15 @@ class MainCardViewModel : BaseViewModel() {
                         }
                     }).show(activity.supportFragmentManager)
             } else {
-                Toast.makeText(
-                    activity,
-                    "可通过“手机设置--应用--虾菇--权限”或app内“我的--设置--权限管理--权限”，手动开启或关闭定位权限。",
-                    Toast.LENGTH_SHORT
-                ).show()
-                prePairList()
+                if (type == 1)
+                    prePairList()
+                else
+                    Toast.makeText(
+                        activity,
+                        "可通过“手机设置--应用--虾菇--权限”或app内“我的--设置--权限管理--权限”，手动开启或关闭定位权限。",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
             }
         }
     }
@@ -242,29 +283,31 @@ class MainCardViewModel : BaseViewModel() {
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION, rationale = "为了更好的提供服务，需要获取定位权限"
             )
-            showLoading(Job(), "定位中...")
-            aMapLocation.start(object : AMapLocation.CallBack {
-                override fun success() {
-                    dismissLoading()
-                    if (type == 1) {
-                        BaseApp.fixedThreadPool.execute {
-                            MineApp.provinceId =
-                                BaseApp.provinceDaoManager.getProvinceId(getString("provinceName"))
-                            MineApp.cityId = BaseApp.cityDaoManager.getCityId(
-                                MineApp.provinceId, getString("cityName")
-                            )
-                            MineApp.districtId = BaseApp.districtDaoManager.getDistrictId(
-                                MineApp.cityId, getString("districtName")
-                            )
-                            activity.runOnUiThread {
-                                modifyMemberInfoForNoVerify()
-                                joinPairPool()
+            activity.runOnUiThread {
+                showLoading(Job(), "定位中...")
+                aMapLocation.start(object : AMapLocation.CallBack {
+                    override fun success() {
+                        dismissLoading()
+                        if (type == 1) {
+                            BaseApp.fixedThreadPool.execute {
+                                MineApp.provinceId =
+                                    BaseApp.provinceDaoManager.getProvinceId(getString("provinceName"))
+                                MineApp.cityId = BaseApp.cityDaoManager.getCityId(
+                                    MineApp.provinceId, getString("cityName")
+                                )
+                                MineApp.districtId = BaseApp.districtDaoManager.getDistrictId(
+                                    MineApp.cityId, getString("districtName")
+                                )
+                                activity.runOnUiThread {
+                                    modifyMemberInfoForNoVerify()
+                                    joinPairPool()
+                                }
                             }
-                        }
-                    } else
-                        activity.startActivity<SelectLocationActivity>()
-                }
-            })
+                        } else
+                            activity.startActivity<SelectLocationActivity>()
+                    }
+                })
+            }
         }
     }
 

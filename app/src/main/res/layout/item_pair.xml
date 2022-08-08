@@ -1,20 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
     android:layout_marginBottom="40dp"
     android:foreground="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="10dp"
-    card_view:cardUseCompatPadding="true"
-    card_view:cardElevation="3dp">
+    card_view:cardElevation="3dp"
+    card_view:cardUseCompatPadding="true">
 
-    <ImageView
-        android:id="@+id/iv_photo"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="center"/>
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="center" />
+
+        <RelativeLayout
+            android:id="@+id/info_relative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/gradient_black"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/nick_linear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tv_nick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    tools:text="租我吧租我吧租我吧" />
+
+                <ImageView
+                    android:id="@+id/iv_real"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:visibility="gone"
+                    app:srcCompat="@mipmap/real_icon" />
+
+                <ImageView
+                    android:id="@+id/iv_vip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:visibility="gone"
+                    app:srcCompat="@mipmap/vip_icon" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/area_linear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nick_linear"
+                android:layout_marginStart="15dp"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/distance_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tv_distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFD358"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:text="1.0" />
+
+                    <TextView
+                        android:id="@+id/tv_distance_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    tools:text="温州市" />
+
+                <TextView
+                    android:id="@+id/tv_district"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    tools:text="鹿城区" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/info_linear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/area_linear"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    tools:text="女" />
+
+                <TextView
+                    android:id="@+id/tv_constellations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    tools:text="巨蟹座" />
+
+                <TextView
+                    android:id="@+id/tv_personality_sign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="80dp"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    tools:text="我的个性签名我的个性签名我的个性签名我的个性签名我的个性签名我的个性签名" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/image_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/info_linear"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="15dp"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </RelativeLayout>
+
 
 </androidx.cardview.widget.CardView>
