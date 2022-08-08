@@ -56,8 +56,8 @@ class SelectLocationViewModel : BaseViewModel(), OnGeocodeSearchListener {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        val latitude = getString("${BaseApp.projectName}_latitude")
-        val longitude = getString("${BaseApp.projectName}_longitude")
+        val latitude = getString("latitude")
+        val longitude = getString("longitude")
         myLl = if (latitude.isEmpty() || longitude.isEmpty()) LatLng(0.0, 0.0)
         else LatLng(latitude.toDouble(), longitude.toDouble())
 
@@ -111,12 +111,12 @@ class SelectLocationViewModel : BaseViewModel(), OnGeocodeSearchListener {
         else regeocodeAddress.city
         info.districtName = regeocodeAddress.district
 
-        saveString("${BaseApp.projectName}_address", info.address)
+        saveString("address", info.address)
         if (isPublish) {
             EventBus.getDefault().post(info.cityName, "lobsterCityName")
             activity.finish()
         } else {
-            saveString("${BaseApp.projectName}_cityName", info.cityName)
+            saveString("cityName", info.cityName)
             BaseApp.fixedThreadPool.execute {
                 MineApp.provinceId = BaseApp.provinceDaoManager.getProvinceId(info.provinceName)
                 MineApp.cityId = BaseApp.cityDaoManager.getCityId(MineApp.provinceId, info.cityName)

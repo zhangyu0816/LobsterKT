@@ -15,6 +15,14 @@
         <variable
             name="isProgressPlay"
             type="boolean" />
+
+        <variable
+            name="isNoWifi"
+            type="boolean" />
+
+        <variable
+            name="cityName"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -23,13 +31,51 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             viewHeightSize="@{ObjectUtils.getViewSizeByHeight(0.14f)}"
             viewWidthSize="@{-1}"
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="70dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="15dp">
 
-        </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="34dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_city"
+                    onClickDelayed="@{viewModel::selectCity}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/btn_bg_white_radius60"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="@{cityName}"
+                    android:textColor="@color/black_252"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    card:drawableStartCompat="@mipmap/address_icon" />
+
+                <ImageView
+                    android:id="@+id/iv_exposure"
+                    onClickDelayed="@{viewModel::exposure}"
+                    viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(72)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(250)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@mipmap/exposure_icon" />
+            </RelativeLayout>
+        </LinearLayout>
 
         <RelativeLayout
             viewHeightSize="@{ObjectUtils.getViewSizeByHeight(0.86f)}"
@@ -51,7 +97,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="@{isProgressPlay?View.VISIBLE:View.GONE}" />
-        </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@mipmap/card_out_line_bg"
+                android:visibility="@{isNoWifi?View.VISIBLE:View.GONE}">
+
+                <TextView
+                    onClickDelayed="@{viewModel::onRefresh}"
+                    android:layout_width="80dp"
+                    android:layout_height="38dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="30dp"
+                    android:background="@drawable/btn_bg_black_4d4_radius60"
+                    android:gravity="center"
+                    android:text="刷新"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </RelativeLayout>
     </LinearLayout>
 </layout>

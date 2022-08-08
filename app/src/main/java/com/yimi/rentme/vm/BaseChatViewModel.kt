@@ -8,7 +8,6 @@ import android.content.Context
 import android.graphics.Rect
 import android.graphics.drawable.AnimationDrawable
 import android.os.SystemClock
-import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View

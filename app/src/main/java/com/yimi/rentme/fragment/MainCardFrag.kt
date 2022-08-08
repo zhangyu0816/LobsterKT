@@ -2,7 +2,6 @@ package com.yimi.rentme.fragment
 
 import androidx.appcompat.app.AppCompatActivity
 import com.yimi.rentme.R
-import com.yimi.rentme.bean.SelectImage
 import com.yimi.rentme.databinding.FragMainCardBinding
 import com.yimi.rentme.vm.fragment.MainCardViewModel
 import com.zb.baselibs.activity.BaseFragment
@@ -25,11 +24,29 @@ class MainCardFrag : BaseFragment() {
         viewModel.initViewModel()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.onDestroy()
+    }
+
     /**
      * 更新卡片动画
      */
     @Subscriber(tag = "lobsterCard")
     private fun lobsterCard(data: Int) {
         viewModel.moveCard(data)
+    }
+
+    /**
+     * 更新城市
+     */
+    @Subscriber(tag = "kotlin_do_area")
+    private fun kotlinDoArea(data: String) {
+        viewModel.updateCity()
     }
 }

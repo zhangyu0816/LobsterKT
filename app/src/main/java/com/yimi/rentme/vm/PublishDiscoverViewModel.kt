@@ -230,7 +230,7 @@ class PublishDiscoverViewModel : BaseViewModel() {
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION, rationale = "为了更好的提供服务，需要获取定位权限"
             )
-            if (getString("${BaseApp.projectName}_latitude").isNotEmpty() && getString("${BaseApp.projectName}_longitude").isNotEmpty()) {
+            if (getString("latitude").isNotEmpty() && getString("longitude").isNotEmpty()) {
                 activity.startActivity<SelectLocationActivity>(
                     Pair("isPublish", true)
                 )

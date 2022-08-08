@@ -54,6 +54,11 @@ interface ApiService {
     @POST("api/Member_modifyMemberInfo")
     suspend fun modifyMemberInfo(@FieldMap map: Map<String, String>): HttpWrapBean<Any?>
 
+    // 修改个人信息--不审核
+    @FormUrlEncoded
+    @POST("api/Member_modifyMemberInfoForNoVerify")
+    suspend fun modifyMemberInfoForNoVerify(@FieldMap map: Map<String, Any>): HttpWrapBean<Any?>
+
     // 快捷登录
     @FormUrlEncoded
     @POST("api/Union_loginByUnionV2")
@@ -483,4 +488,10 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/Pair_prePairList")
     suspend fun prePairList(@FieldMap map: Map<String, String>): HttpWrapBean<ArrayList<PairInfo>>
+
+    // 加入匹配池 (提交当前位置)
+    @FormUrlEncoded
+    @POST("api/Pair_joinPairPool")
+    suspend fun joinPairPool(@FieldMap map: Map<String, String>): HttpWrapBean<Any?>
+
 }

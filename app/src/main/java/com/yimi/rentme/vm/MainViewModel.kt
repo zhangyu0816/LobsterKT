@@ -72,7 +72,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                     }).show(activity.supportFragmentManager)
             }
         }
-
+        initUtil(activity)
         walletInfo()
         giftList()
         rechargeDiscountList()
@@ -160,8 +160,6 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                     }
                 }
             }
-
-            initUtil(activity)
         }
     }
 
@@ -269,6 +267,9 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
         mainDataSource.enqueue({ myInfo() }) {
             onSuccess {
                 MineApp.mineInfo = it
+                MineApp.provinceId = it.provinceId
+                MineApp.cityId = it.cityId
+                MineApp.districtId = it.districtId
                 MineApp.sex = it.sex
                 firstOpenMemberPage()
             }

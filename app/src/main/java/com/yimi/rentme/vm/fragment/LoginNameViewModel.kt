@@ -210,6 +210,9 @@ class LoginNameViewModel : BaseViewModel() {
             onSuccess {
                 dismissLoading()
                 MineApp.mineInfo = it
+                MineApp.provinceId = it.provinceId
+                MineApp.cityId = it.cityId
+                MineApp.districtId = it.districtId
                 MineApp.sex = it.sex
                 MineApp.registerInfo = RegisterInfo()
                 activity.startActivity<MainActivity>()

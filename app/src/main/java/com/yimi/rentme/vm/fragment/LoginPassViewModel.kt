@@ -184,6 +184,9 @@ class LoginPassViewModel : BaseViewModel() {
             onSuccess {
                 dismissLoading()
                 MineApp.mineInfo = it
+                MineApp.provinceId = it.provinceId
+                MineApp.cityId = it.cityId
+                MineApp.districtId = it.districtId
                 MineApp.sex = it.sex
                 passErrorCount = 0
                 activity.startActivity<MainActivity>()

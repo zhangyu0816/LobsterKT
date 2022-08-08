@@ -1,24 +1,16 @@
 package com.yimi.rentme.views.card
 
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Rect
-import android.os.Build
 import android.util.AttributeSet
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.VelocityTracker
-import android.view.View
-import android.view.ViewConfiguration
+import android.view.*
+import android.view.View.OnClickListener
 import android.view.animation.Interpolator
 import android.widget.LinearLayout
 import android.widget.Scroller
 import androidx.core.view.ViewCompat
 import com.yimi.rentme.R
-
-import kotlin.collections.ArrayList
 import kotlin.math.abs
 
 /**

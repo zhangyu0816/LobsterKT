@@ -11,7 +11,6 @@ import com.yimi.rentme.R
 import com.yimi.rentme.activity.bottle.BottleChatActivity
 import com.yimi.rentme.adapter.BaseAdapter
 import com.yimi.rentme.bean.BottleInfo
-import com.yimi.rentme.bean.SelectImage
 import com.yimi.rentme.databinding.AcBottleListBinding
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
@@ -22,7 +21,6 @@ import com.zb.baselibs.utils.dip2px
 import com.zb.baselibs.utils.getLong
 import com.zb.baselibs.views.touch.SimpleItemTouchHelperCallback
 import kotlinx.coroutines.Job
-import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.startActivity
 import org.simple.eventbus.EventBus
 import java.util.*

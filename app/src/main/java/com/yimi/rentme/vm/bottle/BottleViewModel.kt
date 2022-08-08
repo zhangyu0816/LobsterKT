@@ -8,7 +8,6 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
-import com.yimi.rentme.activity.bottle.BottleActivity
 import com.yimi.rentme.activity.bottle.BottleChatActivity
 import com.yimi.rentme.activity.bottle.BottleListActivity
 import com.yimi.rentme.bean.BottleInfo

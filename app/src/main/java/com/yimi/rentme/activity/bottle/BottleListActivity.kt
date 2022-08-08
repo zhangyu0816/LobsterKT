@@ -1,11 +1,9 @@
 package com.yimi.rentme.activity.bottle
 
 import com.yimi.rentme.R
-import com.yimi.rentme.bean.SelectImage
 import com.yimi.rentme.databinding.AcBottleListBinding
 import com.yimi.rentme.vm.bottle.BottleListViewModel
 import com.zb.baselibs.activity.BaseScreenActivity
-import org.simple.eventbus.EventBus
 import org.simple.eventbus.Subscriber
 
 class BottleListActivity : BaseScreenActivity() {
