@@ -6,8 +6,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.bean.PairInfo
+import com.yimi.rentme.views.LeanTextView
 import com.yimi.rentme.views.card.BaseCardAdapter
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.adapter.initAdapter
@@ -48,6 +50,10 @@ class CardAdapter(private val activity: AppCompatActivity, private val viewModel
         val imageList = cardview.findViewById<RecyclerView>(R.id.image_list)
         val tvLeft = cardview.findViewById<View>(R.id.tv_left)
         val tvRight = cardview.findViewById<View>(R.id.tv_right)
+        val likeLayout = cardview.findViewById<LinearLayout>(R.id.like_layout)
+        val tvLikeCount = cardview.findViewById<LeanTextView>(R.id.tv_like_count)
+        val ivDislike = cardview.findViewById<ImageView>(R.id.iv_dislike)
+        val ivLike = cardview.findViewById<ImageView>(R.id.iv_like)
 
         loadImage(
             ivPhoto, item.imageList[item.position], 0, R.mipmap.empty_icon,
@@ -81,6 +87,18 @@ class CardAdapter(private val activity: AppCompatActivity, private val viewModel
         val adapter = BaseAdapter(activity, R.layout.item_image, item.imageList, viewModel)
         adapter.setSelectIndex(0)
         initAdapter(imageList, adapter, 1, 0, 0, 0, false)
+
+        likeLayout.visibility = if (MineApp.likeCount == 0) View.GONE else View.VISIBLE
+        tvLikeCount.text = MineApp.likeCount.toString()
+
+        ivDislike.viewSize(
+            ObjectUtils.getViewSizeByWidthFromMax(238),
+            ObjectUtils.getViewSizeByWidthFromMax(226)
+        )
+        ivLike.viewSize(
+            ObjectUtils.getViewSizeByWidthFromMax(238),
+            ObjectUtils.getViewSizeByWidthFromMax(226)
+        )
 
         tvLeft.setOnClickListener {
             if (item.position > 0) {

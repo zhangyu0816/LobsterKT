@@ -17,19 +17,15 @@ import com.yimi.rentme.adapter.CardAdapter
 import com.yimi.rentme.bean.PairInfo
 import com.yimi.rentme.databinding.FragMainCardBinding
 import com.yimi.rentme.dialog.VipAdDF
+import com.yimi.rentme.views.LeanTextView
 import com.yimi.rentme.views.card.SwipeCardsView
 import com.yimi.rentme.vm.BaseViewModel
-import com.zb.baselibs.adapter.loadImage
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.utils.*
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import kotlinx.coroutines.Job
-import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.startActivity
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class MainCardViewModel : BaseViewModel() {
 
@@ -51,14 +47,27 @@ class MainCardViewModel : BaseViewModel() {
         }
     }
 
+    private var middleX = 0
+
     override fun initViewModel() {
         adapter = CardAdapter(activity, this)
         binding.isProgressPlay = true
         binding.cityName = ""
         aMapLocation = AMapLocation(activity)
+        middleX = BaseApp.W / 2
         binding.swipeCardsView.setCardsSlideListener(object : SwipeCardsView.CardsSlideListener {
+            var ivDislike: ImageView? = null
+            var ivLike: ImageView? = null
+            lateinit var cardImageView: View
             override fun onShow(index: Int) {
                 curIndex = index
+                cardImageView = binding.swipeCardsView.topView!!
+                for (view in binding.swipeCardsView.viewList) {
+                    view.findViewById<LeanTextView>(R.id.tv_like_count).text =
+                        MineApp.likeCount.toString()
+                }
+                ivDislike = null
+                ivLike = null
                 if (adapter.count - curIndex == 3 || adapter.count - curIndex == 0) {
                     prePairList()
                 }
@@ -70,6 +79,7 @@ class MainCardViewModel : BaseViewModel() {
                     SCToastUtil.showToast(activity, "不喜欢", 2)
                 } else {
                     SCToastUtil.showToast(activity, "喜欢", 2)
+                    MineApp.likeCount--
                 }
 
             }

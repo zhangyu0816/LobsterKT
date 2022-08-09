@@ -5,7 +5,6 @@ import com.yimi.rentme.R
 import com.yimi.rentme.databinding.FragMainCardBinding
 import com.yimi.rentme.vm.fragment.MainCardViewModel
 import com.zb.baselibs.activity.BaseFragment
-import com.zb.baselibs.utils.getString
 import org.simple.eventbus.Subscriber
 
 class MainCardFrag : BaseFragment() {

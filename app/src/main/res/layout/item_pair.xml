@@ -23,6 +23,53 @@
             android:scaleType="center" />
 
         <LinearLayout
+            android:id="@+id/like_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/card_top_bg"
+            android:orientation="vertical">
+
+            <com.yimi.rentme.views.LeanTextView
+                android:id="@+id/tv_like_count"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <com.yimi.rentme.views.LeanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="-26dp"
+                android:gravity="center"
+                android:text="剩余喜欢"
+                android:textColor="@color/white_99"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_dislike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:background="@mipmap/dislike_icon"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/iv_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="10dp"
+            android:background="@mipmap/like_icon"
+            android:visibility="gone"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/info_relative"

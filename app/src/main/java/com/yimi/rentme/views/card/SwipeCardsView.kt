@@ -23,7 +23,7 @@ import kotlin.math.abs
 
 class SwipeCardsView : LinearLayout {
 
-    private val viewList = ArrayList<View>() // 存放的是每一层的view，从顶到底
+    val viewList = ArrayList<View>() // 存放的是每一层的view，从顶到底
     private val releasedViewList = ArrayList<View>() // 手指松开后存放的view列表
 
     private var initLeft = 0
@@ -258,9 +258,10 @@ class SwipeCardsView : LinearLayout {
                 deltaX = currentX - mLastX
                 mLastY = currentY
                 mLastX = currentX
+
                 if (!isIntercepted) {
-                    val distanceX = Math.abs(currentX - mInitialMotionX)
-                    val distanceY = Math.abs(currentY - mInitialMotionY)
+                    val distanceX = abs(currentX - mInitialMotionX)
+                    val distanceY = abs(currentY - mInitialMotionY)
                     if (distanceX * distanceX + distanceY + distanceY >= mTouchSlop * mTouchSlop) {
                         isIntercepted = true
                     } else {
@@ -308,7 +309,7 @@ class SwipeCardsView : LinearLayout {
         }
     }
 
-    fun dispatchTouchEventSupper(e: MotionEvent): Boolean {
+    private fun dispatchTouchEventSupper(e: MotionEvent): Boolean {
         return super.dispatchTouchEvent(e)
     }
 
@@ -348,7 +349,9 @@ class SwipeCardsView : LinearLayout {
     }
 
 
-    fun startScrollTopView(finalLeft: Int, finalTop: Int, duration: Int, flyType: SlideType) {
+    private fun startScrollTopView(
+        finalLeft: Int, finalTop: Int, duration: Int, flyType: SlideType
+    ) {
         val topView = topView
         if (topView == null) {
             mScrolling = false
@@ -416,8 +419,8 @@ class SwipeCardsView : LinearLayout {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         measureChildrenWithMargins(widthMeasureSpec, heightMeasureSpec)
-        val maxWidth = View.MeasureSpec.getSize(widthMeasureSpec)
-        val maxHeight = View.MeasureSpec.getSize(heightMeasureSpec)
+        val maxWidth = MeasureSpec.getSize(widthMeasureSpec)
+        val maxHeight = MeasureSpec.getSize(heightMeasureSpec)
         setMeasuredDimension(
             resolveSizeAndState(maxWidth, widthMeasureSpec, 0),
             resolveSizeAndState(maxHeight, heightMeasureSpec, 0)
@@ -459,7 +462,7 @@ class SwipeCardsView : LinearLayout {
 
 
     private fun layoutChild(child: View, index: Int) {
-        val lp = child.layoutParams as LinearLayout.LayoutParams
+        val lp = child.layoutParams as LayoutParams
         val width = child.measuredWidth
         val height = child.measuredHeight
 
