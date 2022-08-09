@@ -66,7 +66,7 @@ class SelectLocationViewModel : BaseViewModel(), OnGeocodeSearchListener {
         binding.edKey.setOnEditorActionListener { arg0, arg1, arg2 ->
             if (arg1 == EditorInfo.IME_ACTION_SEARCH) {
                 hintKeyBoard2()
-                querySearchByTips(arg0.getText().toString())
+                querySearchByTips(arg0.text.toString())
             }
             false
         }

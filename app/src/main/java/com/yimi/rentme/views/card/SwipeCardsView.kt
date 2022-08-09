@@ -41,7 +41,7 @@ class SwipeCardsView : LinearLayout {
     private var mShowingIndex = 0 // 当前正在显示的卡片位置
     private lateinit var btnListener: OnClickListener
 
-     var mAdapter: BaseCardAdapter<*>? = null
+    var mAdapter: BaseCardAdapter<*>? = null
     private lateinit var mScroller: Scroller
     private var mTouchSlop: Int = 0
     private var mLastY = -1 // save event y
@@ -72,7 +72,7 @@ class SwipeCardsView : LinearLayout {
     private var mLastMoveEvent: MotionEvent? = null
     private var mHasSendCancelEvent = false
 
-    private val topView: View?
+    val topView: View?
         get() = if (viewList.size > 0) {
             viewList[0]
         } else null
@@ -123,7 +123,7 @@ class SwipeCardsView : LinearLayout {
 
     }
 
-    fun setSrollDuration(duration:Int){
+    fun setSrollDuration(duration: Int) {
         SCROLL_DURATION = duration
     }
 

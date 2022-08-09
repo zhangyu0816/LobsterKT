@@ -20,7 +20,6 @@ import com.zb.baselibs.utils.ObjectUtils
 class CardAdapter(private val activity: AppCompatActivity, private val viewModel: BaseViewModel) :
     BaseCardAdapter<PairInfo>() {
     private var dataList = ArrayList<PairInfo>()
-    val adapterMap = HashMap<Int, BaseAdapter<String>>()
 
     override val count: Int
         get() = dataList.size
@@ -47,12 +46,15 @@ class CardAdapter(private val activity: AppCompatActivity, private val viewModel
         val tvConstellations = cardview.findViewById<TextView>(R.id.tv_constellations)
         val tvPersonalitySign = cardview.findViewById<TextView>(R.id.tv_personality_sign)
         val imageList = cardview.findViewById<RecyclerView>(R.id.image_list)
+        val tvLeft = cardview.findViewById<View>(R.id.tv_left)
+        val tvRight = cardview.findViewById<View>(R.id.tv_right)
 
         loadImage(
             ivPhoto, item.imageList[item.position], 0, R.mipmap.empty_icon,
             ObjectUtils.getViewSizeByWidth(0.94f), ObjectUtils.getViewSizeByHeight(0.86f), false,
             10f, null, false, 0, false, 0f
         )
+
         tvNick.text = item.nick
         tvNick.maxWidth = ObjectUtils.getViewSizeByWidth(0.5f)
         ivReal.visibility = if (item.faceAttest == 1) View.VISIBLE else View.GONE
@@ -78,7 +80,37 @@ class CardAdapter(private val activity: AppCompatActivity, private val viewModel
 
         val adapter = BaseAdapter(activity, R.layout.item_image, item.imageList, viewModel)
         adapter.setSelectIndex(0)
-        adapterMap[position] = adapter
         initAdapter(imageList, adapter, 1, 0, 0, 0, false)
+
+        tvLeft.setOnClickListener {
+            if (item.position > 0) {
+                val mPosition = item.position
+                item.position = item.position - 1
+                loadImage(
+                    ivPhoto, item.imageList[item.position], 0, R.mipmap.empty_icon,
+                    ObjectUtils.getViewSizeByWidth(0.94f), ObjectUtils.getViewSizeByHeight(0.86f),
+                    false, 10f, null, false, 0,
+                    false, 0f
+                )
+                adapter.setSelectIndex(item.position)
+                adapter.notifyItemChanged(item.position)
+                adapter.notifyItemChanged(mPosition)
+            }
+        }
+        tvRight.setOnClickListener {
+            if (item.position < item.imageList.size - 1) {
+                val mPosition = item.position
+                item.position = item.position + 1
+                loadImage(
+                    ivPhoto, item.imageList[item.position], 0, R.mipmap.empty_icon,
+                    ObjectUtils.getViewSizeByWidth(0.94f), ObjectUtils.getViewSizeByHeight(0.86f),
+                    false, 10f, null, false, 0,
+                    false, 0f
+                )
+                adapter.setSelectIndex(item.position)
+                adapter.notifyItemChanged(item.position)
+                adapter.notifyItemChanged(mPosition)
+            }
+        }
     }
 }

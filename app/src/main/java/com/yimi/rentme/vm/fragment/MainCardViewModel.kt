@@ -7,8 +7,10 @@ import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.SystemClock
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import com.yimi.rentme.MineApp
+import com.yimi.rentme.R
 import com.yimi.rentme.activity.MemberDetailActivity
 import com.yimi.rentme.activity.SelectLocationActivity
 import com.yimi.rentme.adapter.CardAdapter
@@ -17,6 +19,7 @@ import com.yimi.rentme.databinding.FragMainCardBinding
 import com.yimi.rentme.dialog.VipAdDF
 import com.yimi.rentme.views.card.SwipeCardsView
 import com.yimi.rentme.vm.BaseViewModel
+import com.zb.baselibs.adapter.loadImage
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
 import com.zb.baselibs.utils.*
@@ -56,7 +59,7 @@ class MainCardViewModel : BaseViewModel() {
         binding.swipeCardsView.setCardsSlideListener(object : SwipeCardsView.CardsSlideListener {
             override fun onShow(index: Int) {
                 curIndex = index
-                if (adapter.count - curIndex == 3) {
+                if (adapter.count - curIndex == 3 || adapter.count - curIndex == 0) {
                     prePairList()
                 }
             }
@@ -84,7 +87,10 @@ class MainCardViewModel : BaseViewModel() {
                 BaseApp.cityDaoManager.getCityName(MineApp.provinceId, MineApp.cityId)
             SystemClock.sleep(1000L)
             activity.runOnUiThread {
-                setLocation(1)
+                if (MineApp.hasLocation)
+                    prePairList()
+                else
+                    setLocation(1)
             }
         }
     }
@@ -139,8 +145,8 @@ class MainCardViewModel : BaseViewModel() {
                     userIdList.clear()
                     pairInfoList.clear()
                     adapter.setDataList(pairInfoList)
-                    curIndex = 0
-                    binding.swipeCardsView.setAdapter(adapter)
+                    curIndex = -1
+                    adapter = CardAdapter(activity, this)
                     prePairList()
                 }
         }
@@ -155,7 +161,10 @@ class MainCardViewModel : BaseViewModel() {
                 .show(activity.supportFragmentManager)
             return
         }
-        setLocation(2)
+        if (MineApp.hasLocation)
+            activity.startActivity<SelectLocationActivity>()
+        else
+            setLocation(2)
     }
 
     /**
@@ -168,18 +177,6 @@ class MainCardViewModel : BaseViewModel() {
         else
             RemindDF(activity).setTitle("VIP专享").setContent("虾菇每日自动为你增加曝光度，让10的人优先看到你")
                 .isSingle(true).setSureName("明白了").show(activity.supportFragmentManager)
-    }
-
-    /**
-     * 选择图片
-     */
-    fun selectImage(position: Int) {
-        adapter.adapterMap[curIndex]!!.setSelectIndex(position)
-        adapter.adapterMap[curIndex]!!.notifyItemRangeChanged(
-            pairInfoList[curIndex].position, 1, null
-        )
-        adapter.adapterMap[curIndex]!!.notifyItemRangeChanged(position, 1, null)
-        pairInfoList[curIndex].position = position
     }
 
     /**
@@ -211,17 +208,12 @@ class MainCardViewModel : BaseViewModel() {
                             for (image in temp)
                                 item.imageList.add(image)
                         }
-
-                        item.imageList.add(item.singleImage)
-                        item.imageList.add(item.singleImage)
-                        item.imageList.add(item.singleImage)
-                        item.imageList.add(item.singleImage)
-                        item.imageList.add(item.singleImage)
+                        if (item.imageList.size == 0)
+                            item.imageList.add(item.singleImage)
                         pairInfoList.add(item)
                     }
                 }
                 adapter.setDataList(pairInfoList)
-
                 if (curIndex == -1) {
                     curIndex = 0
                     binding.swipeCardsView.setAdapter(adapter)
@@ -298,6 +290,7 @@ class MainCardViewModel : BaseViewModel() {
                                 MineApp.districtId = BaseApp.districtDaoManager.getDistrictId(
                                     MineApp.cityId, getString("districtName")
                                 )
+                                MineApp.hasLocation = true
                                 activity.runOnUiThread {
                                     modifyMemberInfoForNoVerify()
                                     joinPairPool()

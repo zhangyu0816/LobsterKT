@@ -30,8 +30,7 @@
         viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.14f)}"
         viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.14f)}"
         android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:onClick="@{v->viewModel.selectImage(position)}">
+        android:layout_height="60dp">
 
         <ImageView
             imageRes="@{R.mipmap.empty_icon}"
