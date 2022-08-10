@@ -1,15 +1,24 @@
 package com.yimi.rentme.vm
 
 import android.Manifest
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
+import android.app.Service
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
+import android.os.Handler
 import android.os.SystemClock
+import android.os.Vibrator
 import android.provider.Settings
 import android.telephony.TelephonyManager
+import android.view.View
+import android.widget.RelativeLayout
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
+import com.yimi.rentme.activity.FCLActivity
 import com.yimi.rentme.databinding.AcMainBinding
+import com.yimi.rentme.dialog.VipAdDF
 import com.yimi.rentme.fragment.MainCardFrag
 import com.yimi.rentme.fragment.MainChatFrag
 import com.yimi.rentme.fragment.MainHomeFrag
@@ -23,11 +32,29 @@ import com.zb.baselibs.mimc.UserManager
 import com.zb.baselibs.utils.*
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import com.zb.baselibs.views.replaceFragment
+import org.jetbrains.anko.startActivity
 import org.simple.eventbus.EventBus
 
 class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
 
     lateinit var binding: AcMainBinding
+    private var vibrator: Vibrator? = null
+    private var pvhRemind: ObjectAnimator? = null
+    private var pvhTY: PropertyValuesHolder? = null
+    private var pvhSX: PropertyValuesHolder? = null
+    private var pvhSY: PropertyValuesHolder? = null
+    private var pvhSXL: PropertyValuesHolder? = null
+    private var pvhSYL: PropertyValuesHolder? = null
+
+    private val time = 2 * 60 * 1000L
+    private val mHandler = Handler()
+    private val ra: Runnable = object : Runnable {
+        override fun run() {
+            pushGoodUser()
+            visitorBySeeMeCount()
+            mHandler.postDelayed(this, time)
+        }
+    }
 
     override fun initViewModel() {
         selectIndex(1)
@@ -81,6 +108,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
         openedMemberPriceList()
         driftBottleChatList(1)
         myImAccountInfo()
+        contactNum()
         if (getInteger(
                 "toLikeCount_${getLong("userId")}_${DateUtil.getNow(DateUtil.yyyy_MM_dd)}",
                 -1
@@ -109,6 +137,8 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                 OpenNotice.remindNotice(activity)
             }
         }
+
+        mHandler.post(ra)
     }
 
     /**
@@ -311,6 +341,53 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
     }
 
     /**
+     * 更新普通会话列表中的谁喜欢我
+     */
+    fun updateCommonLike() {
+        BaseApp.fixedThreadPool.execute {
+            var chatListInfo =
+                MineApp.chatListDaoManager.getChatListInfo("common_${MineApp.likeUserId}")
+            if (chatListInfo == null) {
+                chatListInfo = ChatListInfo()
+                chatListInfo.chatId = "common_${MineApp.likeUserId}"
+                chatListInfo.otherUserId = MineApp.likeUserId
+                chatListInfo.nick = "查看谁喜欢我"
+                chatListInfo.image = "be_like_logo_icon"
+                chatListInfo.creationDate = DateUtil.getNow(DateUtil.yyyy_MM_dd_HH_mm_ss)
+                chatListInfo.stanza = "TA们喜欢你，正等待你回应"
+                chatListInfo.msgType = 1
+                chatListInfo.noReadNum = MineApp.contactNum.beLikeCount
+                chatListInfo.publicTag = ""
+                chatListInfo.effectType = 1
+                chatListInfo.authType = 1
+                chatListInfo.msgChannelType = 1
+                chatListInfo.chatType = 1
+                chatListInfo.mainUserId = getLong("userId")
+                MineApp.chatListDaoManager.insert(chatListInfo)
+            } else {
+                MineApp.chatListDaoManager.updateChatListInfo(
+                    "查看谁喜欢我", "be_like_logo_icon", DateUtil.getNow(DateUtil.yyyy_MM_dd_HH_mm_ss),
+                    "TA们喜欢你，正等待你回应", 1, MineApp.contactNum.beLikeCount,
+                    "common_${MineApp.likeUserId}"
+                )
+            }
+        }
+    }
+
+    /**
+     * 跳到FCL
+     */
+    fun toLike(view: View) {
+        if (MineApp.mineInfo.memberType == 1)
+            VipAdDF(activity).setMainDataSource(mainDataSource).setType(4)
+                .show(activity.supportFragmentManager)
+        else
+            activity.startActivity<FCLActivity>(
+                Pair("index", 2)
+            )
+    }
+
+    /**
      * 我的聊天账号
      */
     private fun myImAccountInfo() {
@@ -389,7 +466,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                         MineApp.chatListDaoManager.getChatListInfo("drift_${customMessageBody.mDriftBottleId}")
                     if (chatListInfo == null) {
                         activity.runOnUiThread {
-                            otherInfo(otherUserId,  customMessageBody)
+                            otherInfo(otherUserId, customMessageBody)
                         }
                     } else {
                         val noReadNum =
@@ -410,7 +487,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
     /**
      * 用户信息
      */
-    private fun otherInfo(otherUserId: Long,  body: CustomMessageBody) {
+    private fun otherInfo(otherUserId: Long, body: CustomMessageBody) {
         mainDataSource.enqueue({ otherInfo(otherUserId) }) {
             onSuccess {
                 when (body.msgChannelType) {
@@ -455,5 +532,106 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
             MineApp.noReadBottleNum += item.noReadNum
         }
         EventBus.getDefault().post("", "lobsterBottleNoReadNum")
+    }
+
+    /**
+     * 三合一接口 （返回关注数量、粉丝数量、喜欢数量、被喜欢数量）
+     */
+    private fun contactNum() {
+        mainDataSource.enqueue({ contactNum(getLong("userId")) }) {
+            onSuccess {
+                MineApp.contactNum = it
+                updateCommonLike()
+                val lastBeLikeCount = getInteger("lastBeLikeCount_${getLong("userId")}", 0)
+                val count = it.beLikeCount - lastBeLikeCount
+                saveInteger("lastBeLikeCount_${getLong("userId")}", it.beLikeCount)
+                setRemind(count)
+
+            }
+        }
+    }
+
+    /**
+     * 播放提示动画
+     */
+    private fun setRemind(count: Int) {
+        if (count > 0) {
+            vibrator = activity.getSystemService(Service.VIBRATOR_SERVICE) as Vibrator
+            pvhTY =
+                PropertyValuesHolder.ofFloat("translationY", 0f, -30f, 0f, -30f, 0f, -30f, 0f)
+            pvhSX = PropertyValuesHolder.ofFloat("scaleX", 0f, 1f)
+            pvhSY = PropertyValuesHolder.ofFloat("scaleY", 0f, 1f)
+            pvhSXL = PropertyValuesHolder.ofFloat("scaleX", 1f, 0f)
+            pvhSYL = PropertyValuesHolder.ofFloat("scaleY", 1f, 0f)
+            pvhRemind = ObjectAnimator.ofPropertyValuesHolder(binding.remindRelative, pvhSX, pvhSY)
+            pvhRemind!!.duration = 500L
+
+            val params = binding.remindRelative.layoutParams as RelativeLayout.LayoutParams
+            params.marginEnd = ObjectUtils.getViewSizeByWidthFromMax(220)
+            binding.remindRelative.layoutParams = params
+            binding.tvTitle.text = "快来看看又有"
+            binding.tvContent.text = if (count < 99) count.toString() else "99+"
+            binding.tvSubContent.text = "人喜欢你啦"
+            binding.remindRelative.visibility = View.VISIBLE
+
+            vibrator!!.vibrate(500)
+            pvhRemind!!.setValues(pvhSX, pvhSY)
+            pvhRemind!!.start()
+            BaseApp.fixedThreadPool.execute {
+                SystemClock.sleep(500L)
+                activity.runOnUiThread {
+                    vibrator!!.cancel()
+                    pvhRemind!!.setValues(pvhTY)
+                    pvhRemind!!.start()
+                }
+                SystemClock.sleep(6000L)
+                activity.runOnUiThread {
+                    pvhRemind!!.setValues(pvhSXL, pvhSYL)
+                    pvhRemind!!.start()
+                }
+                SystemClock.sleep(6500)
+                activity.runOnUiThread { stopAnimator() }
+            }
+        }
+    }
+
+    /**
+     * 停止播放动画
+     */
+    fun stopAnimator() {
+        binding.remindRelative.visibility = View.GONE
+        if (pvhRemind != null && pvhRemind!!.isRunning) {
+            vibrator = null
+            pvhRemind!!.cancel()
+            pvhRemind = null
+            pvhTY = null
+            pvhSX = null
+            pvhSY = null
+            pvhSXL = null
+            pvhSYL = null
+        }
+    }
+
+    /**
+     * 自动喜欢
+     */
+    private fun pushGoodUser() {
+        mainDataSource.enqueue({ pushGoodUser() }) {
+            onSuccess {
+                contactNum()
+            }
+        }
+    }
+
+    /**
+     * 获取访问数量
+     */
+    private fun visitorBySeeMeCount() {
+        mainDataSource.enqueue({ visitorBySeeMeCount() }) {
+            onSuccess {
+                MineApp.contactNum.visitorCount = it.totalCount
+                EventBus.getDefault().post("", "lobsterVisitor")
+            }
+        }
     }
 }

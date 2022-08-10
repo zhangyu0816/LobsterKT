@@ -20,6 +20,7 @@ import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.getLong
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.startActivity
+import org.simple.eventbus.EventBus
 
 class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
 
@@ -177,6 +178,7 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
                 }
                 binding.refresh.finishRefresh()
                 binding.refresh.finishLoadMore()
+                EventBus.getDefault().post(binding.noData, "lobsterDynNotData")
             }
             onFailed {
                 BaseApp.fixedThreadPool.execute {
@@ -191,6 +193,7 @@ class MemberVideoViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListe
                 binding.noWifi = it.isNoWIFI
                 if (it.isNoData)
                     binding.noData = discoverInfoList.size == 0
+                EventBus.getDefault().post(binding.noData, "lobsterDynNotData")
             }
         }
     }

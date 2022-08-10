@@ -49,7 +49,10 @@ class MineApp : BaseApp() {
     }
 
     override fun getNoticeClassList(): Array<String> {
-        return arrayOf("${context.packageName}.activity.MainActivity","${context.packageName}.activity.NoticeActivity")
+        return arrayOf(
+            "${context.packageName}.activity.MainActivity",
+            "${context.packageName}.activity.NoticeActivity"
+        )
     }
 
     override fun getNoticeLogo(): Int {
@@ -63,6 +66,8 @@ class MineApp : BaseApp() {
         var registerInfo = RegisterInfo()
         var threeInfo = ThreeInfo()
         var walletInfo = WalletInfo()
+        var contactNum = ContactNum()
+        var newsCount = NewsCount()
         var discoverInfoList = ArrayList<DiscoverInfo>()
         var giftInfoList = ArrayList<GiftInfo>()
         var rechargeInfoList = ArrayList<RechargeInfo>()
@@ -78,7 +83,8 @@ class MineApp : BaseApp() {
         var noReadBottleNum = 0
         lateinit var QingSongShouXieTiType: Typeface
         const val bottleUserId = 1002L // 普通会话列表--漂流瓶
-        const val systemUserId = 10000L
+        const val systemUserId = 10000L // 系统Id
+        const val likeUserId = 1001L // 喜欢Id
         var nowChatId = "" // 正在聊天的人
         var hasLocation = false
 

@@ -60,6 +60,11 @@ class MainActivity : BaseScreenActivity() {
         MIMCLog.setLogSaveLevel(MIMCLog.DEBUG)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.stopAnimator()
+    }
+
     /**
      * 更新钱包
      */

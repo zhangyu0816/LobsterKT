@@ -23,6 +23,7 @@ import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.getLong
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.startActivity
+import org.simple.eventbus.EventBus
 
 class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreListener {
 
@@ -166,6 +167,7 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
                 binding.noWifi = it.isNoWIFI
                 if (it.isNoData)
                     binding.noData = discoverInfoList.size == 0
+                EventBus.getDefault().post(binding.noData, "lobsterDynNotData")
             }
         }
     }
@@ -221,6 +223,7 @@ class MemberDiscoverViewModel : BaseViewModel(), OnRefreshListener, OnLoadMoreLi
 
         binding.refresh.finishRefresh()
         binding.refresh.finishLoadMore()
+        EventBus.getDefault().post(binding.noData, "lobsterDynNotData")
     }
 
     /**

@@ -252,9 +252,9 @@
                 </androidx.appcompat.widget.Toolbar>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <com.yimi.rentme.views.TabView
                         onClickDelayed="@{v->viewModel.selectIndex(0)}"

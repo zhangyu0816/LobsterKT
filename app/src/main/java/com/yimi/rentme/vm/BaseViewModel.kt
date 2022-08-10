@@ -115,7 +115,6 @@ abstract class BaseViewModel : BaseLibsViewModel() {
         activity.window.statusBarColor = Color.TRANSPARENT
     }
 
-
     open fun goAnimator(view: View?, min: Float, max: Float, time: Long) {
         pvhSY = PropertyValuesHolder.ofFloat("scaleY", min, max, min)
         pvhSX = PropertyValuesHolder.ofFloat("scaleX", min, max, min)

@@ -69,4 +69,8 @@
     <string name="symbol_money_">¥ </string>
     <string name="mp3">.mp3</string>
     <string name="quotation">”</string>
+    <string name="vip_share">分享送VIP</string>
+    <string name="vip_share_info">推广1人，各得3天vip</string>
+    <string name="vip_open">首充翻倍</string>
+    <string name="vip_open_info">充1月送1月 充1年送1年</string>
 </resources>

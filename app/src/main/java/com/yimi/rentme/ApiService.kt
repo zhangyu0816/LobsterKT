@@ -494,4 +494,15 @@ interface ApiService {
     @POST("api/Pair_joinPairPool")
     suspend fun joinPairPool(@FieldMap map: Map<String, String>): HttpWrapBean<Any?>
 
+    // 自动喜欢
+    @GET("api/Pair_pushGoodUser")
+    suspend fun pushGoodUser(): HttpWrapBean<Int>
+
+    // 访问数量
+    @GET("api/Interactive_visitorBySeeMeCountV2")
+    suspend fun visitorBySeeMeCount(): HttpWrapBean<VisitorCount>
+
+    // 显示爱情盲盒
+    @GET("api/Share_setSendMessageForApp")
+    suspend fun getAi(): HttpWrapBean<Int>
 }
