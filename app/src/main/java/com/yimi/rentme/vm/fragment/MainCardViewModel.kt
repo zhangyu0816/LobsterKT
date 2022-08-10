@@ -111,9 +111,9 @@ class MainCardViewModel : BaseViewModel() {
                 binding.swipeCardsView.setSrollDuration(400)
                 if (type == SwipeCardsView.SlideType.LEFT) {
                     disLikeList.add(0, pairInfoList[index])
-                    SCToastUtil.showToast(activity, "不喜欢", 2)
+                    makeEvaluate(0)
                 } else {
-                    SCToastUtil.showToast(activity, "喜欢", 2)
+                    makeEvaluate(1)
                     MineApp.likeCount--
                 }
                 if (superLike != null) {
