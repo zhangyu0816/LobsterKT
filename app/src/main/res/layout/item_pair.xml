@@ -57,7 +57,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="30dp"
             android:background="@mipmap/dislike_icon"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_like"
@@ -67,7 +67,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginEnd="10dp"
             android:background="@mipmap/like_icon"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -238,6 +238,12 @@
                 android:layout_marginBottom="15dp"
                 android:visibility="gone" />
         </RelativeLayout>
+
+        <com.yimi.rentme.views.SuperLikeView
+            android:id="@+id/super_like"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
     </RelativeLayout>
 
 

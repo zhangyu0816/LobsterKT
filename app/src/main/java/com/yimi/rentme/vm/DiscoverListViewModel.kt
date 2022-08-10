@@ -236,39 +236,43 @@ class DiscoverListViewModel : BaseViewModel() {
                 val myHead = MineApp.mineInfo.image
                 val otherHead = binding.memberInfo!!.image
                 // 1喜欢成功 2匹配成功 3喜欢次数用尽
-                if (it == 1) {
-                    SuperLikeDF(activity).setMyHead(myHead).setOtherHead(otherHead)
-                        .setMySex(MineApp.mineInfo.sex)
-                        .setOtherSex(binding.memberInfo!!.sex)
-                        .show(activity.supportFragmentManager)
-                    EventBus.getDefault().post("更新关注/粉丝/喜欢", "lobsterUpdateFCL")
-                    BaseApp.fixedThreadPool.execute {
-                        if (MineApp.likeTypeDaoManager.getLikeTypeInfo(otherUserId) == null) {
-                            val likeTypeInfo = LikeTypeInfo()
-                            likeTypeInfo.likeType = 2
-                            likeTypeInfo.otherUserId = otherUserId
-                            likeTypeInfo.mainUserId = getLong("userId")
-                            MineApp.likeTypeDaoManager.insert(likeTypeInfo)
-                        } else {
-                            MineApp.likeTypeDaoManager.updateLikeType(2, otherUserId)
+                when (it) {
+                    1 -> {
+                        SuperLikeDF(activity).setMyHead(myHead).setOtherHead(otherHead)
+                            .setMySex(MineApp.mineInfo.sex)
+                            .setOtherSex(binding.memberInfo!!.sex)
+                            .show(activity.supportFragmentManager)
+                        EventBus.getDefault().post("更新关注/粉丝/喜欢", "lobsterUpdateFCL")
+                        BaseApp.fixedThreadPool.execute {
+                            if (MineApp.likeTypeDaoManager.getLikeTypeInfo(otherUserId) == null) {
+                                val likeTypeInfo = LikeTypeInfo()
+                                likeTypeInfo.likeType = 2
+                                likeTypeInfo.otherUserId = otherUserId
+                                likeTypeInfo.mainUserId = getLong("userId")
+                                MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                            } else {
+                                MineApp.likeTypeDaoManager.updateLikeType(2, otherUserId)
+                            }
                         }
                     }
-                } else if (it == 4) {
-                    // 超级喜欢时，非会员或超级喜欢次数用尽
-                    SCToastUtil.showToast(activity, "今日超级喜欢次数已用完", 2)
-                } else {
-                    BaseApp.fixedThreadPool.execute {
-                        if (MineApp.likeTypeDaoManager.getLikeTypeInfo(otherUserId) == null) {
-                            val likeTypeInfo = LikeTypeInfo()
-                            likeTypeInfo.likeType = 2
-                            likeTypeInfo.otherUserId = otherUserId
-                            likeTypeInfo.mainUserId = getLong("userId")
-                            MineApp.likeTypeDaoManager.insert(likeTypeInfo)
-                        } else {
-                            MineApp.likeTypeDaoManager.updateLikeType(2, otherUserId)
-                        }
+                    4 -> {
+                        // 超级喜欢时，非会员或超级喜欢次数用尽
+                        SCToastUtil.showToast(activity, "今日超级喜欢次数已用完", 2)
                     }
-                    SCToastUtil.showToast(activity, "你已超级喜欢过对方", 2)
+                    else -> {
+                        BaseApp.fixedThreadPool.execute {
+                            if (MineApp.likeTypeDaoManager.getLikeTypeInfo(otherUserId) == null) {
+                                val likeTypeInfo = LikeTypeInfo()
+                                likeTypeInfo.likeType = 2
+                                likeTypeInfo.otherUserId = otherUserId
+                                likeTypeInfo.mainUserId = getLong("userId")
+                                MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                            } else {
+                                MineApp.likeTypeDaoManager.updateLikeType(2, otherUserId)
+                            }
+                        }
+                        SCToastUtil.showToast(activity, "你已超级喜欢过对方", 2)
+                    }
                 }
             }
         }

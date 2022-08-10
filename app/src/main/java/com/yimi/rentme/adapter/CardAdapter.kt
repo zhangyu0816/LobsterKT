@@ -10,6 +10,8 @@ import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
 import com.yimi.rentme.bean.PairInfo
 import com.yimi.rentme.views.LeanTextView
+import com.yimi.rentme.views.SuperLikeInterface
+import com.yimi.rentme.views.SuperLikeView
 import com.yimi.rentme.views.card.BaseCardAdapter
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.adapter.initAdapter

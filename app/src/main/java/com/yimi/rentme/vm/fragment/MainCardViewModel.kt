@@ -16,8 +16,12 @@ import com.yimi.rentme.activity.SelectLocationActivity
 import com.yimi.rentme.adapter.CardAdapter
 import com.yimi.rentme.bean.PairInfo
 import com.yimi.rentme.databinding.FragMainCardBinding
+import com.yimi.rentme.dialog.SuperLikeDF
 import com.yimi.rentme.dialog.VipAdDF
+import com.yimi.rentme.roomdata.LikeTypeInfo
 import com.yimi.rentme.views.LeanTextView
+import com.yimi.rentme.views.SuperLikeInterface
+import com.yimi.rentme.views.SuperLikeView
 import com.yimi.rentme.views.card.SwipeCardsView
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
@@ -32,6 +36,7 @@ class MainCardViewModel : BaseViewModel() {
     lateinit var binding: FragMainCardBinding
     private val pairInfoList = ArrayList<PairInfo>()
     private lateinit var adapter: CardAdapter
+    private val disLikeList = ArrayList<PairInfo>()
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var mCardImageView: View
@@ -58,6 +63,7 @@ class MainCardViewModel : BaseViewModel() {
         binding.swipeCardsView.setCardsSlideListener(object : SwipeCardsView.CardsSlideListener {
             var ivDislike: ImageView? = null
             var ivLike: ImageView? = null
+            var superLike: SuperLikeView? = null
             lateinit var cardImageView: View
             override fun onShow(index: Int) {
                 curIndex = index
@@ -68,6 +74,34 @@ class MainCardViewModel : BaseViewModel() {
                 }
                 ivDislike = null
                 ivLike = null
+                if (superLike != null) {
+                    superLike!!.stop()
+                    superLike = null
+                }
+                superLike = cardImageView.findViewById(R.id.super_like)
+                superLike!!.setSuperLikeInterface(object : SuperLikeInterface {
+                    override fun superLike(view: View?, pairInfo: PairInfo?) {
+                        if (MineApp.mineInfo.memberType == 2) {
+                            makeEvaluate(2)
+                        } else
+                            VipAdDF(activity).setType(3).setMainDataSource(mainDataSource)
+                                .show(activity.supportFragmentManager)
+                    }
+
+                    override fun returnBack() {
+                        if (MineApp.mineInfo.memberType == 2) {
+                            if (disLikeList.size > 0) {
+                                val pairInfo = disLikeList.removeAt(0)
+                                pairInfoList.add(0, pairInfo)
+                                adapter.setDataList(pairInfoList)
+                                binding.swipeCardsView.notifyDatasetChanged(curIndex)
+                            }
+                        } else
+                            VipAdDF(activity).setType(2).setMainDataSource(mainDataSource)
+                                .show(activity.supportFragmentManager)
+                    }
+                })
+                superLike!!.start()
                 if (adapter.count - curIndex == 3 || adapter.count - curIndex == 0) {
                     prePairList()
                 }
@@ -76,12 +110,16 @@ class MainCardViewModel : BaseViewModel() {
             override fun onCardVanish(index: Int, type: SwipeCardsView.SlideType) {
                 binding.swipeCardsView.setSrollDuration(400)
                 if (type == SwipeCardsView.SlideType.LEFT) {
+                    disLikeList.add(0, pairInfoList[index])
                     SCToastUtil.showToast(activity, "不喜欢", 2)
                 } else {
                     SCToastUtil.showToast(activity, "喜欢", 2)
                     MineApp.likeCount--
                 }
-
+                if (superLike != null) {
+                    superLike!!.stop()
+                    superLike = null
+                }
             }
 
             override fun onItemClick(cardImageView: View, index: Int) {
@@ -363,5 +401,103 @@ class MainCardViewModel : BaseViewModel() {
      */
     private fun stopAnim() {
         if (animator != null && animator!!.isRunning) animator!!.cancel()
+    }
+
+    /**
+     * 喜欢/超级喜欢
+     */
+    private fun makeEvaluate(likeOtherStatus: Int) {
+        mainDataSource.enqueue({ makeEvaluate(pairInfoList[curIndex].userId, likeOtherStatus) }) {
+            onSuccess {
+                val myHead = MineApp.mineInfo.image
+                val otherHead = pairInfoList[curIndex].singleImage
+                // 1喜欢成功 2匹配成功 3喜欢次数用尽
+                if (it == 1) {
+                    // 不喜欢成功  喜欢成功  超级喜欢成功
+                    when (likeOtherStatus) {
+                        1 -> {
+                            val likeTypeInfo = LikeTypeInfo()
+                            likeTypeInfo.likeType = 1
+                            likeTypeInfo.otherUserId = pairInfoList[curIndex].userId
+                            likeTypeInfo.mainUserId = getLong("userId")
+                            BaseApp.fixedThreadPool.execute {
+                                MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                            }
+                        }
+                        2 -> {
+                            val likeTypeInfo = LikeTypeInfo()
+                            likeTypeInfo.likeType = 2
+                            likeTypeInfo.otherUserId = pairInfoList[curIndex].userId
+                            likeTypeInfo.mainUserId = getLong("userId")
+                            BaseApp.fixedThreadPool.execute {
+                                MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                            }
+                            SuperLikeDF(activity).setMyHead(myHead).setOtherHead(otherHead)
+                                .setMySex(MineApp.mineInfo.sex)
+                                .setOtherSex(pairInfoList[curIndex].sex)
+                                .show(activity.supportFragmentManager)
+                        }
+                    }
+                } else if (it == 2) {
+                    // 匹配成功
+                    SuperLikeDF(activity).setMyHead(myHead).setOtherHead(otherHead)
+                        .setMySex(MineApp.mineInfo.sex)
+                        .setOtherSex(pairInfoList[curIndex].sex)
+                        .setOtherNick(pairInfoList[curIndex].nick)
+                        .setCallBack(object : SuperLikeDF.CallBack {
+                            override fun sure() {
+//                                ActivityUtils.getChatActivity(discoverInfo.getUserId(), false)
+                            }
+                        })
+                        .show(activity.supportFragmentManager)
+                    val likeTypeInfo = LikeTypeInfo()
+                    likeTypeInfo.likeType = 1
+                    likeTypeInfo.otherUserId = pairInfoList[curIndex].userId
+                    likeTypeInfo.mainUserId = getLong("userId")
+                    BaseApp.fixedThreadPool.execute {
+                        MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                    }
+                } else if (it == 3) {
+                    // 喜欢次数用尽
+                    VipAdDF(activity).setType(6).setMainDataSource(mainDataSource)
+                        .show(activity.supportFragmentManager)
+                    SCToastUtil.showToast(activity, "今日喜欢次数已用完", 2)
+                } else if (it == 4) {
+                    // 超级喜欢时，非会员或超级喜欢次数用尽
+                    if (MineApp.mineInfo.memberType == 2) {
+                        SCToastUtil.showToast(activity, "今日超级喜欢次数已用完", 2)
+                    } else {
+                        VipAdDF(activity).setType(3).setOtherImage(otherHead)
+                            .setMainDataSource(mainDataSource)
+                            .show(activity.supportFragmentManager)
+                    }
+                } else {
+                    when (likeOtherStatus) {
+                        1 -> {
+                            val likeTypeInfo = LikeTypeInfo()
+                            likeTypeInfo.likeType = 1
+                            likeTypeInfo.otherUserId = pairInfoList[curIndex].userId
+                            likeTypeInfo.mainUserId = getLong("userId")
+                            BaseApp.fixedThreadPool.execute {
+                                MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                            }
+                        }
+                        2 -> {
+                            val likeTypeInfo = LikeTypeInfo()
+                            likeTypeInfo.likeType = 2
+                            likeTypeInfo.otherUserId = pairInfoList[curIndex].userId
+                            likeTypeInfo.mainUserId = getLong("userId")
+                            BaseApp.fixedThreadPool.execute {
+                                MineApp.likeTypeDaoManager.insert(likeTypeInfo)
+                            }
+                            SuperLikeDF(activity).setMyHead(myHead).setOtherHead(otherHead)
+                                .setMySex(MineApp.mineInfo.sex)
+                                .setOtherSex(pairInfoList[curIndex].sex)
+                                .show(activity.supportFragmentManager)
+                        }
+                    }
+                }
+            }
+        }
     }
 }

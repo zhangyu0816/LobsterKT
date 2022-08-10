@@ -34,8 +34,8 @@ class SuperLikeBigView : RelativeLayout {
     private lateinit var binding: SuperLikeBigBinding
     private var pvhTY: PropertyValuesHolder? = null
     private var pvhTX: PropertyValuesHolder? = null
-    private var pvh_star1: ObjectAnimator? = null
-    private var pvh_star2: ObjectAnimator? = null
+    private var pvhStar1: ObjectAnimator? = null
+    private var pvhStar2: ObjectAnimator? = null
     private lateinit var superLikeInterface: SuperLikeInterface
     private val ra = Random()
     private val time = 500L
@@ -66,7 +66,7 @@ class SuperLikeBigView : RelativeLayout {
             "translationX", 0f,
             -(ra.nextInt(ObjectUtils.getViewSizeByWidthFromMax(200)) + 50).toFloat()
         )
-        pvh_star1 =
+        pvhStar1 =
             ObjectAnimator.ofPropertyValuesHolder(binding.ivStar1, pvhTY, pvhTX).setDuration(time)
         pvhTY = PropertyValuesHolder.ofFloat(
             "translationY", 0f,
@@ -76,12 +76,12 @@ class SuperLikeBigView : RelativeLayout {
             "translationX", 0f,
             (ra.nextInt(ObjectUtils.getViewSizeByWidthFromMax(200)) + 50).toFloat()
         )
-        pvh_star2 =
+        pvhStar2 =
             ObjectAnimator.ofPropertyValuesHolder(binding.ivStar2, pvhTY, pvhTX).setDuration(time)
     }
 
     fun play() {
-        if (pvh_star1 != null && !pvh_star1!!.isRunning && pvh_star2 != null && !pvh_star2!!.isRunning) {
+        if (pvhStar1 != null && !pvhStar1!!.isRunning && pvhStar2 != null && !pvhStar2!!.isRunning) {
             binding.ivStar1.visibility = View.VISIBLE
             binding.ivStar2.visibility = View.VISIBLE
             pvhTY = PropertyValuesHolder.ofFloat(
@@ -92,8 +92,8 @@ class SuperLikeBigView : RelativeLayout {
                 "translationX", 0f,
                 -(ra.nextInt(ObjectUtils.getViewSizeByWidthFromMax(200)) + 50).toFloat()
             )
-            pvh_star1!!.setValues(pvhTY, pvhTX)
-            pvh_star1!!.start()
+            pvhStar1!!.setValues(pvhTY, pvhTX)
+            pvhStar1!!.start()
             pvhTY = PropertyValuesHolder.ofFloat(
                 "translationY", 0f,
                 -(ra.nextInt(ObjectUtils.getViewSizeByWidthFromMax(200)) + 50).toFloat()
@@ -102,8 +102,8 @@ class SuperLikeBigView : RelativeLayout {
                 "translationX", 0f,
                 (ra.nextInt(ObjectUtils.getViewSizeByWidthFromMax(200)) + 50).toFloat()
             )
-            pvh_star2!!.setValues(pvhTY, pvhTX)
-            pvh_star2!!.start()
+            pvhStar2!!.setValues(pvhTY, pvhTX)
+            pvhStar2!!.start()
             if (mHandler == null) {
                 mHandler = Handler()
             }
@@ -121,8 +121,8 @@ class SuperLikeBigView : RelativeLayout {
     fun stop() {
         mHandler?.removeCallbacks(runnable)
         mHandler = null
-        if (pvh_star1 != null && pvh_star1!!.isRunning) pvh_star1!!.cancel()
-        if (pvh_star2 != null && pvh_star2!!.isRunning) pvh_star2!!.cancel()
+        if (pvhStar1 != null && pvhStar1!!.isRunning) pvhStar1!!.cancel()
+        if (pvhStar2 != null && pvhStar2!!.isRunning) pvhStar2!!.cancel()
     }
 
 }
