@@ -543,4 +543,9 @@ interface ApiService {
         @Field("pageNo") pageNo: Int, @Field("pageSize") pageSize: Int,
         @Field("isPublicAccount") isPublicAccount: Int
     ): HttpWrapBean<ArrayList<ChatListInfo>>
+
+    // 匹配列表
+    @FormUrlEncoded
+    @POST("api/Pair_pairList")
+    suspend fun pairList(@Field("pageNo") pageNo: Int): HttpWrapBean<ArrayList<LikeMe>>
 }

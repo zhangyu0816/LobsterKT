@@ -222,4 +222,14 @@ object LobsterObjectUtil {
             "每人发10句可以解锁资料哦~"
         } else "[暂不支付该类型消息]"
     }
+
+    @JvmStatic
+    fun count0_99(count: Int): String {
+        return if (count == 0) "0" else if (count < 99) count.toString() else "99+"
+    }
+
+    @JvmStatic
+    fun count99(count: Int): String {
+        return if (count < 99) count.toString() else "99+"
+    }
 }

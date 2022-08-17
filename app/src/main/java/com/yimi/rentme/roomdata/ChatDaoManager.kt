@@ -29,7 +29,8 @@ data class ChatListInfo(
     var flashTalkId: Long = 0L,// 闪聊
     var myChatCount: Int = 0,// 我的聊天数量
     var otherChatCount: Int = 0, // 别人的
-    var showChat: Boolean = false // 正在聊天
+    var showChat: Boolean = false, // 正在聊天
+    var hasNewBeLike: Boolean = false // 新的被喜欢数量
 ) {
     @Ignore
     constructor() : this("")
@@ -56,6 +57,12 @@ interface ChatListInfoDao {
     fun queryChatListInfoList(msgChannelType: Int, mainUserId: Long): MutableList<ChatListInfo>
 
     /**
+     * 获取某个类型的会话列表
+     */
+    @Query("select * from ChatListInfo where chatType=:chatType and mainUserId=:mainUserId")
+    fun queryChatListInfoListByChatType(chatType: Int, mainUserId: Long): MutableList<ChatListInfo>
+
+    /**
      * 更新未读数
      */
     @Query("update ChatListInfo set noReadNum=:noReadNum where chatId=:chatId and mainUserId=:mainUserId")
@@ -75,6 +82,12 @@ interface ChatListInfoDao {
      */
     @Query("delete from ChatListInfo where chatId=:chatId and mainUserId=:mainUserId")
     fun deleteChatListInfo(chatId: String, mainUserId: Long)
+
+    /**
+     * 更新喜欢
+     */
+    @Query("update ChatListInfo set hasNewBeLike=:hasNewBeLike  where chatId=:chatId and mainUserId=:mainUserId")
+    fun updateHasNewBeLike(hasNewBeLike: Boolean, chatId: String, mainUserId: Long)
 }
 
 @Database(entities = [ChatListInfo::class], version = 1, exportSchema = false)
@@ -114,6 +127,13 @@ class ChatListDaoManager(private val context: Context) {
     }
 
     /**
+     * 获取某个类型的会话列表
+     */
+    fun getChatListInfoListByChatType(chatType: Int): MutableList<ChatListInfo> {
+        return dao.queryChatListInfoListByChatType(chatType, getLong("userId"))
+    }
+
+    /**
      * 更新未读数
      */
     fun updateNoReadNum(noReadNum: Int, chatId: String) {
@@ -138,5 +158,12 @@ class ChatListDaoManager(private val context: Context) {
      */
     fun deleteChatListInfo(chatId: String) {
         dao.deleteChatListInfo(chatId, getLong("userId"))
+    }
+
+    /**
+     * 更新喜欢
+     */
+    fun updateHasNewBeLike(hasNewBeLike: Boolean, chatId: String) {
+        dao.updateHasNewBeLike(hasNewBeLike, chatId, getLong("userId"))
     }
 }

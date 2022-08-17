@@ -366,6 +366,8 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                 chatListInfo.authType = 1
                 chatListInfo.msgChannelType = 1
                 chatListInfo.showChat = false
+                chatListInfo.hasNewBeLike =
+                    MineApp.contactNum.beLikeCount > getInteger("beLikeCount_${getLong("userId")}")
                 chatListInfo.chatType = 1
                 chatListInfo.mainUserId = getLong("userId")
                 MineApp.chatListDaoManager.insert(chatListInfo)
@@ -548,10 +550,10 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
         mainDataSource.enqueue({ contactNum(getLong("userId")) }) {
             onSuccess {
                 MineApp.contactNum = it
-                updateCommonLike()
                 val lastBeLikeCount = getInteger("lastBeLikeCount_${getLong("userId")}", 0)
                 val count = it.beLikeCount - lastBeLikeCount
                 saveInteger("lastBeLikeCount_${getLong("userId")}", it.beLikeCount)
+                updateCommonLike()
                 setRemind(count)
             }
         }
@@ -699,7 +701,8 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                             chatListInfo.effectType = item.effectType
                             chatListInfo.authType = item.authType
                             chatListInfo.msgChannelType = 1
-                            chatListInfo.showChat = item.userId > 10010L
+                            chatListInfo.showChat =
+                                item.userId == MineApp.dynUserId || item.userId > 10010L
                             chatListInfo.chatType = if (item.userId == MineApp.dynUserId) 5 else 4
                             chatListInfo.mainUserId = getLong("userId")
                             MineApp.chatListDaoManager.insert(chatListInfo)

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.fragment.PairViewModel" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.roomdata.ChatListInfo" />
+
+        <variable
+            name="position"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        onClickDelayed="@{v->viewModel.selectChat(item,position)}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@mipmap/chat_bottle_bg"
+            android:visibility="@{item.chatType==2?View.VISIBLE:View.GONE}">
+
+            <ImageView
+                android:id="@+id/iv_bottle_image"
+                defaultRes="@{R.mipmap.empty_icon}"
+                imageUrl="@{item.image}"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.12f)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.12f)}"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_margin="15dp" />
+
+            <TextView
+                android:id="@+id/tv_bottle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_toEndOf="@+id/iv_bottle_image"
+                android:text="@{item.nick}"
+                android:textColor="@color/purple_7a4"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="漂流瓶1" />
+
+            <com.yimi.rentme.views.emoji.EmojiTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_bottle"
+                android:layout_marginTop="12dp"
+                android:layout_toEndOf="@+id/iv_bottle_image"
+                android:singleLine="true"
+                android:text='@{item.stanza}'
+                android:textColor="@color/black_827"
+                android:textSize="14sp"
+                tools:text="二五零附近未来房价" />
+
+            <TextView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/circle_white_red"
+                android:gravity="center"
+                android:text="@{ObjectUtils.count(item.noReadNum)}"
+                android:textColor="@android:color/white"
+                android:textSize="11sp"
+                android:visibility="@{item.noReadNum==0?View.GONE:View.VISIBLE}"
+                tools:text="99" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{item.chatType!=2?View.VISIBLE:View.GONE}">
+
+            <RelativeLayout
+                android:id="@+id/image_relative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <ImageView
+                    android:id="@+id/iv_image"
+                    defaultRes="@{R.mipmap.empty_icon}"
+                    imageUrl="@{item.image}"
+                    isCircle="@{true}"
+                    viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+                    viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@{item.chatType==1?LobsterObjectUtil.count0_99(item.noReadNum):LobsterObjectUtil.count99(item.noReadNum)}"
+                    android:textColor="@android:color/white"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="@{item.chatType==1?View.VISIBLE:View.GONE}"
+                    tools:text="99+" />
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/image_relative"
+                android:layout_alignBottom="@+id/image_relative"
+                android:layout_marginEnd="-10dp"
+                android:layout_marginBottom="-10dp"
+                android:background="@mipmap/be_like_tag"
+                android:visibility="@{item.chatType==1?View.VISIBLE:View.GONE}" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/image_relative"
+                android:layout_alignBottom="@+id/image_relative"
+                android:layout_marginEnd="-10dp"
+                android:layout_marginBottom="-10dp"
+                android:background="@mipmap/super_like_tag"
+                android:visibility="@{item.chatType==3?View.VISIBLE:View.GONE}" />
+
+            <TextView
+                android:id="@+id/tv_nick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@+id/image_relative"
+                android:text="@{item.nick}"
+                android:textColor="@{item.nick==@string/appapp_name?@color/purple_7a4:@color/black_252}"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="漂流瓶1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:text='@{item.creationDate.empty?String.valueOf(""):item.creationDate.substring(11,16)}'
+                android:textColor="@color/black_827"
+                android:textSize="12sp"
+                tools:text="20:02" />
+
+            <com.yimi.rentme.views.emoji.EmojiTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_nick"
+                android:layout_marginTop="12dp"
+                android:layout_toStartOf="@+id/tv_num"
+                android:layout_toEndOf="@+id/image_relative"
+                android:singleLine="true"
+                android:text="@{LobsterObjectUtil.getTitle(item.stanza,item.msgType)}"
+                android:textColor="@{item.chatType==3?@color/red_fe4:@color/black_827}"
+                android:textSize="14sp"
+                tools:text="二五零附近未来房价我了文旅局为了将放了假了来房价未  无法就为了附件为了减肥了就" />
+
+            <TextView
+                android:id="@+id/tv_num"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_below="@+id/tv_nick"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/circle_red"
+                android:gravity="center"
+                android:text="@{ObjectUtils.count(item.noReadNum)}"
+                android:textColor="@android:color/white"
+                android:textSize="9sp"
+                android:visibility="@{(item.chatType==1||item.chatType==3)?View.GONE:(item.noReadNum==0?View.GONE:View.VISIBLE)}"
+                tools:text="99" />
+
+            <TextView
+                android:layout_width="62dp"
+                android:layout_height="24dp"
+                android:layout_below="@+id/tv_nick"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/btn_bg_red_fe4_radius40"
+                android:gravity="center"
+                android:text="了解TA"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="@{item.chatType==3?View.VISIBLE:View.GONE}" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:visibility="@{item.chatType==1?View.VISIBLE:View.GONE}">
+
+                <TextView
+                    android:id="@+id/tv_check"
+                    android:layout_width="58dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/btn_bg_purple_e6d_radius40"
+                    android:gravity="center"
+                    android:text="查看"
+                    android:textColor="@color/purple_7a4"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_alignTop="@+id/tv_check"
+                    android:layout_alignEnd="@+id/tv_check"
+                    android:background="@drawable/circle_red"
+                    android:visibility="@{item.hasNewBeLike?View.VISIBLE:View.GONE}" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

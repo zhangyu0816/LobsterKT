@@ -73,6 +73,7 @@ class MineApp : BaseApp() {
         var rechargeInfoList = ArrayList<RechargeInfo>()
         var reportList = ArrayList<Report>()
         var vipInfoList = ArrayList<VipInfo>()
+        var pairList = ArrayList<LikeMe>()
         var provinceId = 0L
         var cityId = 0L
         var districtId = 0L
