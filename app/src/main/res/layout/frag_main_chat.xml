@@ -1,19 +1,270 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
         <variable
             name="viewModel"
             type="com.yimi.rentme.vm.fragment.MainChatViewModel" />
+
+        <variable
+            name="newsCount"
+            type="com.yimi.rentme.bean.NewsCount" />
+
+        <variable
+            name="index"
+            type="Integer" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="聊天" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:splitMotionEvents="false">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:elevation="0dp">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="42dp"
+                    app:contentInsetStart="0dp"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                    <LinearLayout
+                        android:id="@+id/top_linear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/gradient_red_white"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="34dp"
+                            android:text="对话"
+                            android:textColor="@color/black_252"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <com.yimi.rentme.views.BottleTitleView
+                            bottleTitleIsPlay="@{true}"
+                            onClickDelayed="@{viewModel::toBottle}"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp">
+
+                            <RelativeLayout
+                                onClickDelayed="@{v->viewModel.toNews(3)}"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tv_gift_msg"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="15dp"
+                                    android:drawablePadding="10dp"
+                                    android:text="我的礼物"
+                                    android:textColor="@color/black_827"
+                                    android:textSize="12sp"
+                                    app:drawableTopCompat="@mipmap/gift_msg_icon" />
+
+                                <TextView
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:layout_alignEnd="@+id/tv_gift_msg"
+                                    android:layout_marginEnd="-5dp"
+                                    android:background="@drawable/circle_white_red"
+                                    android:gravity="center"
+                                    android:text="@{ObjectUtils.count(newsCount.friendDynamicGiftNum)}"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="11sp"
+                                    android:visibility="@{newsCount.friendDynamicGiftNum==0?View.INVISIBLE:View.VISIBLE}"
+                                    tools:text="···" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                onClickDelayed="@{v->viewModel.toNews(1)}"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tv_comment_msg"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="15dp"
+                                    android:drawablePadding="10dp"
+                                    android:text="我的消息"
+                                    android:textColor="@color/black_827"
+                                    android:textSize="12sp"
+                                    app:drawableTopCompat="@mipmap/comment_msg_icon" />
+
+                                <TextView
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:layout_alignEnd="@+id/tv_comment_msg"
+                                    android:layout_marginEnd="-5dp"
+                                    android:background="@drawable/circle_white_red"
+                                    android:gravity="center"
+                                    android:text="@{ObjectUtils.count(newsCount.friendDynamicReviewNum)}"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="11sp"
+                                    android:visibility="@{newsCount.friendDynamicReviewNum==0?View.INVISIBLE:View.VISIBLE}"
+                                    tools:text="···" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                onClickDelayed="@{v->viewModel.toNews(2)}"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tv_good_msg"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="15dp"
+                                    android:drawablePadding="10dp"
+                                    android:text="我的点赞"
+                                    android:textColor="@color/black_827"
+                                    android:textSize="12sp"
+                                    app:drawableTopCompat="@mipmap/good_msg_icon" />
+
+                                <TextView
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:layout_alignEnd="@+id/tv_good_msg"
+                                    android:layout_marginEnd="-5dp"
+                                    android:background="@drawable/circle_white_red"
+                                    android:gravity="center"
+                                    android:text="@{ObjectUtils.count(newsCount.friendDynamicGoodNum)}"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="11sp"
+                                    android:visibility="@{newsCount.friendDynamicGoodNum==0?View.INVISIBLE:View.VISIBLE}"
+                                    tools:text="···" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                onClickDelayed="@{viewModel::toService}"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tv_service_msg"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="15dp"
+                                    android:drawablePadding="10dp"
+                                    android:text="客服消息"
+                                    android:textColor="@color/black_827"
+                                    android:textSize="12sp"
+                                    app:drawableTopCompat="@mipmap/service_msg_icon" />
+
+                                <TextView
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:layout_alignEnd="@+id/tv_service_msg"
+                                    android:layout_marginEnd="-5dp"
+                                    android:background="@drawable/circle_white_red"
+                                    android:gravity="center"
+                                    android:text="@{ObjectUtils.count(newsCount.systemNewsNum)}"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="11sp"
+                                    android:visibility="@{newsCount.systemNewsNum==0?View.INVISIBLE:View.VISIBLE}"
+                                    tools:text="···" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_marginTop="5dp"
+                            android:background="@color/black_efe" />
+                    </LinearLayout>
+
+                </androidx.appcompat.widget.Toolbar>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="15dp">
+
+                    <com.yimi.rentme.views.TabView
+                        onClickDelayed="@{v->viewModel.selectIndex(0)}"
+                        tabSelect="@{index==0}"
+                        tabTitle="@{@string/chat_pair}"
+                        android:layout_width="70dp"
+                        android:layout_height="40dp"
+                        android:gravity="center" />
+
+                    <com.yimi.rentme.views.TabView
+                        onClickDelayed="@{v->viewModel.selectIndex(1)}"
+                        tabSelect="@{index==1}"
+                        tabTitle="@{@string/chat_chat}"
+                        android:layout_width="70dp"
+                        android:layout_height="40dp"
+                        android:gravity="center" />
+                </LinearLayout>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <FrameLayout
+                android:id="@+id/pair_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <!--        <com.zb.lib_base.views.FlashChat-->
+        <!--            android:id="@+id/flash_chat"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_alignParentEnd="true"-->
+        <!--            android:layout_alignParentBottom="true"-->
+        <!--            android:visibility="gone" />-->
+        <View
+            android:id="@+id/view_top"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:alpha="0"
+            android:background="@color/white" />
     </RelativeLayout>
 </layout>

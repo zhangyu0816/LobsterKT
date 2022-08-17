@@ -32,6 +32,7 @@ import com.zb.baselibs.mimc.UserManager
 import com.zb.baselibs.utils.*
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import com.zb.baselibs.views.replaceFragment
+import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.startActivity
 import org.simple.eventbus.EventBus
 
@@ -109,6 +110,8 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
         driftBottleChatList(1)
         myImAccountInfo()
         contactNum()
+        newDynMsgAllNum()
+        systemChat()
         if (getInteger(
                 "toLikeCount_${getLong("userId")}_${DateUtil.getNow(DateUtil.yyyy_MM_dd)}",
                 -1
@@ -327,6 +330,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                 chatListInfo.effectType = 1
                 chatListInfo.authType = 1
                 chatListInfo.msgChannelType = 1
+                chatListInfo.showChat = false
                 chatListInfo.chatType = 2
                 chatListInfo.mainUserId = getLong("userId")
                 MineApp.chatListDaoManager.insert(chatListInfo)
@@ -334,7 +338,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                 MineApp.chatListDaoManager.updateChatListInfo(
                     "漂流瓶", "bottle_logo_icon", DateUtil.getNow(DateUtil.yyyy_MM_dd_HH_mm_ss),
                     if (MineApp.noReadBottleNum == 0) "茫茫人海中，需要流浪到何时" else "您有新消息",
-                    1, MineApp.noReadBottleNum, "common_${MineApp.bottleUserId}"
+                    1, MineApp.noReadBottleNum, false, "common_${MineApp.bottleUserId}"
                 )
             }
         }
@@ -361,6 +365,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                 chatListInfo.effectType = 1
                 chatListInfo.authType = 1
                 chatListInfo.msgChannelType = 1
+                chatListInfo.showChat = false
                 chatListInfo.chatType = 1
                 chatListInfo.mainUserId = getLong("userId")
                 MineApp.chatListDaoManager.insert(chatListInfo)
@@ -368,7 +373,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                 MineApp.chatListDaoManager.updateChatListInfo(
                     "查看谁喜欢我", "be_like_logo_icon", DateUtil.getNow(DateUtil.yyyy_MM_dd_HH_mm_ss),
                     "TA们喜欢你，正等待你回应", 1, MineApp.contactNum.beLikeCount,
-                    "common_${MineApp.likeUserId}"
+                    false, "common_${MineApp.likeUserId}"
                 )
             }
         }
@@ -423,6 +428,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                         chatListInfo.effectType = item.effectType
                         chatListInfo.authType = item.authType
                         chatListInfo.msgChannelType = 2
+                        chatListInfo.showChat = false
                         chatListInfo.chatType = 2
                         chatListInfo.mainUserId = item.mainUserId
                         MineApp.chatListDaoManager.insert(chatListInfo)
@@ -475,7 +481,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                         MineApp.chatListDaoManager.updateChatListInfo(
                             chatListInfo.nick, chatListInfo.image, customMessageBody.creationDate,
                             customMessageBody.mStanza, customMessageBody.mMsgType,
-                            noReadNum, "drift_${customMessageBody.mDriftBottleId}"
+                            noReadNum, false, "drift_${customMessageBody.mDriftBottleId}"
                         )
                         updateBottle(customMessageBody)
                     }
@@ -507,6 +513,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                             chatListInfo.msgType = body.mMsgType
                             chatListInfo.noReadNum = noReadNum
                             chatListInfo.msgChannelType = body.msgChannelType
+                            chatListInfo.showChat = false
                             chatListInfo.chatType = 2
                             chatListInfo.mainUserId = getLong("userId")
                             MineApp.chatListDaoManager.insert(chatListInfo)
@@ -546,7 +553,6 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                 val count = it.beLikeCount - lastBeLikeCount
                 saveInteger("lastBeLikeCount_${getLong("userId")}", it.beLikeCount)
                 setRemind(count)
-
             }
         }
     }
@@ -631,6 +637,133 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
             onSuccess {
                 MineApp.contactNum.visitorCount = it.totalCount
                 EventBus.getDefault().post("", "lobsterVisitor")
+            }
+        }
+    }
+
+    /**
+     * 动态消息
+     */
+    fun newDynMsgAllNum() {
+        mainDataSource.enqueue({ newDynMsgAllNum() }) {
+            onSuccess {
+                MineApp.newsCount = it
+                EventBus.getDefault().post("", "lobsterNewsCount")
+                chatList(1)
+            }
+        }
+    }
+
+    /**
+     * 系统消息
+     */
+    private fun systemChat() {
+        mainDataSource.enqueue({ systemChat() }) {
+            onSuccess {
+                MineApp.newsCount.content = it.stanza
+                MineApp.newsCount.createTime = it.creationDate
+                MineApp.newsCount.msgType = it.msgType
+                MineApp.newsCount.systemNewsNum = it.noReadNum
+                EventBus.getDefault().post("", "lobsterNewsCount")
+            }
+        }
+    }
+
+    /**
+     * 普通聊天记录
+     */
+    private fun chatList(pageNo: Int) {
+        mainDataSource.enqueue({ chatList(pageNo, 20, 1) }) {
+            onSuccess {
+                BaseApp.fixedThreadPool.execute {
+                    for (item in it) {
+                        val id = if (item.userId == MineApp.dynUserId)
+                            MineApp.dynUserId
+                        else if (item.userId > 10010L)
+                            item.userId
+                        else
+                            break
+                        var chatListInfo =
+                            MineApp.chatListDaoManager.getChatListInfo("common_$id")
+                        if (chatListInfo == null) {
+                            chatListInfo = ChatListInfo()
+                            chatListInfo.chatId = "common_$id"
+                            chatListInfo.otherUserId = id
+                            chatListInfo.nick = item.nick
+                            chatListInfo.image = item.image
+                            chatListInfo.creationDate = item.creationDate
+                            chatListInfo.stanza = item.stanza
+                            chatListInfo.msgType = item.msgType
+                            chatListInfo.noReadNum = item.noReadNum
+                            chatListInfo.publicTag = item.publicTag
+                            chatListInfo.effectType = item.effectType
+                            chatListInfo.authType = item.authType
+                            chatListInfo.msgChannelType = 1
+                            chatListInfo.showChat = item.userId > 10010L
+                            chatListInfo.chatType = if (item.userId == MineApp.dynUserId) 5 else 4
+                            chatListInfo.mainUserId = getLong("userId")
+                            MineApp.chatListDaoManager.insert(chatListInfo)
+                        } else {
+                            MineApp.chatListDaoManager.updateChatListInfo(
+                                item.nick, item.image, item.creationDate, item.stanza, item.msgType,
+                                item.noReadNum, item.userId > 10010L, "common_$id"
+                            )
+                        }
+                    }
+                    activity.runOnUiThread {
+                        chatList(pageNo + 1)
+                    }
+                }
+            }
+            onFailed {
+                if (it.isNoData)
+                    flashChatList(1)
+            }
+        }
+    }
+
+    /**
+     * 闪聊聊天记录
+     */
+    private fun flashChatList(pageNo: Int) {
+        mainDataSource.enqueue({ flashChatList(pageNo, 20, 1) }) {
+            onSuccess {
+                BaseApp.fixedThreadPool.execute {
+                    for (item in it) {
+                        var chatListInfo =
+                            MineApp.chatListDaoManager.getChatListInfo("common_${item.flashTalkId}")
+                        if (chatListInfo == null) {
+                            chatListInfo = ChatListInfo()
+                            chatListInfo.chatId = "common_${item.flashTalkId}"
+                            chatListInfo.otherUserId = item.flashTalkId
+                            chatListInfo.nick = item.nick
+                            chatListInfo.image = item.image
+                            chatListInfo.creationDate = item.creationDate
+                            chatListInfo.stanza = item.stanza
+                            chatListInfo.msgType = item.msgType
+                            chatListInfo.noReadNum = item.noReadNum
+                            chatListInfo.publicTag = item.publicTag
+                            chatListInfo.effectType = item.effectType
+                            chatListInfo.authType = item.authType
+                            chatListInfo.msgChannelType = 1
+                            chatListInfo.showChat = true
+                            chatListInfo.chatType = 6
+                            chatListInfo.mainUserId = getLong("userId")
+                            MineApp.chatListDaoManager.insert(chatListInfo)
+                        } else {
+                            MineApp.chatListDaoManager.updateChatListInfo(
+                                item.nick, item.image, item.creationDate, item.stanza, item.msgType,
+                                item.noReadNum, true, "common_${item.flashTalkId}"
+                            )
+                        }
+                    }
+                    activity.runOnUiThread {
+                        flashChatList(pageNo + 1)
+                    }
+                }
+            }
+            onFailed {
+                EventBus.getDefault().post("", "lobsterUpdateChatList")
             }
         }
     }

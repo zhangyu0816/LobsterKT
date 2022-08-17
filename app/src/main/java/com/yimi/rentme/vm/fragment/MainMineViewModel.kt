@@ -21,12 +21,12 @@ import com.yimi.rentme.fragment.MemberVideoFrag
 import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.dialog.RemindDF
+import com.zb.baselibs.utils.dip2px
 import com.zb.baselibs.utils.getInteger
 import com.zb.baselibs.utils.getLong
 import com.zb.baselibs.utils.permission.requestPermissionsForResult
 import com.zb.baselibs.utils.saveInteger
 import com.zb.baselibs.views.replaceFragment
-import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.startActivity
 
 class MainMineViewModel : BaseViewModel() {
@@ -84,6 +84,10 @@ class MainMineViewModel : BaseViewModel() {
             SystemClock.sleep(200L)
             activity.runOnUiThread {
                 goAnimator(binding.ivGo, 0.8f, 1.0f, 800L)
+                val height: Int = BaseApp.context.dip2px(30f) - binding.topLinear.getHeight()
+                binding.appbar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+                    binding.showBg = verticalOffset <= height
+                }
             }
         }
     }

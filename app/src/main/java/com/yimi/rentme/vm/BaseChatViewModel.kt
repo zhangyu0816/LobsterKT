@@ -671,9 +671,9 @@ class BaseChatViewModel : BaseViewModel(), OnRefreshListener {
      * 更新聊天
      */
     fun updateChat(body: CustomMessageBody) {
-        when(body.msgChannelType){
-            1->{}
-            2->{
+        when (body.msgChannelType) {
+            1 -> {}
+            2 -> {
                 var historyInfo = HistoryInfo()
                 historyInfo = historyInfo.createBottleHistoryInfoFromBody(
                     body, otherUserId, body.mMsgChannelType, body.mDriftBottleId
@@ -696,7 +696,7 @@ class BaseChatViewModel : BaseViewModel(), OnRefreshListener {
                     binding.chatList.scrollToPosition(historyInfoList.size - 1)
                 }
             }
-            3->{}
+            3 -> {}
         }
     }
 
@@ -845,6 +845,7 @@ class BaseChatViewModel : BaseViewModel(), OnRefreshListener {
                             chatListInfo.effectType = 1
                             chatListInfo.authType = 1
                             chatListInfo.msgChannelType = 2
+                            chatListInfo.showChat = false
                             chatListInfo.chatType = 2
                             chatListInfo.mainUserId = getLong("userId")
                             MineApp.chatListDaoManager.insert(chatListInfo)
@@ -855,7 +856,7 @@ class BaseChatViewModel : BaseViewModel(), OnRefreshListener {
                                 allHistoryInfoList[0].creationDate,
                                 allHistoryInfoList[0].stanza,
                                 allHistoryInfoList[0].msgType,
-                                0,
+                                0, false,
                                 "drift_$driftBottleId"
                             )
                         }

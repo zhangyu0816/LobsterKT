@@ -82,9 +82,10 @@ class MineApp : BaseApp() {
         var likeCount = 30
         var noReadBottleNum = 0
         lateinit var QingSongShouXieTiType: Typeface
+        const val likeUserId = 1001L // 喜欢Id
         const val bottleUserId = 1002L // 普通会话列表--漂流瓶
         const val systemUserId = 10000L // 系统Id
-        const val likeUserId = 1001L // 喜欢Id
+        const val dynUserId = 10002L // 动态Id
         var nowChatId = "" // 正在聊天的人
         var hasLocation = false
 

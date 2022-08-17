@@ -149,6 +149,8 @@
         <activity android:name=".activity.bottle.BottleListActivity" />
         <activity android:name=".activity.bottle.BottleChatActivity" />
         <activity android:name=".activity.NoticeActivity" />
+        <activity android:name=".activity.NewsActivity" />
+        <activity android:name=".activity.SystemNewsActivity" />
     </application>
 
 </manifest>

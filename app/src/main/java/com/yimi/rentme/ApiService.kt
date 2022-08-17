@@ -1,6 +1,7 @@
 package com.yimi.rentme
 
 import com.yimi.rentme.bean.*
+import com.yimi.rentme.roomdata.ChatListInfo
 import com.zb.baselibs.bean.AliPay
 import com.zb.baselibs.bean.HttpWrapBean
 import com.zb.baselibs.bean.WXPay
@@ -505,4 +506,41 @@ interface ApiService {
     // 显示爱情盲盒
     @GET("api/Share_setSendMessageForApp")
     suspend fun getAi(): HttpWrapBean<Int>
+
+    // 清除全部未读消息
+    @FormUrlEncoded
+    @POST("api/Interactive_readNewDynMsgAll")
+    suspend fun readNewDynMsgAll(@Field("reviewType") reviewType: Int): HttpWrapBean<Any?>
+
+    // 新消息列表
+    @FormUrlEncoded
+    @POST("api/Interactive_dynNewMsgListV2")
+    suspend fun dynNewMsgList(
+        @Field("pageNo") pageNo: Int,
+        @Field("reviewType") reviewType: Int
+    ): HttpWrapBean<ArrayList<MineNews>>
+
+    // 我的新消息数量(礼物、评论、点赞)
+    @GET("api/Interactive_newDynMsgAllNum")
+    suspend fun newDynMsgAllNum(): HttpWrapBean<NewsCount>
+
+    // 系统消息未读
+    @GET("api/SystemMsg_chat")
+    suspend fun systemChat(): HttpWrapBean<SystemNews>
+
+    // 未读会话列表
+    @FormUrlEncoded
+    @POST("api/Contact_thirdChatList")
+    suspend fun chatList(
+        @Field("pageNo") pageNo: Int, @Field("pageSize") pageSize: Int,
+        @Field("isPublicAccount") isPublicAccount: Int
+    ): HttpWrapBean<ArrayList<ChatListInfo>>
+
+    // 闪聊未读会话列表
+    @FormUrlEncoded
+    @POST("api/FlashTalk_chatList")
+    suspend fun flashChatList(
+        @Field("pageNo") pageNo: Int, @Field("pageSize") pageSize: Int,
+        @Field("isPublicAccount") isPublicAccount: Int
+    ): HttpWrapBean<ArrayList<ChatListInfo>>
 }

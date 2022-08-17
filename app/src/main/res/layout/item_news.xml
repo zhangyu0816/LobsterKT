@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.R" />
+
+        <variable
+            name="viewModel"
+            type="com.yimi.rentme.vm.NewsViewModel" />
+
+        <variable
+            name="item"
+            type="com.yimi.rentme.bean.MineNews" />
+
+        <variable
+            name="position"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            defaultRes="@{R.mipmap.empty_icon}"
+            imageUrl="@{item.reviewUserImage}"
+            isCircle="@{true}"
+            onClickDelayed="@{v->viewModel.toMemberDetail(item)}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidthFromMax(100)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidthFromMax(100)}"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+        <LinearLayout
+            onClickDelayed="@{v->viewModel.toDiscoverDetail(item)}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_toStartOf="@+id/iv_gift"
+            android:layout_toEndOf="@+id/iv_logo"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_nick"
+                    tools:text="分为发"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:text="@{item.reviewUserNick}"
+                    android:textColor="@color/black_252"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:text="@{item.createTime}"
+                    android:textColor="@color/black_827"
+                    android:textSize="12sp"
+                    android:visibility="@{viewModel.reviewType==3?View.GONE:View.VISIBLE}" />
+            </RelativeLayout>
+
+            <TextView
+                tools:text="香蕉*5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.format(@string/get_gift_news,item.giftName,item.giftNumber)}"
+                android:textColor="@color/black_827"
+                android:textSize="12sp"
+                android:visibility="@{viewModel.reviewType==3?View.VISIBLE:View.GONE}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@{item.createTime}"
+                android:textColor="@color/black_827"
+                android:textSize="12sp"
+                android:visibility="@{viewModel.reviewType==3?View.VISIBLE:View.GONE}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@{viewModel.reviewType==1?item.text:@string/dyn_good}"
+                android:textColor="@color/black_4d4"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="@{viewModel.reviewType==3?View.GONE:View.VISIBLE}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:singleLine="true"
+                android:text="@{String.format(@string/dyn_text,item.friendDynamicText.empty?item.friendDynamicTitle:item.friendDynamicText)}"
+                android:textColor="@color/black_4d4"
+                android:textSize="12sp"
+                android:visibility="@{viewModel.reviewType==3?View.VISIBLE:View.GONE}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_bg_black_efe_radius5"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:text="@{String.format(@string/dyn_text,item.friendDynamicText.empty?item.friendDynamicTitle:item.friendDynamicText)}"
+                android:textColor="@color/black_4d4"
+                android:textSize="12sp"
+                android:visibility="@{viewModel.reviewType==3?View.GONE:View.VISIBLE}" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_gift"
+            defaultRes="@{R.mipmap.empty_icon}"
+            imageUrl="@{item.giftImage}"
+            onClickDelayed="@{v->viewModel.toDiscoverDetail(item)}"
+            viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.14f)}"
+            viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.14f)}"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="15dp"
+            android:visibility="@{viewModel.reviewType==3?View.VISIBLE:View.GONE}" />
+    </RelativeLayout>
+</layout>

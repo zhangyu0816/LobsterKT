@@ -36,6 +36,7 @@ class BottleChatActivity : BaseScreenActivity() {
         super.onDestroy()
         viewModel.onDestroy()
     }
+
     /**
      * 更新是否显示毛玻璃
      */
@@ -51,8 +52,9 @@ class BottleChatActivity : BaseScreenActivity() {
     private fun lobsterUploadImageList(data: ArrayList<SelectImage>) {
         viewModel.uploadImageList(data)
     }
+
     /**
-     * 上传图片
+     * 更新聊天
      */
     @Subscriber(tag = "lobsterUpdateChat")
     private fun lobsterUpdateChat(data: CustomMessageBody) {

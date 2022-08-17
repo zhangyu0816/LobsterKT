@@ -1,12 +1,16 @@
 package com.yimi.rentme.activity
 
+import android.os.Build
+import android.os.Bundle
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.xiaomi.mimc.logger.Logger
 import com.xiaomi.mimc.logger.MIMCLog
 import com.yimi.rentme.R
 import com.yimi.rentme.databinding.AcMainBinding
 import com.yimi.rentme.vm.MainViewModel
 import com.zb.baselibs.activity.BaseScreenActivity
+import com.zb.baselibs.utils.StatusBarUtil
 import org.simple.eventbus.Subscriber
 
 class MainActivity : BaseScreenActivity() {
@@ -15,6 +19,12 @@ class MainActivity : BaseScreenActivity() {
         binding = mBinding as AcMainBinding
         activity = this@MainActivity
         binding.viewModel = this
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        StatusBarUtil.statusBarLightMode(this)
     }
 
     override fun getRes(): Int {
@@ -87,5 +97,20 @@ class MainActivity : BaseScreenActivity() {
     @Subscriber(tag = "lobsterBottleNoReadNum")
     private fun lobsterBottleNoReadNum(data: String) {
         viewModel.updateCommonBottle()
+    }
+
+    /**
+     * 更新消息数量
+     */
+    @Subscriber(tag = "lobsterNewsCount")
+    private fun lobsterNewsCount(data: String) {
+    }
+
+    /**
+     * 更新动态消息数量
+     */
+    @Subscriber(tag = "lobsterNewDynMsgAllNum")
+    private fun lobsterNewDynMsgAllNum(data: String) {
+        viewModel.newDynMsgAllNum()
     }
 }

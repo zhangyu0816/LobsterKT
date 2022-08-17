@@ -11,7 +11,8 @@ import com.zb.baselibs.utils.getLong
 data class ChatListInfo(
     @PrimaryKey
     var chatId: String = "", // 1、普通聊天：common_otherUserId   2、漂流瓶：drift_driftBottleId   3、闪聊：flash_flashTalkId
-    var otherUserId: Long = 0L,
+    var userId: Long = 0L,// 别人的userId
+    var otherUserId: Long = 0L,// 别人的userId
     var nick: String = "", // 用户昵称
     var image: String = "", // 用户头像
     var creationDate: String = "", // 会话时间
@@ -22,8 +23,13 @@ data class ChatListInfo(
     var effectType: Int = 0, // 作用类型 1.无  2.系统内置      默认 null
     var authType: Int = 0, // 权限类型  1.无限制  2.以下限制      默认 null
     var msgChannelType: Int = 0, // 1：普通聊天  2：漂流瓶  3：闪聊
-    var chatType: Int = 0, // 1 喜欢我  2 漂流瓶  3超级喜欢  4 匹配成功  5 动态  6 闪聊
-    var mainUserId: Long = 0L // 拥有的
+    var chatType: Int = 0, // 1 喜欢我  2 漂流瓶  3超级喜欢  4 匹配成功  5 动态  6  闪聊
+    var mainUserId: Long = 0L,// 拥有的
+    var driftBottleId: Long = 0L,// 漂流瓶
+    var flashTalkId: Long = 0L,// 闪聊
+    var myChatCount: Int = 0,// 我的聊天数量
+    var otherChatCount: Int = 0, // 别人的
+    var showChat: Boolean = false // 正在聊天
 ) {
     @Ignore
     constructor() : this("")
@@ -58,10 +64,10 @@ interface ChatListInfoDao {
     /**
      * 更新所有
      */
-    @Query("update ChatListInfo set nick=:nick,image=:image,creationDate=:creationDate,stanza=:stanza,msgType=:msgType,noReadNum=:noReadNum  where chatId=:chatId and mainUserId=:mainUserId")
+    @Query("update ChatListInfo set nick=:nick,image=:image,creationDate=:creationDate,stanza=:stanza,msgType=:msgType,noReadNum=:noReadNum,showChat=:showChat  where chatId=:chatId and mainUserId=:mainUserId")
     fun updateChatListInfo(
         nick: String, image: String, creationDate: String, stanza: String, msgType: Int,
-        noReadNum: Int, chatId: String, mainUserId: Long
+        noReadNum: Int, showChat: Boolean, chatId: String, mainUserId: Long
     )
 
     /**
@@ -119,11 +125,11 @@ class ChatListDaoManager(private val context: Context) {
      */
     fun updateChatListInfo(
         nick: String, image: String, creationDate: String, stanza: String, msgType: Int,
-        noReadNum: Int, chatId: String
+        noReadNum: Int, showChat: Boolean, chatId: String
     ) {
         dao.updateChatListInfo(
             nick, image, creationDate, stanza, msgType,
-            noReadNum, chatId, getLong("userId")
+            noReadNum, showChat, chatId, getLong("userId")
         )
     }
 
