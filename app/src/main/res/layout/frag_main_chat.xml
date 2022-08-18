@@ -20,6 +20,10 @@
         <variable
             name="index"
             type="Integer" />
+
+        <variable
+            name="showRed"
+            type="boolean" />
     </data>
 
     <RelativeLayout
@@ -238,6 +242,7 @@
                         onClickDelayed="@{v->viewModel.selectIndex(1)}"
                         tabSelect="@{index==1}"
                         tabTitle="@{@string/chat_chat}"
+                        showRed="@{showRed}"
                         android:layout_width="70dp"
                         android:layout_height="40dp"
                         android:gravity="center" />

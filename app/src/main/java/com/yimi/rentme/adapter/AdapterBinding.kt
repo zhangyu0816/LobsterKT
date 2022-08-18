@@ -77,9 +77,9 @@ fun TextView.tabTextSize(isBig: Boolean) {
     this.textSize = if (isBig) 16f else 14f
 }
 
-@BindingAdapter(value = ["tabTitle", "tabSelect"], requireAll = false)
-fun TabView.setTab(tabTitle: String, tabSelect: Boolean) {
-    this.selectTab(tabTitle, tabSelect)
+@BindingAdapter(value = ["tabTitle", "tabSelect", "showRed"], requireAll = false)
+fun TabView.setTab(tabTitle: String, tabSelect: Boolean, showRed: Boolean) {
+    this.selectTab(tabTitle, tabSelect, showRed)
 }
 
 @BindingAdapter(value = ["noDataRes", "noWifi"], requireAll = false)

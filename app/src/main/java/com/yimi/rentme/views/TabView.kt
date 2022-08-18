@@ -38,9 +38,10 @@ class TabView : RelativeLayout {
         addView(binding.root)
     }
 
-    fun selectTab(tabTitle: String, tabSelect: Boolean) {
+    fun selectTab(tabTitle: String, tabSelect: Boolean,showRed:Boolean) {
         binding.title = tabTitle
         binding.tabSelect = tabSelect
+        binding.showRed = showRed
     }
 
 }

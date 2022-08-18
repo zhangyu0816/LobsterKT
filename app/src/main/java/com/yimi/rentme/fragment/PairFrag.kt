@@ -28,7 +28,8 @@ class PairFrag : BaseFragment() {
      * 更新聊天列表
      */
     @Subscriber(tag = "lobsterUpdateChatList")
-    private fun lobsterUpdateChat(data: String) {
+    private fun lobsterUpdateChatList(data: String) {
+        viewModel.personOtherDyn()
     }
 
     /**

@@ -5,6 +5,7 @@ import com.yimi.rentme.R
 import com.yimi.rentme.databinding.FragMainChatBinding
 import com.yimi.rentme.vm.fragment.MainChatViewModel
 import com.zb.baselibs.activity.BaseFragment
+import org.simple.eventbus.Subscriber
 
 class MainChatFrag : BaseFragment() {
 
@@ -19,6 +20,16 @@ class MainChatFrag : BaseFragment() {
     }
 
     override fun initView() {
+        needEvenBus = true
         viewModel.initViewModel()
     }
+
+    /**
+     * 聊天红点
+     */
+    @Subscriber(tag = "lobsterUpdateTabRed")
+    private fun lobsterUpdateTabRed(data: String) {
+        viewModel.updateTabRed()
+    }
+
 }

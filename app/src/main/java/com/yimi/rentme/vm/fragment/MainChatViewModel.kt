@@ -14,6 +14,7 @@ import com.yimi.rentme.vm.BaseViewModel
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.dip2px
 import com.zb.baselibs.views.replaceFragment
+import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.startActivity
 
 class MainChatViewModel : BaseViewModel() {
@@ -66,5 +67,23 @@ class MainChatViewModel : BaseViewModel() {
      */
     fun toService(view: View) {
         activity.startActivity<SystemNewsActivity>()
+    }
+
+    /**
+     * 更新红i但
+     */
+    fun updateTabRed() {
+        BaseApp.fixedThreadPool.execute {
+            var showRed = false
+            for (item in MineApp.chatListDaoManager.getChatListInfoListByChatType(4)) {
+                if (item.noReadNum > 0) {
+                    showRed = true
+                    break
+                }
+            }
+            activity.runOnUiThread {
+                binding.showRed = showRed
+            }
+        }
     }
 }

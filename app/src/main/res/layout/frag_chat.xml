@@ -2,14 +2,26 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
+        <import type="com.yimi.rentme.R" />
+
         <variable
             name="viewModel"
             type="com.yimi.rentme.vm.fragment.ChatViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh"
+        onRefreshListener="@{viewModel}"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_list"
+            adapter="@{viewModel.adapter}"
+            color="@{R.color.black_efe}"
+            size="@{1}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </layout>

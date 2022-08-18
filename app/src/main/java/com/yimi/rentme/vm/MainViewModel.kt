@@ -107,7 +107,6 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
         comType()
         firstOpenMemberPage()
         openedMemberPriceList()
-        driftBottleChatList(1)
         myImAccountInfo()
         contactNum()
         newDynMsgAllNum()
@@ -341,6 +340,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                     1, MineApp.noReadBottleNum, false, "common_${MineApp.bottleUserId}"
                 )
             }
+            EventBus.getDefault().post("", "lobsterUpdateChatList")
         }
     }
 
@@ -719,8 +719,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                 }
             }
             onFailed {
-                if (it.isNoData)
-                    flashChatList(1)
+                flashChatList(1)
             }
         }
     }
@@ -766,7 +765,7 @@ class MainViewModel : BaseViewModel(), UserManager.OnHandleMIMCMsgListener {
                 }
             }
             onFailed {
-                EventBus.getDefault().post("", "lobsterUpdateChatList")
+                driftBottleChatList(1)
             }
         }
     }
