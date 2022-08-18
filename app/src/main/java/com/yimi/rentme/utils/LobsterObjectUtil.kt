@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import com.yimi.rentme.MineApp
 import com.yimi.rentme.R
+import com.yimi.rentme.roomdata.ChatListInfo
 import com.zb.baselibs.app.BaseApp
 import com.zb.baselibs.utils.DateUtil
 import com.zb.baselibs.utils.ObjectUtils
@@ -11,6 +12,7 @@ import com.zb.baselibs.utils.getLong
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.regex.Pattern
+import kotlin.math.min
 
 object LobsterObjectUtil {
 
@@ -231,5 +233,12 @@ object LobsterObjectUtil {
     @JvmStatic
     fun count99(count: Int): String {
         return if (count < 99) count.toString() else "99+"
+    }
+
+    @JvmStatic
+    fun getLockProgress(chatList: ChatListInfo): String {
+        val myCount = min(chatList.myChatCount, 10)
+        val otherCount = min(chatList.otherChatCount, 10)
+        return "${(myCount + otherCount) * 5}%"
     }
 }

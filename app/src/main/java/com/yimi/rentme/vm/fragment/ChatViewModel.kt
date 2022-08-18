@@ -56,6 +56,20 @@ class ChatViewModel : BaseViewModel(), OnRefreshListener {
         EventBus.getDefault().post("", "lobsterNewDynMsgAllNum")
     }
 
+    /**
+     * 聊天记录
+     */
+    fun selectChat(chatListInfo: ChatListInfo) {
+//        if (chatListInfo.flashTalkId == 0L)
+//            ActivityUtils.getChatActivity(chatListInfo.userId, false)
+//        else
+//            ActivityUtils.getFlashChatActivity(
+//                chatListInfo.userId,
+//                chatListInfo.flashTalkId,
+//                false
+//            )
+    }
+
     private class ChatComparator : Comparator<ChatListInfo> {
         override fun compare(o1: ChatListInfo?, o2: ChatListInfo?): Int {
             if (o1 == null && o2 == null) {

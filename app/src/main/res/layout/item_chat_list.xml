@@ -1,18 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="com.zb.baselibs.utils.ObjectUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yimi.rentme.utils.LobsterObjectUtil" />
+
+        <import type="com.yimi.rentme.R" />
+
         <variable
             name="viewModel"
             type="com.yimi.rentme.vm.fragment.ChatViewModel" />
+
         <variable
             name="item"
             type="com.yimi.rentme.roomdata.ChatListInfo" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
+        onClickDelayed="@{v->viewModel.selectChat(item)}"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:padding="15dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <RelativeLayout
+            android:id="@+id/logo_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp">
+
+            <ImageView
+                android:id="@+id/iv_image"
+                defaultRes="@{R.mipmap.empty_icon}"
+                imageUrl="@{item.image}"
+                isBlur='@{item.chatType==6&amp;&amp;!LobsterObjectUtil.getLockProgress(item).equals("100%")}'
+                isCircle="@{true}"
+                viewHeightSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+                viewWidthSize="@{ObjectUtils.getViewSizeByWidth(0.15f)}"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@{LobsterObjectUtil.getLockProgress(item)}"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility='@{(item.chatType==6&amp;&amp;!LobsterObjectUtil.getLockProgress(item).equals("100%"))?View.VISIBLE:View.GONE}'
+                tools:text="50%" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_nick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/logo_layout"
+            android:text="@{item.nick}"
+            android:textColor="@color/black_252"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="漂流瓶1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="@{item.creationDate.substring(11,16)}"
+            android:textColor="@color/black_827"
+            android:textSize="12sp"
+            tools:text="20:02" />
+
+        <com.yimi.rentme.views.emoji.EmojiTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_nick"
+            android:layout_marginTop="10dp"
+            android:layout_toStartOf="@+id/tv_num"
+            android:layout_toEndOf="@+id/logo_layout"
+            android:singleLine="true"
+            android:text='@{LobsterObjectUtil.getTitle(item.stanza,item.msgType)}'
+            android:textColor="@color/black_827"
+            android:textSize="14sp"
+            tools:text="二五零附近未来房价我了文旅局为了将放了假了来房价未  无法就为了附件为了减肥了就" />
+
+        <TextView
+            android:id="@+id/tv_num"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_below="@+id/tv_nick"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/circle_red"
+            android:gravity="center"
+            android:text="@{String.valueOf(item.noReadNum)}"
+            android:textColor="@android:color/white"
+            android:textSize="9sp"
+            android:visibility="@{item.noReadNum==0?View.GONE:View.VISIBLE}"
+            tools:text="99" />
+    </RelativeLayout>
 </layout>
