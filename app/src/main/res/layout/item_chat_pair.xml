@@ -149,7 +149,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_toEndOf="@+id/image_relative"
                 android:text="@{item.nick}"
-                android:textColor="@{item.nick==@string/appapp_name?@color/purple_7a4:@color/black_252}"
+                android:textColor="@{item.nick==@string/app_name?@color/purple_7a4:@color/black_252}"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="漂流瓶1" />
@@ -158,7 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="15dp"
                 android:text='@{item.creationDate.empty?String.valueOf(""):item.creationDate.substring(11,16)}'
                 android:textColor="@color/black_827"

@@ -178,7 +178,7 @@ class PairViewModel : BaseViewModel(), OnRefreshListener {
     /**
      * 个人视频动态
      */
-    private fun personOtherDyn() {
+    fun personOtherDyn() {
         val map = HashMap<String, String>()
         map["otherUserId"] = getLong("userId").toString()
         map["pageNo"] = "1"
